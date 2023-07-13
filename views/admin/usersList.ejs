@@ -1,0 +1,67 @@
+<%- include('../partials/adminPartials/adminHeader.ejs') -%>
+    <section class="content-main">
+        <div class="content-header">
+            <h2 class="content-title">Users list</h2>
+        </div>
+        <div class="card mb-4">
+            <header class="card-header">
+                <div class="row gx-3">
+                    <div class="col-lg-4 col-md-6 me-auto">
+                        <input type="text" placeholder="Search..." class="form-control" />
+                    </div>
+                </div>
+            </header>
+            <!-- card-header end// -->
+            <div class="card-body">
+                <div class="table-responsive">
+                    <table class="table table-hover">
+                        <thead>
+                            <tr>
+                                <th>Name</th>
+                                <th>Email</th>
+                                <th>Mobile</th>
+                                <th>Status</th>
+                                <th>Action</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <% 
+                            if (users.length > 0) { 
+                                for(i=0;i<users.length;i++){
+                                %>
+                             
+                                <tr>
+                                    <td>
+                                        <a href="#" class="itemside">
+                                            <div class="info pl-3">
+                                                <h6 class="mb-0 title"><%=users[i].name%></h6>
+                                            </div>
+                                        </a>
+                                    </td>
+                                    <td><%=users[i].email%></td>
+                                    <td><%=users[i].mobile%></td>
+                                    <% if(users[i].is_blocked){ %>
+                                        <td><span class="badge rounded-pill alert-danger">Blocked</span></td>
+                                        <td> <a href="/admin/unblock?id=<%= users[i]._id%>" class="btn btn-sm btn-danger  font-sm mt-10">Unblock</a></td>
+
+                                    <% } else { %>
+                                        <td><span class="badge rounded-pill alert-success">Active</span></td>
+                                        <td>
+                                            <a href="/admin/block?id=<%= users[i]._id%>" class="btn btn-sm btn-brand font-sm mt-10">Block</a>
+                                        </td>
+                                    <% } %>
+                                </tr>
+                            <% 
+                            } 
+                            } else {
+                                %>
+                                <tr>Not found</tr>
+                                <%
+                            }
+                            %>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+    </section>
+<%- include('../partials/adminPartials/adminFooter.ejs') %>

@@ -1,0 +1,80 @@
+<%- include('../partials/adminPartials/adminHeader.ejs') -%>
+    <section class="content-main">
+        <div class="content-header">
+            <div>
+                <h2 class="content-title card-title">Categories</h2>
+                <p>Add, edit or delete a category</p>
+            </div>
+            <div>
+                <input type="text" placeholder="Search Categories" class="form-control bg-white" />
+            </div>
+        </div>
+        <div class="card">
+            <div class="card-body">
+                <div class="row">
+                    <div class="col-md-3">
+                        <form action="/admin/category" method="post">
+                            <div class="mb-4">
+                                <label for="product_name" class="form-label">Catogery Name</label>
+                                <input type="text" placeholder="Type here" class="form-control" id="product_name" name="categoryName" required/>
+                            </div>
+                            <div class="mb-4">
+                                <label class="form-label">Description</label>
+                                <textarea placeholder="Type here" class="form-control" name="description" required></textarea>
+                            </div>
+                            <div class="d-grid">
+                                <button  type="submit" class="btn btn-primary">Add Category</button>
+
+                            </div>
+                            <% if (typeof message !== 'undefined') { %>
+                             <p class="text-danger">
+                                <%= message %>
+                             </p>
+                            <% } %>
+                        </form>
+                    </div>
+                    <div class="col-md-9">
+                        <div class="table-responsive">
+                            <table class="table table-hover">
+                                <thead>
+                                    <tr>
+                                        <th>Category Name</th>
+                                        <th>Description</th>
+                                        <th>Status</th>
+                                        <th class="text-end">Action</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <% if (category.length> 0) {
+                                        for(i= 0; i < category.length; i++){ %>
+                                            <tr>
+                                                <td><b><%=category[i].categoryName%></b></td>
+                                                <td><%=category[i].description %></td>
+                                                <% if (category[i].status===true) { %>
+                                                    <td><a href="/admin/unlistCategory?id=<%= category[i]._id %>" class="btn btn-sm font-sm btn-brand">Listed</a></td>
+                                                <% } else {%>
+                                                    <td><a href="/admin/listCategory?id=<%= category[i]._id %>" class="btn btn-sm btn-danger font-sm ">Unlisted</a></td>
+                                                <% } %>
+                                                <td class="text-end">
+                                                    <a href="/admin/editCategory?id=<%=category[i]._id%>"  class="btn btn-light btn-sm font-sm">Edit </a>
+                                                </td>
+                                            </tr>
+
+                                    <% }
+                                     } else { %>
+                                        <tr>Not found</tr>
+                                        <% } %>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                    <!-- .col// -->
+                </div>
+                <!-- .row // -->
+            </div>
+            <!-- card body .// -->
+        </div>
+        <!-- card .// -->
+    </section>
+    <!-- content-main end// -->
+<%- include('../partials/adminPartials/adminFooter.ejs') -%>

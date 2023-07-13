@@ -1,0 +1,45 @@
+<%- include('../partials/adminPartials/adminHeader.ejs') -%>
+    <section class="content-main">
+        <div class="content-header">
+            <div>
+                <h2 class="content-title card-title">Categories</h2>
+                <p>Edit category</p>
+            </div>
+            <div>
+                <input type="text" placeholder="Search Categories" class="form-control bg-white" />
+            </div>
+        </div>
+        <div class="card">
+            <div class="card-body">
+                <div class="row">
+                    <div class="col-md-6">
+                        <form action="/admin/editCategory?id=<%=category._id%>" method="post">
+                            <div class="mb-4">
+                                <label for="product_name" class="form-label">Catogery Name</label>
+                                <input type="text" placeholder="Type here" class="form-control" id="product_name" value="<%= category.categoryName%>"
+                                    name="categoryName" required />
+                            </div>
+                            <div class="mb-4">
+                                <label class="form-label">Description</label>
+                                <textarea placeholder="Type here" class="form-control" name="description"
+                                    required><%= category.description%></textarea>
+                            </div>
+                            <div class="text-center">
+                                <button type="submit" class="btn btn-primary">Update</button>
+                            </div>
+                            <% if (typeof message !=='undefined' ) { %>
+                                <p class="text-danger">
+                                    <%= message %>
+                                </p>
+                                <% } %>
+                        </form>
+                    </div>
+                </div>
+                <!-- .row // -->
+            </div>
+            <!-- card body .// -->
+        </div>
+        <!-- card .// -->
+    </section>
+    <!-- content-main end// -->
+    <%- include('../partials/adminPartials/adminFooter.ejs') -%>

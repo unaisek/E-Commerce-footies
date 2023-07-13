@@ -1,0 +1,150 @@
+<%- include('../partials/userPartials/header.ejs') %>
+
+    <!-- BREADCRUMB AREA START -->
+    <div class="ltn__breadcrumb-area text-left ">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-12">
+                    <div class="ltn__breadcrumb-inner">
+                        <h1 class="page-title">Cart</h1>
+                        <div class="ltn__breadcrumb-list">
+                            <ul>
+                                <li><a href="/"><span class="ltn__secondary-color"><i class="fas fa-home"></i></span> Home</a></li>
+                                <li>Cart</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- BREADCRUMB AREA END -->
+
+    <!-- SHOPING CART AREA START -->
+    <div class="liton__shoping-cart-area mb-120">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-12">
+                    <div class="shoping-cart-inner">
+                        <div class="shoping-cart-table table-responsive">
+                            <% products.forEach(product=> {%>
+                            <table class="table">
+                                <!-- <thead>
+                                    <th class="cart-product-remove">Remove</th>
+                                    <th class="cart-product-image">Image</th>
+                                    <th class="cart-product-info">Product</th>
+                                    <th class="cart-product-price">Price</th>
+                                    <th class="cart-product-quantity">Quantity</th>
+                                    <th class="cart-product-subtotal">Subtotal</th>
+                                </thead> -->
+                                <tbody>
+                                    <tr>
+                                        <td class="cart-product-remove"><a href="/removeFromCart?id=<%=product.productId._id %>">x</a></td>
+                                        <td class="cart-product-image">
+                                            <a href="product-details.html"><img src="/adminAsset/productImages/<%=product.productId.images[product.productId.images.length-1]%>" alt="#"></a>
+                                        </td>
+                                        <td class="cart-product-info">
+                                            <h4><a href="/productDetails?id=<%=product.productId %>"><%= product.productId.productName%></a></h4>
+                                        </td>
+                                        <td class="cart-product-price">&#8377;<%= product.productId.price%></td>
+                                        <td class="cart-product-quantity">
+                                            <!-- <div class="border border-secondary text-center">
+                                                <span class=" border-secondary"><a onclick="changeQuantity('<%=userId%>','<%=product.productId._id%>',-1)">-</a></span>
+                                                <span id="<%= product.productId._id %>">
+                                                    <%= product.count %>
+                                                </span>
+                                                <span class="border border-secondary"><a onclick="changeQuantity('<%=userId%>','<%=product.productId._id%>',1)">+</a></span>
+                                            </div> -->
+                                        <td>
+                                            <% if (product.count <=0) { %>
+                                                <span id="quantity" name="count" class="quantity">
+                                                    <%= product.count %>
+                                                </span>
+                                                <button type="button" class="quantity-right-plus btn"
+                                                    onclick="changeQuantity('<%= userId %>','<%= product.productId._id %>', 1)">+</button>
+                                                <% } else { %>
+                                                    <button type="button" class="quantity-left-minus btn"
+                                                        onclick="changeQuantity('<%= userId %>','<%= product.productId._id %>', -1)">-</button>
+                                                    <span id="quantity" name="count" class="quantity">
+                                                        <%= product.count %>
+                                                    </span>
+                                                    <button type="button" class="quantity-right-plus btn"
+                                                        onclick="changeQuantity('<%= userId %>','<%= product.productId._id %>', 1)">+</button>
+                                                    <% } %>
+
+                                        </td>
+                                        <td class="cart-product-subtotal">&#8377;<%= product.productId.price %></td>
+                                    </tr>
+                                    <% }) %>
+                                    <tr class="cart-coupon-row">
+                                        <td colspan="6">
+                                            <div class="cart-coupon">
+                                                <input type="text" name="cart-coupon" placeholder="Coupon code">
+                                                <button type="submit" class="btn theme-btn-2 btn-effect-2">Apply Coupon</button>
+                                                <a href="/shop" class="theme-btn-1 btn btn-effect-1">Shop More</a>
+                                            </div>
+                                        </td>
+                                </tbody>
+                            </table>
+                        </div>
+                        <div class="shoping-cart-total mt-50">
+                            <h4>Cart Totals</h4>
+                            <table class="table">
+                                <tbody>
+                                    <tr>
+                                        <td>Cart Subtotal</td>
+                                        <td>&#8377;<%=Total %></td>
+                                    </tr>
+                                    <tr>
+                                        <td>Shipping and Handing</td>
+                                        <td>&#8377;00.00</td>
+                                    </tr>
+                                    <tr>
+                                        <td>Vat</td>
+                                        <td>$00.00</td>
+                                    </tr>
+                                    <tr>
+                                        <td><strong>Order Total</strong></td>
+                                        <td><strong>&#8377;<%=Total %></strong></td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                            <div class="btn-wrapper text-right">
+                                <a href="checkout.html" class="theme-btn-1 btn btn-effect-1">Proceed to checkout</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- SHOPING CART AREA END -->
+    <script>
+        function changeQuantity(userId,proId,count){
+            $.ajax({
+                url :'/changeProductQuantity',
+                data :{
+                    user :userId,
+                    product :proId,
+                    count :count 
+                },
+                method :'post',
+                success:(response)=>{
+
+                }
+            }).done((data)=>{
+                if(data.success){
+                    window.location.reload();
+
+                } else if(data.check){
+                    Swal.fire({
+                        icon :'error',
+                        title :'Oops..',
+                        text :'Out of Stockes!!'
+                    })
+                }
+            })
+        }
+    </script>
+
+<%- include('../partials/userPartials/footer.ejs') %>

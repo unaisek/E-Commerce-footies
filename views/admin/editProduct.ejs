@@ -1,0 +1,79 @@
+<%- include('../partials/adminPartials/adminHeader.ejs') -%>
+    <section class="content-main">
+        <div class="row">
+            <div class="col-9">
+                <div class="content-header">
+                    <h2 class="content-title">Edit Product</h2>
+                </div>
+            </div>
+            <form action="/admin/editProduct?id=<%=products._id %>" method="post" enctype="multipart/form-data">
+                <div class="col-lg-6">
+                    <div class="card mb-4">
+                        <div class="card-body">
+                            <div class="mb-4">
+                                <label for="product_name" class="form-label">Product Name</label>
+                                <input type="text" placeholder="Type here" class="form-control" id="product_name"
+                                    name="productName" required  value="<%= products.productName %>"/>
+                            </div>
+                            <div class="mb-4">
+                                <label class="form-label">Description</label>
+                                <textarea placeholder="Type here" class="form-control" rows="4" name="description"
+                                    required><%= products.description %></textarea>
+                            </div>
+                            <div class="row">
+                                <div class="col-lg-4">
+                                    <div class="mb-4">
+                                        <label class="form-label">price</label>
+                                        <div class="row gx-2">
+                                            <input placeholder="$" type="text" class="form-control" name="price" value="<%= products.price %>" required/>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="mb-4">
+                                <label class="form-label">Stock</label>
+                                <input type="number" class="form-control" id="product_name" name="stock" value="<%= products.stock %>" required />
+                            </div>
+                            <div class="row gx-2">
+                                <div class="col-sm-6 mb-3">
+                                    <label class="form-label">Category</label>
+                                    <select class="form-select" name="category">
+                                        <% if (category.length> 0) {
+                                            category.forEach(cat => { %>
+                                            <option value="<%= cat.categoryName %>" <%=products.category===cat.categoryName ? 'selected' : '' %>>
+                                                <%= cat.categoryName %>
+                                            </option>
+                                            <% }) } %>
+                                    </select>
+                                </div>
+                            </div>
+
+                            <div>
+                                <div class="mb-4">
+                                    <label class="form-label">Images</label>
+                                    <div class="mb-4 d-flex">
+                                        <% products.images.forEach(image=>{ %>
+                                        <div class="border border-info">
+                                            <img src="/adminAsset/productImages/<%= image %>" class="img-sm  img-thumbnail" alt="item">
+                                            <span><a href="/admin/deleteImage?fileName=<%=image%>&id=<%= products._id %>"><i class="icon material-icons md-delete"></i></a></span>
+                                        </div>
+                                       <% }) %>
+
+                                    </div>
+                                    <input class="form-control" type="file" name="images" multiple accept=".png, .jpg, .jpeg, .webp, .gif" />
+                                </div>
+                                <button class="btn btn-md rounded font-sm hover-up" type="submit">Update</button>
+                            </div>
+                            <% if (typeof message!=='undefined' ) { %>
+                                <p class="text-danger">
+                                    <%= message %>
+                                </p>
+                            <% } %>
+                        </div>
+                    </div>
+                </div>
+            </form>
+        </div>
+
+    </section>
+    <%- include('../partials/adminPartials/adminFooter.ejs') -%>
