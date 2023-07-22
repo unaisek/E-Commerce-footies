@@ -1,6 +1,7 @@
 const User = require('../models/userModel');
 const Product = require('../models/productModel');
-const Category = require('../models/categoryModel')
+const Category = require('../models/categoryModel');
+const Address = require('../models/addressModel');
 const bcrypt = require('bcrypt');
 const nodemailer = require('nodemailer');
 require('dotenv').config();
@@ -387,6 +388,22 @@ const loadShopPage = async(req,res)=>{
     }
 }
 
+// load profile
+
+const loadProfile = async(req,res)=>{
+    try {
+
+        const loggedIn = req.session.user_id;
+        const userData = await User.findOne({_id :req.session.user_id});
+        const addressData = await Address.findOne({userId:req.session.user_id});
+        res.render('myAccount',{user:userData,loggedIn,addressData});
+
+        
+    } catch (error) {
+        console.log(error.message);
+    }
+}
+
 module.exports = {
     loadHome,
     loadLogin,
@@ -400,7 +417,8 @@ module.exports = {
     verifyForgetPassword,
     verifyResetPassOtp,
     verifyNewPassword,
-    loadShopPage
+    loadShopPage,
+    loadProfile
 
     
 }

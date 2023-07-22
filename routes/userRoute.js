@@ -6,6 +6,8 @@ const userAuth = require('../middlewares/userAuth');
 const userController = require('../controllers/userController');
 const cartController = require('../controllers/cartController');
 const wishlistController = require('../controllers/wishlistController');
+const addressController = require('../controllers/addressController');
+const orderController = require('../controllers/orderController');
 
 userRoute.use(session({
     secret: sessionSecret.sessionSecret,
@@ -53,6 +55,24 @@ userRoute.post('/addToWishlist', userAuth.isLogin,wishlistController.addToWishli
 userRoute.get('/wishlist', userAuth.isLogin,wishlistController.loadWishlist);
 userRoute.get('/removeFromWishlist', userAuth.isLogin,wishlistController.removeFromWishlist);
 userRoute.get('/addFromWishlist', userAuth.isLogin,wishlistController.addProductFromWishlist);
+
+// user Profile
+
+userRoute.get('/myAccount',userController.loadProfile);
+
+// address 
+
+userRoute.get('/addAddress',addressController.loadAddAddress);
+userRoute.post('/addAddress',addressController.addNewAddress)
+
+// checkout
+userRoute.get('/checkout',userAuth.isLogin,cartController.loadCheckout);
+// orderplace
+userRoute.post('/checkout',orderController.placeOrder);
+userRoute.post('/verifyPayment',orderController.verifyPayment);
+
+// orders
+userRoute.get('/myOrders',userAuth.isLogin,orderController.loadMyOrders)
 
 
 

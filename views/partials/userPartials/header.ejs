@@ -24,6 +24,11 @@
     <link rel="stylesheet" href="userAsset/css/responsive.css">
     <!-- swal fire cdn -->
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <!-- razorPay -->
+    <script src="https://checkout.razorpay.com/v1/checkout.js"></script>
+    <!-- ajax -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.4/jquery.min.js"></script>
+
 </head>
 
 <body>
@@ -141,8 +146,9 @@
                                     <ul>
                                         <% if (loggedIn) { %>
                                             <li><a href="/logout">logout</a></li>
-                                            <li><a href="/register">My profile</a></li>
+                                            <li><a href="/myAccount">My profile</a></li>
                                             <li><a href="/wishlist">Wishlist</a></li>
+                                            <li><a href="/myOrders">My Orders</a></li>
                                         <% } else { %>
                                                 <li><a href="/login">Sign in</a></li>
                                                 <li><a href="/register">Register</a></li>
@@ -244,7 +250,7 @@
                         </li>
                         <% if (loggedIn) { %>
                             <li><a href="/logout">logout</a></li>
-                            <li><a href="/register">My profile</a></li>
+                            <li><a href="/myAccount">My profile</a></li>
                             <li><a href="/wishlist">Wishlist</a></li>
                             <% } else { %>
                                 <li><a href="/login">Sign in</a></li>

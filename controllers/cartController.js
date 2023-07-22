@@ -1,6 +1,7 @@
 const User = require ("../models/userModel");
 const Product = require("../models/productModel");
 const Cart= require("../models/cartModel");
+const Address = require('../models/addressModel'); 
 const { query } = require("express");
 
 const loadCart = async(req,res)=>{
@@ -142,10 +143,55 @@ const changeQuantity=async(req,res)=>{
     }
 }
 
+const loadCheckout = async(req,res)=>{
+    try {
+        const loggedIn = req.session.user_id;
+        const userData = await User.findOne({_id :req.session.user_id});
+        const addressData = await Address.findOne({userId:req.session.user_id});
+        if(addressData){
+            const addresses = addressData.addresses;
+            const total = await Cart.aggregate([
+                { 
+                    $match: { 
+                        userName: userData.name 
+                    } 
+                }, 
+                {
+                    $unwind: "$products" 
+                }, 
+                { 
+                    $project: { 
+                        productPrice: "$products.productPrice", 
+                        count: "$products.count" 
+                    } 
+                }, 
+                { 
+                    $group: {
+                         _id: null, 
+                         total: { $sum: { $multiply: ["$productPrice", "$count"] } } 
+                        } 
+                    }
+                ]);
+                const Total = total[0].total
+                res.render('checkout',{loggedIn,addresses,userData,Total});
+
+
+        } else {
+            console.log("no address");
+        }
+
+
+        
+    } catch (error) {
+        console.log(error.message);
+    }
+}
+
 module.exports = {
     loadCart,
     addToCart,
     removeFromCart,
-    changeQuantity
+    changeQuantity,
+    loadCheckout
 
 }

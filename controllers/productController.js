@@ -45,7 +45,7 @@ const addProduct = async(req,res)=>{
         // for (let i = 0; i < req.files.length; i++) {
         //     images[i] = req.files[i].filename;
 
-        //     const outputPath = path.join(__dirname, '../public/adminAsset/productImages', req.files[i].filename);
+        //     const outputPath = path.join(__dirname, '../public/adminAsset/productImages/resized', req.files[i].filename);
 
         //     await sharp(req.files[i].path)
         //         .resize({ width: 1728, height: 2160 })
@@ -116,7 +116,7 @@ const updateProduct = async(req,res)=>{
         //     const outputPath = path.join(__dirname, '../public/adminAsset/productImages/resized', image.filename);
 
         //     await sharp(image.path)
-        //         .resize({ width: 1000, height: 1000, fit: 'cover' })
+        //         .resize({ width: 1728, height: 2160, fit: 'cover' })
         //         .toFile(outputPath);
 
         //     await Product.findByIdAndUpdate(

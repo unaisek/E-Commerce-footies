@@ -1,0 +1,205 @@
+<%- include('../partials/userPartials/header.ejs') %>
+    <!-- BREADCRUMB AREA START -->
+    <div class="ltn__breadcrumb-area text-left">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-12">
+                    <div class="ltn__breadcrumb-inner">
+                        <h1 class="page-title">Checkout</h1>
+                        <div class="ltn__breadcrumb-list">
+                            <ul>
+                                <li><a href="index.html"><span class="ltn__secondary-color"><i class="fas fa-home"></i></span> Home</a></li>
+                                <li>Checkout</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- BREADCRUMB AREA END -->
+
+    <!-- WISHLIST AREA START -->
+    <div class="ltn__checkout-area mb-105">
+        <form id="checkout-form" >
+            <div class="container">
+                <div class="row">
+                        <div class="col-lg-12">
+                            <div class="ltn__checkout-inner">
+                                <div class="ltn__checkout-single-content mt-50">
+                                    <h4 class="title-2">Delivery Address</h4>
+                                    <div class="ltn__checkout-single-content-info">
+                                        <div class="row">
+                                            <% addresses.forEach((address)=>{%>
+                                                <div class="col-lg-3 col-md-6 m-4" style="border: 1px solid #e5eaee;">
+                                                    <div>
+                                                        <input type="radio" value="<%=address.userName %>,<%=address.mobile%>,<%=address.address%>,<%=address.city%>,<%=address.state%>,<%=address.pincode%>" name="selectAddress">
+                                                    </div>
+                                                    <div>
+                                                        <p>Name:<%=address.userName %></p>
+                                                        <p>Mobile: <%=address.mobile%></p>
+                                                        <p>Alternative:<%=address.alternativeMob%></p>
+                                                        <p>Address:<%=address.address%></p>
+                                                        <p>City:<%=address.city%></p>
+                                                        <p>State:<%=address.state%></p>
+                                                        <p>Picode:<%=address.pincode%></p>
+                                                        <p>Landmark:<%=address.landmark%></p>
+                                                    </div>
+                                                </div>
+                                            <% }) %>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-lg-6">
+                                <div class="ltn__checkout-payment-method mt-50">
+                                    <h4 class="title-2">Payment Method</h4>
+                                    <div id="checkout_accordion_1 " style="color: black;">
+                                        <!-- <div class="card">
+                                            <label>
+                                                <input type="radio" name="payment_method" value="check" />
+                                                Check payments
+                                            </label>
+                                            <div class="card-body">
+                                                <p>Please send a check to Store Name, Store Street, Store Town, Store State / County, Store Postcode.</p>
+                                            </div>
+                                        </div> -->
+                                        <div class="card">
+                                            <label>
+                                                <input type="radio" name="payment" value="COD" id="COD"/>
+                                                Cash on delivery
+                                            </label>
+                                        </div>
+                                        <div class="card">
+                                            <label>
+                                                <input type="radio" name="payment" value="onlinePayment" id="onlinePayment" />
+                                                Razorpay
+                                                <img src="img/icons/payment-3.png" alt="#">
+                                            </label>
+                                        </div>
+                                    </div>
+
+                                    <div class="ltn__payment-note mt-30 mb-30">
+                                        <p>Your personal data will be used to process your order, support your experience throughout this website, and for other purposes described in our privacy policy.</p>
+                                    </div>
+                                    <button class="btn theme-btn-1 btn-effect-1 text-uppercase mt-5" type="submit">Place order</button>
+                                </div>
+                            </div>
+                            <div class="col-lg-6">
+                                <div class="shoping-cart-total mt-50">
+                                    <h4 class="title-2">Cart Totals</h4>
+                                    <table class="table">
+                                        <tbody>
+                                        <tr>
+                                            <td>Subtotal</td>
+                                            <td id="total">&#8377;<%=Total %>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td>Shipping and Handing</td>
+                                            <td>&#8377;00.00</td>
+                                        </tr>
+                                        <tr>
+                                            <td>Vat</td>
+                                            <td>$00.00</td>
+                                        </tr>
+                                        <tr>
+                                            <td><strong>Grand Total</strong></td>
+                                            <td><strong id="grandtotal">&#8377;<%=Total %></strong></td>
+                                        </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                </div>
+            </div>
+        </form>
+    </div>
+    <!-- WISHLIST AREA START -->
+
+    <script>
+
+        $("#checkout-form").submit((e)=>{
+            e.preventDefault();
+            const amount = document.getElementById("total").innerHTML;
+            const totalAmount = document.getElementById("grandtotal").innerHTML;
+            let address = $("input[name=selectAddress]:checked").val();
+            let payment = $("input[name=payment]:checked").val();
+            $.ajax({
+                url :"/checkout",
+                method :"post",
+                data :{
+                    amount:parseInt(amount.replace(/[^\d.]/g, '')),
+                    total: parseInt(totalAmount.replace(/[^\d.]/g, '')),
+                    address: address,
+                    payment :payment
+                },
+                success:(response)=>{
+                    if(response.codSuccess==true){
+                        console.log("sucessorder");
+                    } else {
+                        razorpayPayment(response.order)
+                    }
+                }
+            })
+        })
+
+       function razorpayPayment(order) {
+        console.log("ONLINE PAAYMENT");
+
+            var options = {
+                "key": "rzp_test_B0cfXKkM2OrzLj", // Enter the Key ID generated from the Dashboard
+                "amount": order.amount, // Amount is in currency subunits. Default currency is INR. Hence, 50000 refers to 50000 paise
+                "currency": "INR",
+                "name": "Footies-Footwear", //your business name
+                "description": "Test Transaction",
+                "image": "https://example.com/your_logo",
+                "order_id": order.id, //This is a sample Order ID. Pass the `id` obtained in the response of Step 1
+                "handler": function (response) {
+                    verifyPayment(response, order);
+                },
+                "prefill": {
+                    "name": "Gaurav Kumar", //your customer's name
+                    "email": "gaurav.kumar@example.com",
+                    "contact": "9000090000"
+                },
+                "notes": {
+                    "address": "Razorpay Corporate Office"
+                },
+                "theme": {
+                    "color": "#3399cc"
+                }
+            };
+            var rzp1 = new Razorpay(options);
+            rzp1.open();
+        }
+
+
+        function verifyPayment(payment,order){
+            console.log("verify");
+            const amount = document.getElementById("total").innerHTML;
+            const totalAmount = document.getElementById("grandtotal").innerHTML;
+            $.ajax({
+                url: "/verifyPayment",
+                method: "post",
+                data :{
+                    payment,
+                    amount,
+                    totalAmount,
+                    order
+                },
+                success:(response)=>{
+                    if(response.success){
+                        console.log("online payment suucessfull");
+                    } else {
+                        alert('payment failed');
+                    }
+                }
+            })
+        }
+    </script>
+
+<%- include('../partials/userPartials/footer.ejs') %>
