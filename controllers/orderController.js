@@ -104,10 +104,11 @@ const verifyPayment = async(req,res)=>{
 
 const loadMyOrders = async(req,res)=>{
     try {
-
+        const loggedIn = req.session.user_id;
         const userData = await User.findOne({ _id: req.session.user_id });
-        const orderData = await Order.find({ userId: req.session.user_id })
-        res.render('myOrders')
+        const orderData = await Order.find({ userId: req.session.user_id }).sort({ date: -1});
+        console.log(orderData);
+        res.render('myOrders',{loggedIn,orders: orderData});
 
         
     } catch (error) {
@@ -115,10 +116,57 @@ const loadMyOrders = async(req,res)=>{
     }
 }
 
+const viewOrderedProduct = async(req,res)=>{
+    try {
+
+        const loggedIn = req.session.user_id;
+        const orderId = req.query.id;
+        const orderData = await Order.findOne({ _id: orderId }).populate("products.productId");
+        const products = orderData.products;
+        if(products.length > 0){
+            res.render('orderedProduct',{orderData,products,loggedIn});
+        }
+
+        
+    } catch (error) {
+        console.log(error.message);
+    }
+
+}
+
+// cancel Order
+
+const cancelOrder = async(req,res)=>{
+    try {
+
+        const userId = req.session.user_id;
+        const orderId = req.body.orderId;
+        const userData = await User.findOne({ _id: userId });
+        const orderData = await Order.findOne({ _id: orderId });
+        if(orderData){
+            for(const product of orderData.products){
+                const productId = product.productId;
+                const count = product.count;
+                await Product.findByIdAndUpdate(productId, { $inc: { stock: count }});
+            }
+
+            await Order.findByIdAndUpdate(orderId, { $set: { status: "Cancelled" } });
+            res.json({success: true})
+
+        } else {
+            res.json({success: false});
+        }
+        
+    } catch (error) {
+        console.log(error.message);
+    }
+}
 
 
 module.exports = {
     placeOrder,
     verifyPayment,
-    loadMyOrders
+    loadMyOrders,
+    viewOrderedProduct,
+    cancelOrder
 }

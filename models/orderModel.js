@@ -22,9 +22,9 @@ const orderSchema = new mongoose.Schema({
     },
     products :[{
         productId :{
-            type :String,
-            ref :'product',
-            required :true
+            type: mongoose.Types.ObjectId,
+            ref: 'product',
+            required: true
         },
         count :{
             type :Number

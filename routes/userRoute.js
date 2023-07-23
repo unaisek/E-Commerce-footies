@@ -72,7 +72,9 @@ userRoute.post('/checkout',orderController.placeOrder);
 userRoute.post('/verifyPayment',orderController.verifyPayment);
 
 // orders
-userRoute.get('/myOrders',userAuth.isLogin,orderController.loadMyOrders)
+userRoute.get('/myOrders',userAuth.isLogin,orderController.loadMyOrders);
+userRoute.get('/orderedProduct', userAuth.isLogin, orderController.viewOrderedProduct);
+userRoute.post('/cancelOrder',orderController.cancelOrder);
 
 
 
