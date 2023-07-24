@@ -1,0 +1,72 @@
+<%- include('../partials/adminPartials/adminHeader.ejs') %>
+    <section class="content-main container">
+        <div class="content-header">
+            <div>
+                <h2 class="content-title card-title">Order Details</h2>
+            </div>
+        </div>
+        <div class="row" >
+            <div class="card mb-4 col-lg-8 col-md-8 col-sm-12">
+                <!-- <header class="card-header">
+                    <div class="row gx-3">
+                        <div class="col-lg-4 mb-lg-0 mb-15 me-auto">
+                            <input type="text" placeholder="Search..." class="form-control" />
+                        </div>
+                        <div class="col-lg-2 col-6">
+                            <div class="custom_select">
+                                <select class="form-select select-nice">
+                                    <option selected>Categories</option>
+                                    <option>Technology</option>
+                                    <option>Fashion</option>
+                                    <option>Home Decor</option>
+                                    <option>Healthy</option>
+                                    <option>Travel</option>
+                                    <option>Auto-car</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="col-lg-2 col-6">
+                            <input type="date" class="form-control" name="" />
+                        </div>
+                    </div>
+                </header> -->
+                <!-- card-header end// -->
+                <div class="card-body">
+                   <%  products.forEach(product =>{ %>
+                    <div class="row gx-3 ">
+                        <div class="col-6">
+                                    <figure class="card border-1">
+                                <div class="card-header bg-white text-center">
+                                    <img src="/adminAsset/productImages/<%=product.productId.images[product.productId.images.length-1] %>" class="img-fluid" alt="Logo" />
+                                </div>
+                                <figcaption class="card-body text-center">
+                                    <h6 class="card-title m-0"><%=product.productId.productName %></h6>
+                                    <p> <%= product.count%> items</p>
+                                    <p>Price:<%= product.productPrice %></p>
+                                </figcaption>
+                            </figure>
+                        </div>
+                    </div>
+                    <% }) %>
+                    <!-- row.// -->
+                </div>
+                <!-- card-body end// -->
+            </div>
+            <div class="col-lg-4 col-md-4 col-sm-12">
+                <div class="box bg-light text-wrap" >
+                    <h6 class="mt-15">User Details</h6>
+                    <hr />
+                    <h6 class="mb-0">User Name:</h6>
+                    <p><%= order.userName %></p>
+                    <br />
+                    <h6 class="mb-0">Date:</h6>
+                    <p><%= order.date.toISOString().substring(0,10) %></p>
+                    <br />
+                    <h6 class="mb-0">Delivery address:</h6>
+                    <p style="word-wrap: break-word;"><%= order.deliveryAddress %></p>
+                </div>
+            </div>
+        <!-- card end// -->
+        </div>
+    </section>
+<%- include('../partials/adminPartials/adminFooter.ejs') %>

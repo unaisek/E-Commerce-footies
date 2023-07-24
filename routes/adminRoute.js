@@ -5,6 +5,7 @@ const sessionSecret = require('../config/sessionSecret');
 const adminController = require('../controllers/adminController');
 const categoryController = require('../controllers/categoryController');
 const productController = require('../controllers/productController');
+const orderController = require('../controllers/orderController');
 const adminAuth = require('../middlewares/adminAuth');
 const multer = require('../config/multer')
 
@@ -44,7 +45,14 @@ adminRoute.get('/unlistProduct', adminAuth.isLogin, productController.doUnlistPr
 adminRoute.get('/listProduct', adminAuth.isLogin, productController.doListProducrt);
 adminRoute.get('/editProduct', adminAuth.isLogin, productController.loadEditProduct);
 adminRoute.post('/editProduct', multer.upload.array('images', 10), productController.updateProduct);
-adminRoute.get('/deleteImage',productController.deleteImage)
+adminRoute.get('/deleteImage',productController.deleteImage);
+
+// order details
+
+adminRoute.get('/orderList',adminAuth.isLogin,orderController.adminOrderLists);
+adminRoute.get('/shipping', adminAuth.isLogin, orderController.shippedOrder);
+adminRoute.get('/delivered', adminAuth.isLogin, orderController.deliveredOrder);
+adminRoute.get('/orderDetails',adminAuth.isLogin,orderController.showOrderDetails);
 
 
 module.exports = adminRoute;

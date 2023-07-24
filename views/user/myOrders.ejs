@@ -58,21 +58,32 @@
                                                 <p class="text-warning">
                                                     <%= order.status %>
                                                 </p>
-                                            <% } else { %>
+                                            <% } else if(order.status == 'Delivered'){ %>
                                                 <p class="text-success">
                                                     <%= order.status %>
                                                 </p>
-                                              <% } %>  
+                                            <% } else if(order.status=='Returned' ){ %>
+                                                <p class="text-secondary">
+                                                    <%= order.status %>
+                                                </p>
+                                            <% } else{ %>
+                                                    <p class="text-info">
+                                                        <%= order.status %>
+                                                    </p>
+                                            <% } %>  
                                         </td>
                                         <td>
                                             <% if (order.status==="Delivered" ) { %>
                                                 <div>
-                                                    <button class="btn btn-danger btn-sm">Return</button>
+                                                    <button class="font-sm btn-danger btn-sm" onclick=" returnOrder('<%= order._id %>')">Return</button>
                                                 </div>
                                                 <% }else if(order.status == "Cancelled") {%>
                                                     <div>
                                                         <button class="btn-sm font-sm btn-secondary" disabled>Cancelled</button>
-                                                        <!-- <p class=" btn-sm font-sm btn-danger" disabled >Cancelled</p> -->
+                                                    </div>
+                                                <% }else if(order.status=="Returned" ) {%>
+                                                    <div>
+                                                        <button class="btn-sm font-sm btn-secondary" disabled>Returned</button>
                                                     </div>
                                                 <% } else { %>
                                                     <div>
@@ -115,6 +126,29 @@
                 });
             }
         }
+
+        function returnOrder(orderId) {
+                if (confirm("Are you sure you want to return this order?")) {
+
+                    $.ajax({
+                        url: "/returnOrder",
+                        data: {
+                            orderId: orderId
+                        },
+                        method: "post",
+                        success: (response) => {
+                            if (response.success) {
+                                toastr.success("Order canceled successfully!", "Success", {
+                                    timeOut: 3000,
+                                    closeButton: true,
+                                    progressBar: true,
+                                });
+                                location.reload();
+                            }
+                        }
+                    });
+                }
+            }
     </script>
 
 <%- include('../partials/userPartials/footer.ejs') %>

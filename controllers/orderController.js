@@ -162,11 +162,81 @@ const cancelOrder = async(req,res)=>{
     }
 }
 
+// return Order
+
+const returnOrder = async(req,res)=>{
+    try {
+
+        const userId = req.session.user_id;
+        const orderId = req.body.orderId;
+        const userData = await User.findOne({ _id: userId });
+        const orderData = await Order.findOne({ _id: orderId });
+        if (orderData) {
+            for (const product of orderData.products) {
+                const productId = product.productId;
+                const count = product.count;
+                await Product.findByIdAndUpdate(productId, { $inc: { stock: count } });
+            }
+
+            await Order.findByIdAndUpdate(orderId, { $set: { status: "Returned" } });
+            res.json({ success: true })
+
+        } else {
+            res.json({ success: false });
+        }
+        
+    } catch (error) {
+        console.log(error.message);
+    }
+}
+
+// admin side order list
+
+ const adminOrderLists = async(req,res)=>{
+    try {
+
+        const orderData = await Order.find({}).sort({ date: -1 });
+        res.render('orderList',{ orders: orderData });
+        
+    } catch (error) {
+        console.log(error.message);
+    }
+}
+
+const shippedOrder = async(req,res)=>{
+    const orderId = req.query.id;
+    await Order.findByIdAndUpdate(orderId,{ $set: { status : "Shipped" } })
+    res.redirect('/admin/orderList');
+}
+
+const deliveredOrder = async (req, res) => {
+    const orderId = req.query.id;
+    await Order.findByIdAndUpdate(orderId, { $set: { status: "Delivered" } })
+    res.redirect('/admin/orderList');
+}
+
+const showOrderDetails = async(req,res)=>{
+    try {
+        const orderId = req.query.id;
+        const orderData = await Order.findOne({ _id: orderId }).populate('products.productId');
+        const products = orderData.products;
+        console.log(products);
+        res.render('orderDetails',{ order:orderData,products});
+        
+    } catch (error) {
+        console.log(error.message);
+    }
+}
 
 module.exports = {
     placeOrder,
     verifyPayment,
     loadMyOrders,
     viewOrderedProduct,
-    cancelOrder
+    cancelOrder,
+    returnOrder,
+    adminOrderLists,
+    shippedOrder,
+    deliveredOrder,
+    showOrderDetails
 }
