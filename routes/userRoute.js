@@ -8,6 +8,7 @@ const cartController = require('../controllers/cartController');
 const wishlistController = require('../controllers/wishlistController');
 const addressController = require('../controllers/addressController');
 const orderController = require('../controllers/orderController');
+const couponController = require('../controllers/couponController');
 
 userRoute.use(session({
     secret: sessionSecret.sessionSecret,
@@ -70,6 +71,8 @@ userRoute.get('/checkout',userAuth.isLogin,cartController.loadCheckout);
 // orderplace
 userRoute.post('/checkout',orderController.placeOrder);
 userRoute.post('/verifyPayment',orderController.verifyPayment);
+// apply Coupon 
+userRoute.post('/applyCoupon',couponController.applyCoupon)
 
 // orders
 userRoute.get('/myOrders',userAuth.isLogin,orderController.loadMyOrders);

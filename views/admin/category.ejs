@@ -13,14 +13,14 @@
             <div class="card-body">
                 <div class="row">
                     <div class="col-md-3">
-                        <form action="/admin/category" method="post">
+                        <form action="/admin/category" method="post" onsubmit="return validat">
                             <div class="mb-4">
                                 <label for="product_name" class="form-label">Catogery Name</label>
-                                <input type="text" placeholder="Type here" class="form-control" id="product_name" name="categoryName" required/>
+                                <input type="text" placeholder="Type here" class="form-control" id="category_name" name="categoryName" required/>
                             </div>
                             <div class="mb-4">
                                 <label class="form-label">Description</label>
-                                <textarea placeholder="Type here" class="form-control" name="description" required></textarea>
+                                <textarea placeholder="Type here" class="form-control" name="description"  id="description" required></textarea>
                             </div>
                             <div class="d-grid">
                                 <button  type="submit" class="btn btn-primary">Add Category</button>
@@ -72,9 +72,26 @@
                 </div>
                 <!-- .row // -->
             </div>
-            <!-- card body .// -->
+            // <!-- card body !-->
         </div>
         <!-- card .// -->
     </section>
-    <!-- content-main end// -->
+
+        <script>
+            function validateForm() {
+                const productName = document.getElementById("category_name").value;
+                if (productName.trim() === "") {
+                    alert("Product name cannot be empty");
+                    return false;
+                }
+
+                const description = document.getElementById("description").value;
+                if (description.trim() === "") {
+                    alert("Description cannot be empty");
+                    return false;
+                }
+                return true;
+            }
+        </script>
+
 <%- include('../partials/adminPartials/adminFooter.ejs') -%>

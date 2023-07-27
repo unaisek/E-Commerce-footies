@@ -16,12 +16,12 @@
                         <form action="/admin/editCategory?id=<%=category._id%>" method="post">
                             <div class="mb-4">
                                 <label for="product_name" class="form-label">Catogery Name</label>
-                                <input type="text" placeholder="Type here" class="form-control" id="product_name" value="<%= category.categoryName%>"
+                                <input type="text" placeholder="Type here" class="form-control" id="category_name" value="<%= category.categoryName%>"
                                     name="categoryName" required />
                             </div>
                             <div class="mb-4">
                                 <label class="form-label">Description</label>
-                                <textarea placeholder="Type here" class="form-control" name="description"
+                                <textarea placeholder="Type here" class="form-control" name="description" id="description"
                                     required><%= category.description%></textarea>
                             </div>
                             <div class="text-center">
@@ -42,4 +42,21 @@
         <!-- card .// -->
     </section>
     <!-- content-main end// -->
+
+    <script>
+        function validateForm() {
+            const productName = document.getElementById("category_name").value;
+            if (productName.trim() === "") {
+                alert("Product name cannot be empty");
+                return false;
+            }
+
+            const description = document.getElementById("description").value;
+            if (description.trim() === "") {
+                alert("Description cannot be empty");
+                return false;
+            }
+            return true;
+        }
+    </script>
     <%- include('../partials/adminPartials/adminFooter.ejs') -%>

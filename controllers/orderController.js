@@ -45,7 +45,6 @@ const placeOrder = async(req,res)=>{
             }
             if(order.status == "placed"){
                 // const wallet = totalPrice - Total;
-                console.log("placed");
                 await Order.updateOne({_id:orderId},{$set:{month:date}});
                 await Cart.deleteOne({user: req.session.user_id});
                 res.json({codSuccess : true});
@@ -89,7 +88,6 @@ const verifyPayment = async(req,res)=>{
             res.json({success: true});
 
         } else {
-            console.log("failed");
             await Order.findByIdAndRemove({_id: details.order.receipt});
             res.json({success: false});
         }
@@ -107,7 +105,6 @@ const loadMyOrders = async(req,res)=>{
         const loggedIn = req.session.user_id;
         const userData = await User.findOne({ _id: req.session.user_id });
         const orderData = await Order.find({ userId: req.session.user_id }).sort({ date: -1});
-        console.log(orderData);
         res.render('myOrders',{loggedIn,orders: orderData});
 
         
@@ -143,15 +140,23 @@ const cancelOrder = async(req,res)=>{
         const orderId = req.body.orderId;
         const userData = await User.findOne({ _id: userId });
         const orderData = await Order.findOne({ _id: orderId });
+        let wallet = userData.wallet;
         if(orderData){
-            for(const product of orderData.products){
-                const productId = product.productId;
-                const count = product.count;
-                await Product.findByIdAndUpdate(productId, { $inc: { stock: count }});
-            }
+            if(orderData.status == "placed"  || orderData.status == "Shipped"){
+                const totalWallet =wallet+=orderData.totalAmount;
+                await User.findByIdAndUpdate(userId, { $set: { wallet: totalWallet }});
+                for(const product of orderData.products){
+                    const productId = product.productId;
+                    const count = product.count;
+                    await Product.findByIdAndUpdate(productId, { $inc: { stock: count }});
+                }    
+                await Order.findByIdAndUpdate(orderId, { $set: { status: "Cancelled" } });
+                res.json({success: true});
 
-            await Order.findByIdAndUpdate(orderId, { $set: { status: "Cancelled" } });
-            res.json({success: true})
+            } else {
+                await Order.findByIdAndUpdate(orderId, { $set: { status: "Cancelled" } });
+                res.json({success: true});
+            }
 
         } else {
             res.json({success: false});
@@ -171,15 +176,20 @@ const returnOrder = async(req,res)=>{
         const orderId = req.body.orderId;
         const userData = await User.findOne({ _id: userId });
         const orderData = await Order.findOne({ _id: orderId });
+        let wallet = userData.wallet;
         if (orderData) {
-            for (const product of orderData.products) {
-                const productId = product.productId;
-                const count = product.count;
-                await Product.findByIdAndUpdate(productId, { $inc: { stock: count } });
-            }
+            if(orderData.status === "Delivered"){
+                const totalWallet = wallet+=orderData.amount;
+                await User.findByIdAndUpdate(userId, { $set: { wallet: totalWallet } });
+                for (const product of orderData.products) {
+                    const productId = product.productId;
+                    const count = product.count;
+                    await Product.findByIdAndUpdate(productId, { $inc: { stock: count } });
+                }    
+                await Order.findByIdAndUpdate(orderId, { $set: { status: "Returned" } });
+                res.json({ success: true })
 
-            await Order.findByIdAndUpdate(orderId, { $set: { status: "Returned" } });
-            res.json({ success: true })
+            }
 
         } else {
             res.json({ success: false });
@@ -220,7 +230,6 @@ const showOrderDetails = async(req,res)=>{
         const orderId = req.query.id;
         const orderData = await Order.findOne({ _id: orderId }).populate('products.productId');
         const products = orderData.products;
-        console.log(products);
         res.render('orderDetails',{ order:orderData,products});
         
     } catch (error) {

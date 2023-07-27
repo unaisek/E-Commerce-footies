@@ -6,6 +6,7 @@ const adminController = require('../controllers/adminController');
 const categoryController = require('../controllers/categoryController');
 const productController = require('../controllers/productController');
 const orderController = require('../controllers/orderController');
+const couponController = require('../controllers/couponController');
 const adminAuth = require('../middlewares/adminAuth');
 const multer = require('../config/multer')
 
@@ -53,6 +54,13 @@ adminRoute.get('/orderList',adminAuth.isLogin,orderController.adminOrderLists);
 adminRoute.get('/shipping', adminAuth.isLogin, orderController.shippedOrder);
 adminRoute.get('/delivered', adminAuth.isLogin, orderController.deliveredOrder);
 adminRoute.get('/orderDetails',adminAuth.isLogin,orderController.showOrderDetails);
+
+// coupon 
+adminRoute.get('/coupon', adminAuth.isLogin, couponController.showCouponList);
+adminRoute.get('/addCoupon', adminAuth.isLogin, couponController.loadAddCoupon);
+adminRoute.post('/addCoupon',couponController.addNewCoupon);
+adminRoute.get('/editCoupon', adminAuth.isLogin, couponController.loadEditCoupon);
+adminRoute.post('/editCoupon',couponController.updateCoupon)
 
 
 module.exports = adminRoute;

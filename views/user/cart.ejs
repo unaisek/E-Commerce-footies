@@ -56,7 +56,7 @@
                                                 <span class="border border-secondary"><a onclick="changeQuantity('<%=userId%>','<%=product.productId._id%>',1)">+</a></span>
                                             </div> -->
                                         <td>
-                                            <% if (product.count <=0) { %>
+                                            <% if (product.count <=1) { %>
                                                 <span id="quantity" name="count" class="quantity">
                                                     <%= product.count %>
                                                 </span>
@@ -79,8 +79,6 @@
                                     <tr class="cart-coupon-row">
                                         <td colspan="6">
                                             <div class="cart-coupon">
-                                                <input type="text" name="cart-coupon" placeholder="Coupon code">
-                                                <button type="submit" class="btn theme-btn-2 btn-effect-2">Apply Coupon</button>
                                                 <a href="/shop" class="theme-btn-1 btn btn-effect-1">Shop More</a>
                                             </div>
                                         </td>

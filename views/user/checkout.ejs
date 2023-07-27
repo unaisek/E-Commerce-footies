@@ -8,7 +8,7 @@
                         <h1 class="page-title">Checkout</h1>
                         <div class="ltn__breadcrumb-list">
                             <ul>
-                                <li><a href="index.html"><span class="ltn__secondary-color"><i class="fas fa-home"></i></span> Home</a></li>
+                                <li><a href="/"><span class="ltn__secondary-color"><i class="fas fa-home"></i></span> Home</a></li>
                                 <li>Checkout</li>
                             </ul>
                         </div>
@@ -39,7 +39,7 @@
                                                         <p>Name:<%=address.userName %></p>
                                                         <p>Mobile: <%=address.mobile%></p>
                                                         <p>Alternative:<%=address.alternativeMob%></p>
-                                                        <p>Address:<%=address.address%></p>
+                                                        <p style="word-wrap: break-word;">Address:<%=address.address%></p>
                                                         <p>City:<%=address.city%></p>
                                                         <p>State:<%=address.state%></p>
                                                         <p>Picode:<%=address.pincode%></p>
@@ -76,7 +76,7 @@
                                             <label>
                                                 <input type="radio" name="payment" value="onlinePayment" id="onlinePayment" />
                                                 Razorpay
-                                                <img src="img/icons/payment-3.png" alt="#">
+                                                <!-- <img src="img/icons/payment-3.png" alt="#"> -->
                                             </label>
                                         </div>
                                     </div>
@@ -102,12 +102,13 @@
                                             <td>&#8377;00.00</td>
                                         </tr>
                                         <tr>
-                                            <td>Vat</td>
-                                            <td>$00.00</td>
+                                            <td>Discount Amount</td>
+                                            <td id="discountAmount">&#8377;00.00</td>
                                         </tr>
+
                                         <tr>
                                             <td><strong>Grand Total</strong></td>
-                                            <td><strong id="grandtotal">&#8377;<%=Total %></strong></td>
+                                            <td id="grandtotal"><strong id="newTotal">&#8377;<%=Total %></strong></td>
                                         </tr>
                                         </tbody>
                                     </table>
@@ -117,6 +118,14 @@
                 </div>
             </div>
         </form>
+        <div class="container">
+            <form id="coupon-form">
+                <div class="cart-coupon mt-3 ">
+                    <input type="text" name="cart-coupon" placeholder="Coupon code" id="code">
+                    <button type="submit" class="btn theme-btn-2 btn-effect-2">Apply Coupon</button>
+                </div>
+            </form>
+        </div>
     </div>
     <!-- WISHLIST AREA START -->
 
@@ -139,7 +148,11 @@
                 },
                 success:(response)=>{
                     if(response.codSuccess==true){
-                        console.log("sucessorder");
+                        toastr.success("COD payment successful!");
+                        // Redirect to "/myOrders" after a short delay (e.g., 1 second)
+                        setTimeout(function () {
+                            window.location.href = "/myOrders";
+                        }, 1500);
                     } else {
                         razorpayPayment(response.order)
                     }
@@ -157,12 +170,12 @@
                 "name": "Footies-Footwear", //your business name
                 "description": "Test Transaction",
                 "image": "https://example.com/your_logo",
-                "order_id": order.id, //This is a sample Order ID. Pass the `id` obtained in the response of Step 1
+                "order_id": order.id,
                 "handler": function (response) {
                     verifyPayment(response, order);
                 },
                 "prefill": {
-                    "name": "Gaurav Kumar", //your customer's name
+                    "name": "Gaurav Kumar", 
                     "email": "gaurav.kumar@example.com",
                     "contact": "9000090000"
                 },
@@ -193,13 +206,63 @@
                 },
                 success:(response)=>{
                     if(response.success){
-                        console.log("online payment suucessfull");
+                        window.location.href = "/myOrders"
                     } else {
                         alert('payment failed');
                     }
                 }
             })
         }
+
+        // apply coupon
+            $("#coupon-form").submit((e) => {
+                e.preventDefault();
+                const code = $("#code").val();
+                const amount = document.getElementById("grandtotal").innerHTML;
+                console.log("amount",amount);
+                $.ajax({
+                    url: "/applyCoupon",
+                    method: "post",
+                    data: {
+                        code: code,
+                        amount: parseInt(amount.replace(/[^\d.]/g, ''))
+                    },
+                    success: (response) => {
+                        console.log(response);
+                        if (response.user) {
+                            console.log("This user has already used this coupon");
+                            toastr.warning("Oops! This user has already used this coupon");
+                        } else if (response.status) {
+                            console.log("This coupon is not in use");
+                            toastr.warning("Oops! This coupon is not in use");
+                        } else if (response.cartAmount) {
+                            console.log("You can't use the coupon... Buy more");
+                            toastr.warning("Oops! You can't use the coupon... Buy more");
+                        } else if (response.date) {
+                            console.log("Coupon date expired");
+                            toastr.warning("Oops! Coupon date expired");
+                        } else if (response.amountkey) {
+                            console.log("hi",response.discAmount);
+                            console.log(response.disTotal);
+
+                            document.getElementById('discountAmount').innerText = response.discAmount;
+                          document.getElementById('newTotal').innerHTML = response.disTotal;
+                        //   $("#grandTotal").html(response.disTotal)
+
+
+
+
+                            
+                            console.log("Done");
+                            toastr.success("Coupon Added");
+                        } else if (response.invalid) {
+                            console.log("Invalid coupon");
+                            toastr.warning("Oops! Invalid coupon");
+                        }
+                    }
+                });
+            });
+
     </script>
 
 <%- include('../partials/userPartials/footer.ejs') %>
