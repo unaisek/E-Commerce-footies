@@ -27,6 +27,7 @@
                                 <th>Coupon Type</th>
                                 <th>Discount Amount</th>
                                 <th>Minimum Cart Amount</th>
+                                <th>Expired</th>
                                 <th>Status</th>
                                 <th>Action</th>
 
@@ -54,6 +55,7 @@
                                         <td>
                                             <%=coupons[i].minCartAmount%>
                                         </td>
+                                        <td><%= coupons[i].expired.toISOString().slice(0, 10) %></td>
                                         <% if(coupons[i].status){%>
                                             <td><span class="badge rounded-pill alert-success"><%=coupons[i].status %></span></td>
 
@@ -63,8 +65,8 @@
                                         <td>
                                             <a href="/admin/editCoupon?id=<%= coupons[i]._id %>" class="btn btn-sm font-sm rounded btn-outline-secondary">
                                                 <i class="material-icons md-edit"></i> Edit</a>
-                                            <a href="/admin/deleteCoupon?id=<%= coupons[i]._id %>" class="btn btn-sm font-sm btn-outline-danger rounded" onclick="return confirm('Are you sure you want delete this item');"><i
-                                                                                        class="material-icons md-delete_forever"></i> Delete</a>
+                                            <!-- <a href="/admin/deleteCoupon?id=<%= coupons[i]._id %>" class="btn btn-sm font-sm btn-outline-danger rounded" onclick="return confirm('Are you sure you want delete this item');"><i
+                                                                                        class="material-icons md-delete_forever"></i> Delete</a> -->
                                         </td>
 
                                     </tr>

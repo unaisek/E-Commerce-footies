@@ -47,9 +47,9 @@ const addNewAddress = async(req,res)=>{
                 }
             );
             if (updatedAddress){
-                res.redirect('addAddress');
+                res.redirect('/checkout');
             } else {
-                req.redirect('addAddress');
+                req.redirect('/checkout');
             }
 
         } else {
@@ -69,9 +69,9 @@ const addNewAddress = async(req,res)=>{
 
             const addressData = await userAdress.save();
             if(addressData){
-                res.redirect('/addAddress');
+                res.redirect('/checkout');
             } else {
-                res.redirect('/addAddress');
+                res.render('addAddress')
             }
         }
     } catch (error) {
@@ -79,7 +79,53 @@ const addNewAddress = async(req,res)=>{
     }
 }
 
+const loadEditAddress =  async(req,res)=>{
+    try {
+        const userId = req.session.user_id;
+        const addressId = req.query.id;
+        const addressData = await Address.findOne({ userId: userId ,"addresses._id":addressId})
+        const aData = addressData.addresses.find((addr) => addr._id.toString()=== addressId);
+        res.render("editAddress", { address: aData ,loggedIn :userId})       
+    } catch (error) {
+        console.log(error.message);
+    }
+}
+
+const doEditAddress = async (req, res) => {
+    try {
+        const userId = req.session.user_id;
+        console.log(req.body);
+        const { userName, mobile, altMobile, address, city, state, pincode, landmark } = req.body;
+
+         const updateData = await Address.findOneAndUpdate({ userId:userId, "addresses._id": req.query.id }, {
+                $set: {
+                    "addresses.$.userName": userName,
+                    "addresses.$.mobile": mobile,
+                    "addresses.$.alternativeMob": altMobile, 
+                    "addresses.$.address": address,
+                    "addresses.$.city": city,
+                    "addresses.$.state": state,
+                    "addresses.$.pincode": pincode,
+                    "addresses.$.landmark": landmark,
+                }
+        });
+        if(updateData){
+
+            res.redirect('/checkout');
+        } else {
+            console.log("log not updated");
+        }
+
+    } catch (error) {
+        console.log(error.message);
+    }
+};
+
+
 module.exports = {
     loadAddAddress,
-    addNewAddress
+    addNewAddress,
+    loadEditAddress,
+    doEditAddress
+
 }

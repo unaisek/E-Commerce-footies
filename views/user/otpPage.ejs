@@ -613,7 +613,7 @@
         <!--  otp-page AREA END -->
 
 
-<script>
+<!-- <script>
     function startTimer(duration, display) {
         var timer = duration, minutes, seconds;
         setInterval(function () {
@@ -637,11 +637,11 @@
         startTimer(15, countdown);
         // Update timer element and display message when OTP expires
         function countdownExpired() {
-        countdownTimer.innerHTML = 'OTP has expired. Resend the OTP <a href="/resend/">here</a>.';
+        countdownTimer.innerHTML = 'OTP has expired. Resend the OTP <a href="/resend/?email=< class=>here</a>.';
 
         }
 
         setTimeout(countdownExpired, 15000);
-</script>
+</script> -->
 
 <%- include('../partials/userPartials/footer.ejs') %>

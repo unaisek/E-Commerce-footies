@@ -34,7 +34,7 @@
                 <div class="row">
                     <div class="col-lg-6 offset-lg-3">
                         <div class="account-login-inner">
-                            <form method="post" action="/addAddress" class="ltn__form-box contact-form-box">
+                            <form method="post" action="/addAddress" class="ltn__form-box contact-form-box" onsubmit=" return validateForm()">
                                 <input type="text" name="userName" placeholder="Username" id="username" required>
                                 <input type="text" name="mobile" placeholder="Mobile Number" id="mobile" required>
                                 <input type="text" name="altMobile" placeholder="Alternative Mobile Number(optional)" id="altMobile">
@@ -75,4 +75,22 @@
             </div>
         </div>
         <!-- CALL TO ACTION END -->
+        <script>
+            function validateForm() {
+                var userName = document.getElementById("username").value.trim();
+                var mobile = document.getElementById("mobile").value.trim();
+                var address = document.getElementById("address").value.trim();
+                var city = document.getElementById("city").value.trim();
+                var state = document.getElementById("state").value.trim();
+                var pincode = document.getElementById("pincode").value.trim();
+
+                // Validate that required fields are not empty
+                if (userName === '' || mobile === '' || address === '' || city === '' || state === '' || pincode === '') {
+                    toastr.error("Please fill in all required fields.");
+                    return false;
+                }
+
+                return true;
+            }
+        </script>
 <%- include('../partials/userPartials/footer.ejs') %>

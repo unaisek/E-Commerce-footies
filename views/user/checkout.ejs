@@ -30,6 +30,11 @@
                                     <h4 class="title-2">Delivery Address</h4>
                                     <div class="ltn__checkout-single-content-info">
                                         <div class="row">
+                                            <div class="mb-5">
+                                                <a href="/addAddress" class="theme-btn-1 btn btn-effect-1">
+                                                    <span class="d-inline-block fi">ADD NEW ADDRESS</span>
+                                                </a>
+                                            </div>
                                             <% addresses.forEach((address)=>{%>
                                                 <div class="col-lg-3 col-md-6 m-4" style="border: 1px solid #e5eaee;">
                                                     <div>
@@ -44,6 +49,8 @@
                                                         <p>State:<%=address.state%></p>
                                                         <p>Picode:<%=address.pincode%></p>
                                                         <p>Landmark:<%=address.landmark%></p>
+                                                        <a href="/editAddress?id=<%=address._id%>" class="btn-outline-success-light"><i class="fas fa-edit"></i>
+                                                        Edit </a>
                                                     </div>
                                                 </div>
                                             <% }) %>

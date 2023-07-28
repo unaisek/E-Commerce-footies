@@ -4,14 +4,14 @@
             <div class="col-lg-6">
                 <div class="card mb-4">
                     <div class="card-body">
-                        <form action="/admin/editCoupon?id=<%= coupon._id%>" method="post" onsubmit=" return validateForm()">
+                        <form action="/admin/editCoupon?id=<%= coupon._id%>" method="post" onsubmit="return validateForm()">
                             <div class="mb-4">
                                 <label for="product_name" class="form-label">Coupon Name</label>
-                                <input type="text" placeholder="Type here" class="form-control" name="couponName"  value="<%=coupon.couponName %>"/>
+                                <input type="text" placeholder="Type here" class="form-control" name="couponName" id="couponName" value="<%=coupon.couponName %>"/>
                             </div>
                             <div class="mb-4">
                                 <label class="form-label">Discount Type</label>
-                                <select class="form-select" name="discountType">
+                                <select class="form-select" name="discountType" id="discountType">
                                     <option value="Fixed Amount" <%=coupon.discountType==='Fixed Amount' ? 'selected' : '' %>>Fixed Amount</option>
                                     <option value="Percentage" <%=coupon.discountType==='Percentage' ? 'selected' : '' %>>Percentage</option>
                                 </select>
@@ -22,7 +22,7 @@
                                     <div class="mb-4">
                                         <label class="form-label">Discount Amount</label>
                                         <div class="row gx-2">
-                                            <input placeholder="$" type="Number" class="form-control"
+                                            <input placeholder="$" type="Number" class="form-control" id="discountAmount"
                                                 name="discountAmount"  value="<%=coupon.discountAmount %>"/>
                                         </div>
                                     </div>
@@ -30,60 +30,56 @@
                                 <div class="col-lg-4">
                                     <div class="mb-4">
                                         <label class="form-label">Minimum Cart Amount</label>
-                                        <input placeholder="$" type="Number" class="form-control"
+                                        <input placeholder="$" type="Number" class="form-control" id="minCartAmount"
                                             name="minCartAmount"  value="<%=coupon.minCartAmount %>"/>
                                     </div>
                                 </div>
                                 <div class="col-lg-4">
                                     <div class="mb-4">
                                         <label class="form-label">Max Discount Amount</label>
-                                        <input placeholder="$" type="Number" class="form-control"
+                                        <input placeholder="$" type="Number" class="form-control" id="maxDiscAmount"
                                             name="maxDiscAmount" value="<%=coupon.maxDiscAmount %>" />
                                     </div>
                                 </div>
                             </div>
                             <div class="mb-4">
                                 <label class="form-label">Expire Date</label>
-                                <input type="date" class="form-control" id="product_name" name="expired" value="<%= coupon.expired ? coupon.expired.toISOString().substr(0, 10) : '' %>"/>
+                                <input type="date" class="form-control" id="product_name" name="expired" id="expired" value="<%= coupon.expired ? coupon.expired.toISOString().substr(0, 10) : '' %>"/>
                             </div>
-                            <button class="btn btn-md rounded font-sm hover-up" type="submit">Update Coupon</button>
+                            <button class="btn btn-md rounded font-sm hover-up" >Update Coupon</button>
                         </form>
                     </div>
                 </div>
             </div>
         </div>
     </section>
+    
 
     <script>
         function validateForm() {
             // Get the form elements
             console.log("validate");
-            var discountAmount = document.forms["couponForm"]["discountAmount"].value;
-            var minCartAmount = document.forms["couponForm"]["minCartAmount"].value;
-            var maxDiscAmount = document.forms["couponForm"]["maxDiscAmount"].value;
-            var couponName = document.forms["couponForm"]["couponName"].value;
-            var expireDate = document.forms["couponForm"]["expired"].value;
+            var couponName  = document.getElementsById("couponName").value.trim();
+            console.log("hi", couponName);
+            var discountAmount = document.getElementsById("discountAmount").value;
+            var minCartAmount = document.getElementsById("minCartAmount").value;
+            var maxDiscAmount = document.getElementsById("maxDiscAmount").value;
+            var expireDate = document.getElementsById("expired").value;
 
-            // Validate discountAmount, minCartAmount, and maxDiscAmount
             if (discountAmount <= 0 || minCartAmount <= 0 || maxDiscAmount <= 0) {
                 toastr.error("Discount amount, minimum cart amount, and max discount amount must be positive numbers.");
                 return false;
             }
-
-            // Validate couponName
-            if (couponName.trim() === '') {
+            if (couponName === '') {
                 toastr.error("Coupon name must not be empty.");
                 return false;
             }
-
-            // Validate expired date
             var today = new Date().toISOString().slice(0, 10);
             if (expireDate < today) {
                 toastr.error("Coupon expiration date must be greater than the current date.");
                 return false;
             }
 
-            // Form is valid, submit the form
             return true;
         }
     </script>

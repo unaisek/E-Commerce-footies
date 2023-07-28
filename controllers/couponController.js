@@ -83,7 +83,6 @@ const applyCoupon = async(req,res)=>{
 
         const code = req.body.code;
         const amount = Number(req.body.amount);
-        console.log("amount",amount);
         const userExist = await Coupon.findOne({ couponName: code, usedUsers: { $in: [req.session.user_id]}});
         if(userExist){
             res.json({user: true});

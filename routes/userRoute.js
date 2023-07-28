@@ -63,8 +63,11 @@ userRoute.get('/myAccount',userController.loadProfile);
 
 // address 
 
-userRoute.get('/addAddress',addressController.loadAddAddress);
-userRoute.post('/addAddress',addressController.addNewAddress)
+userRoute.get('/addAddress',userAuth.isLogin,addressController.loadAddAddress);
+userRoute.post('/addAddress',addressController.addNewAddress);
+userRoute.get('/editAddress', userAuth.isLogin, addressController.loadEditAddress);
+userRoute.post('/editAddress',addressController.doEditAddress)
+
 
 // checkout
 userRoute.get('/checkout',userAuth.isLogin,cartController.loadCheckout);

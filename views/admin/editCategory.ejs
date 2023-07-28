@@ -13,7 +13,7 @@
             <div class="card-body">
                 <div class="row">
                     <div class="col-md-6">
-                        <form action="/admin/editCategory?id=<%=category._id%>" method="post">
+                        <form action="/admin/editCategory?id=<%=category._id%>" method="post" onsubmit="return validateForm()">
                             <div class="mb-4">
                                 <label for="product_name" class="form-label">Catogery Name</label>
                                 <input type="text" placeholder="Type here" class="form-control" id="category_name" value="<%= category.categoryName%>"
@@ -47,13 +47,13 @@
         function validateForm() {
             const productName = document.getElementById("category_name").value;
             if (productName.trim() === "") {
-                alert("Product name cannot be empty");
+                toastr.error("Category name cannot be empty");
                 return false;
             }
 
             const description = document.getElementById("description").value;
             if (description.trim() === "") {
-                alert("Description cannot be empty");
+                toastr.error("Description cannot be empty");
                 return false;
             }
             return true;
