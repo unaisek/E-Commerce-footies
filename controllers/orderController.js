@@ -2,7 +2,8 @@ const User = require("../models/userModel");
 const Product = require("../models/productModel");
 const Cart = require("../models/cartModel");
 const Address = require('../models/addressModel'); 
-const Order = require('../models/orderModel')
+const Order = require('../models/orderModel');
+const Wallet = require('../models/walletModel');
 const Razorpay = require('razorpay');
 require('dotenv').config();
 
@@ -169,36 +170,40 @@ const cancelOrder = async(req,res)=>{
 
 // return Order
 
-const returnOrder = async(req,res)=>{
+const loadReturnPage = async(req,res)=>{
     try {
 
-        const userId = req.session.user_id;
-        const orderId = req.body.orderId;
-        const userData = await User.findOne({ _id: userId });
-        const orderData = await Order.findOne({ _id: orderId });
-        let wallet = userData.wallet;
-        if (orderData) {
-            if(orderData.status === "Delivered"){
-                const totalWallet = wallet+=orderData.amount;
-                await User.findByIdAndUpdate(userId, { $set: { wallet: totalWallet } });
-                for (const product of orderData.products) {
-                    const productId = product.productId;
-                    const count = product.count;
-                    await Product.findByIdAndUpdate(productId, { $inc: { stock: count } });
-                }    
-                await Order.findByIdAndUpdate(orderId, { $set: { status: "Returned" } });
-                res.json({ success: true })
-
-            }
-
-        } else {
-            res.json({ success: false });
-        }
+        const orderId = req.query.id;
+        const loggedIn = req.session.user_id;
+        res.render('returnReason',{orderId,loggedIn});
         
     } catch (error) {
         console.log(error.message);
     }
 }
+
+const returnOrder = async(req,res)=>{
+    try {
+
+        const userId = req.session.user_id;
+        const orderId = req.query.id;
+        const returnReason = req.body.reasonReturn;
+        const userData = await User.findOne({ _id: userId });
+        const orderData = await Order.findOne({ _id: orderId });
+        if (orderData) {
+            if(orderData.status === "Delivered"){
+                const updatedData = await Order.findByIdAndUpdate(orderId, { $set: { returnReason: returnReason, returnStatus: "Requested"  }});
+                if(updatedData){
+                    res.redirect('/myOrders')
+                }
+            }
+        }        
+    } catch (error) {
+        console.log(error.message);
+    }
+}
+
+// ADMIN 
 
 // admin side order list
 
@@ -225,6 +230,70 @@ const deliveredOrder = async (req, res) => {
     res.redirect('/admin/orderList');
 }
 
+// order Return confirmation
+
+const returnConfirmPage = async(req,res)=>{
+    try {
+
+        const orderId = req.query.id;
+        const orderData = await Order.findOne({_id:orderId});
+        if(orderData){
+            res.render('returnConfirmPage',{order:orderData})
+        }
+        
+    } catch (error) {
+        console.log(error.message);
+    }
+}
+
+const returnApproved = async(req,res)=>{
+
+    const orderId = req.query.id;
+    const orderData = await Order.findOne({_id: orderId});
+    const userId = orderData .userId;
+    await Order.findByIdAndUpdate({_id: orderId}, { $set: { returnStatus: "Approved" , status: "Returned" } })    
+    const walletData = await Wallet.findOne({userId: userId});
+    if(walletData){
+        const wallet = walletData.walletAmount;
+        const totalWallet = wallet + orderData.totalAmount;
+        console.log("wallet",totalWallet);
+        await Wallet.findOneAndUpdate({userId: userId},{ $set: { walletAmount: totalWallet } });
+        await Wallet.findOneAndUpdate({ userId: userId }, { $push: { wallet: { amount: orderData.totalAmount, transactionType: "Credited"} } })
+        for (const product of orderData.products) {
+            const productId = product.productId;
+            const count = product.count;
+            await Product.findByIdAndUpdate(productId, { $inc: { stock: count } });
+        }  
+        res.redirect('/admin/orderList');
+    } else {
+        const wallet = new Wallet({
+            userId: userId,
+            walletAmount: orderData.totalAmount,
+            wallet:[{
+                amount: orderData.totalAmount,
+                transactionType: "Credited",
+            }]
+        });
+        const walletData = await wallet.save();
+        if(walletData){
+            res.redirect('/admin/orderList')
+        } else {
+            console.log(error.message,"not save wallet");
+        }
+    }
+
+}
+
+const returnRejected = async(req,res)=>{
+    try {
+
+        const orderId = req.query.id;
+        await Order.findOneAndUpdate({_id: orderId},{ $set: { returnStatus: "Rejected" }});
+        res.redirect('/admin/orderList');
+    } catch (error) {
+        console.log(error.message);
+    }
+}
 const showOrderDetails = async(req,res)=>{
     try {
         const orderId = req.query.id;
@@ -243,9 +312,13 @@ module.exports = {
     loadMyOrders,
     viewOrderedProduct,
     cancelOrder,
+    loadReturnPage,
     returnOrder,
     adminOrderLists,
     shippedOrder,
     deliveredOrder,
+    returnConfirmPage,
+    returnApproved,
+    returnRejected,
     showOrderDetails
 }

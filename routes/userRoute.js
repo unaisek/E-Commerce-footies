@@ -81,7 +81,10 @@ userRoute.post('/applyCoupon',couponController.applyCoupon)
 userRoute.get('/myOrders',userAuth.isLogin,orderController.loadMyOrders);
 userRoute.get('/orderedProduct', userAuth.isLogin, orderController.viewOrderedProduct);
 userRoute.post('/cancelOrder',orderController.cancelOrder);
-userRoute.post('/returnOrder', orderController.returnOrder);
+
+// return Order
+userRoute.get('/returnOrder', userAuth.isLogin, orderController.loadReturnPage);
+userRoute.post('/returnOrder', userAuth.isLogin, orderController.returnOrder);
 
 
 

@@ -1,0 +1,25 @@
+<%- include('../partials/adminPartials/adminHeader.ejs') %>
+        <section class="content-main">
+            <div class="content-header">
+                <h2 class="content-title">Blank page</h2>
+                <div>
+                    <a href="#" class="btn btn-primary">Create new</a>
+                </div>
+            </div>
+            <div class="card mb-4">
+                <header class="card-header">
+                    <h4>Return Reason</h4>
+                </header>
+                    <div class="mt-4">
+                        <div class=" ps-4">
+                            <p><%= order.returnReason %></p>
+                        </div>
+                    </div>
+            </div>
+            <div class="text-center">
+                <a href="/admin/returnApproved?id=<%=order._id %>" ><button class="btn btn-primary">Approved</button></a>
+                <a href="/admin/returnRejected?id=<%=order._id %>"><button class="btn btn-danger">Rejected</button></a>
+                </div>
+            <!-- card end// -->
+        </section>
+<%- include('../partials/adminPartials/adminFooter.ejs') %>

@@ -1,0 +1,104 @@
+
+<%- include('../partials/userPartials/header.ejs') %>
+
+
+<div class="ltn__breadcrumb-area text-left bg-overlay-white-30 bg-image " data-bs-bg="img/bg/14.jpg">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-12">
+                <div class="ltn__breadcrumb-inner">
+                    <h1 class="page-title">Return Product</h1>
+                    <div class="ltn__breadcrumb-list">
+                        <ul>
+                            <li><a href="index.html"><span class="ltn__secondary-color"><i
+                                            class="fas fa-home"></i></span> Home</a></li>
+                            <li>Return</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- BREADCRUMB AREA END -->
+<div class="row">
+    <div class="col-lg-6 offset-lg-3">
+        <div class="account-login-inner">
+            <form method="post" action="/returnOrder?id=<%= orderId %>" class="ltn__form-box contact-form-box text-center">
+                <textarea name="reasonReturn" placeholder="Return Reason" id="'reasonReturn" required></textarea>
+                <button class="theme-btn-1 btn reverse-color btn-block" type="submit">Return</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+
+    <script>
+        toastr.options = {
+            "closeButton": true,
+            "newestOnTop": false,
+            "progressBar": true,
+            "positionClass": "toast-top-center",
+            "preventDuplicates": false,
+            "onclick": null,
+            "showDuration": "300",
+            "hideDuration": "1000",
+            "timeOut": "3000",
+            "extendedTimeOut": "1000",
+            "showEasing": "swing",
+            "hideEasing": "linear",
+            "showMethod": "slideDown",
+            "hideMethod": "fadeOut"
+        };
+
+        
+        
+        // function confirmReturn() {
+        //     const reason = document.getElementById('reasonReturn').value;
+            
+        //     // Show SweetAlert confirmation modal
+        //     swal({
+        //         title: "Are you sure?",
+        //         text: "Do you want to request a return with the following reason?\n\n" + reason,
+        //         icon: "warning",
+        //         buttons: ["Cancel", "Confirm"],
+        //     }).then((confirmed) => {
+        //         if (confirmed) {
+        //             // User confirmed, call returnOrder function to submit the return request
+        //             const orderId = '<%=orderId%>';
+        //             returnOrder(orderId, reason);
+        //         } else {
+        //             // User canceled, do nothing
+        //         }
+        //     });
+        // }
+
+
+        // function returnOrder(orderId) {
+        //     const reason = document.getElementById('reasonReturn').value;
+        //     console.log(orderId);
+        //     $.ajax({
+        //         url: "/returnOrder",
+        //         method: 'post',
+        //         data: {
+        //              orderId,
+        //              reason
+        //         },
+        //         success: (response) => {
+        //             if (response.status === true) {
+        //                 toastr.success("Order Returned");
+        //                 window.location.href = '/'
+        //             } else if (response.noReturn === true) {
+        //                 toastr.warning("Return Date Exceeded");
+        //             } else if (response.noOrder === true) {
+        //                 toastr.warning("No Order Available For Return");
+        //             }
+        //         }
+        //     });
+        // }
+
+    </script>
+
+    <!-- FOOTER AREA START -->
+    <%-include('../partials/userPartials/footer.ejs')%>

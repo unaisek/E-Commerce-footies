@@ -51,6 +51,14 @@ const orderSchema = new mongoose.Schema({
     status :{
         type :String
     },
+    returnStatus: {
+        type: String,
+        default: "No Return"
+    },
+    returnReason:{
+        type: String,
+        default: null
+    },
     orderWallet :{
         type :Number
     }

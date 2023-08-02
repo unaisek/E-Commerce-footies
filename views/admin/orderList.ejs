@@ -44,6 +44,7 @@
                                 <th scope="col">Total</th>
                                 <th scope="col">Payment Method</th>
                                 <th scope="col">Status</th>
+                                <th scope="col">Return Status</th>
                                 <th scope="col" class="text-end">Action</th>
                             </tr>
                         </thead>
@@ -87,6 +88,23 @@
                                                 </button>
                                             <% } %>
                                     </div></td>
+                                    <td>
+                                        <% if(order.returnStatus == "No Return") {%>
+                                            <a href="" class="btn-secondary btn-sm ">
+                                                <%=order.returnStatus%>
+                                            </a>
+                                        <% }else if(order.returnStatus == "Requested"){ %>
+                                            <a href="/admin/returnConfirm?id=<%=order._id %>" class="btn-info btn-sm "><%=order.returnStatus%></a>
+                                        <% }else if(order.returnStatus == "Approved"){ %>
+                                            <a href="" class="btn-success btn-sm "><%=order.returnStatus%></a>
+                                        <% } else{ %>
+                                            <a href="" class="btn-danger btn-sm ">
+                                                <%=order.returnStatus%>
+                                            </a>
+                                        <% } %>
+
+
+                                    </td>
                                     <td class="text-end">
                                         <a href="/admin/orderDetails?id=<%=order._id %>" class="btn btn-md rounded font-sm">Detail</a>
                                         <!-- <div class="dropdown">

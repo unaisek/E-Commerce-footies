@@ -29,10 +29,10 @@
                                 <tr>
                                     <th>OrderId</th>
                                     <th>Date</th>
-                                    <th>Delivery Address</th>
                                     <th>Paid Amount</th>
                                     <th>Status</th>
                                     <th>Return/Cancel</th>
+                                    <th>Return Status</th>
                                     <th>Action</th>
                                 </tr>
                             </thead>
@@ -44,9 +44,6 @@
                                         </td>
                                         <td>
                                             <%= order.date.toISOString().substring(0,10) %>
-                                        </td>
-                                        <td>
-                                            <%= order.deliveryAddress %>
                                         </td>
                                         <td>
                                             <%= order.totalAmount %>
@@ -75,7 +72,7 @@
                                         <td>
                                             <% if (order.status==="Delivered" ) { %>
                                                 <div>
-                                                    <button class="font-sm btn-danger btn-sm" onclick=" returnOrder('<%= order._id %>')">Return</button>
+                                                    <a href="/returnOrder?id=<%= order._id %>"><button class="font-sm btn-danger btn-sm">Return</button></a>
                                                 </div>
                                                 <% }else if(order.status == "Cancelled") {%>
                                                     <div>
@@ -90,6 +87,21 @@
                                                         <button class="btn-sm font-sm btn-danger" onclick="cancel('<%= order._id %>')">Cancel</button>
                                                     </div>
                                                     <% } %>
+                                        </td>
+                                        <td>
+                                            <% if(order.returnStatus == "Approved") {%>
+                                                <p class="text-success"><%= order.returnStatus %></p>
+                                            <% } else if(order.returnStatus == "Rejected"){ %>
+                                                <p class="text-danger"><%= order.returnStatus %></p>
+                                            <% } else if(order.returnStatus == "Requested"){ %>
+                                                <p class="text-info">
+                                                    <%= order.returnStatus %>
+                                                </p>
+                                            <% } else{ %>
+                                                <p class="text-secondary">
+                                                    <%= order.returnStatus %>
+                                                </p>
+                                            <% } %>
                                         </td>
                                         <td><a href="/orderedProduct?id=<%= order._id %>">View</a></td>
                                     </tr>
@@ -127,28 +139,28 @@
             }
         }
 
-        function returnOrder(orderId) {
-                if (confirm("Are you sure you want to return this order?")) {
+        // function returnOrder(orderId) {
+        //         if (confirm("Are you sure you want to return this order?")) {
 
-                    $.ajax({
-                        url: "/returnOrder",
-                        data: {
-                            orderId: orderId
-                        },
-                        method: "post",
-                        success: (response) => {
-                            if (response.success) {
-                                toastr.success("Order canceled successfully!", "Success", {
-                                    timeOut: 3000,
-                                    closeButton: true,
-                                    progressBar: true,
-                                });
-                                location.reload();
-                            }
-                        }
-                    });
-                }
-            }
+        //             $.ajax({
+        //                 url: "/returnOrder",
+        //                 data: {
+        //                     orderId: orderId
+        //                 },
+        //                 method: "post",
+        //                 success: (response) => {
+        //                     if (response.success) {
+        //                         toastr.success("Order canceled successfully!", "Success", {
+        //                             timeOut: 3000,
+        //                             closeButton: true,
+        //                             progressBar: true,
+        //                         });
+        //                         location.reload();
+        //                     }
+        //                 }
+        //             });
+        //         }
+        //     }
     </script>
 
 <%- include('../partials/userPartials/footer.ejs') %>

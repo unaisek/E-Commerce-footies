@@ -54,6 +54,10 @@ adminRoute.get('/orderList',adminAuth.isLogin,orderController.adminOrderLists);
 adminRoute.get('/shipping', adminAuth.isLogin, orderController.shippedOrder);
 adminRoute.get('/delivered', adminAuth.isLogin, orderController.deliveredOrder);
 adminRoute.get('/orderDetails',adminAuth.isLogin,orderController.showOrderDetails);
+// return Order Approval
+adminRoute.get('/returnConfirm', adminAuth.isLogin, orderController.returnConfirmPage);
+adminRoute.get('/returnApproved',adminAuth.isLogin,orderController.returnApproved);
+adminRoute.get('/returnRejected', adminAuth.isLogin, orderController.returnRejected);
 
 // coupon 
 adminRoute.get('/coupon', adminAuth.isLogin, couponController.showCouponList);
