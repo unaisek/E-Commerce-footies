@@ -2,6 +2,7 @@ const User = require('../models/userModel');
 const Product = require('../models/productModel');
 const Category = require('../models/categoryModel');
 const Address = require('../models/addressModel');
+const Wallet = require('../models/walletModel');
 const bcrypt = require('bcrypt');
 const nodemailer = require('nodemailer');
 require('dotenv').config();

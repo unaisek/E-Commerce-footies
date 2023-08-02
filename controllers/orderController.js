@@ -14,17 +14,18 @@ var instance = new Razorpay ({
 
 const placeOrder = async(req,res)=>{
     try {
-        const userData = await User.findOne({_id:req.session.user_id});
+        const userId = req.session.user_id;
+        const userData = await User.findOne({ _id: userId });
         const address = req.body.address;
         const paymentMethod = req.body.payment;
-        const cartData = await Cart.findOne({user: req.session.user_id});
+        const cartData = await Cart.findOne({ user: userId });
         const products = cartData.products;
         const total = parseInt(req.body.amount);
         const grandTotal = parseInt(req.body.total);
-        const status = paymentMethod === "COD" ? "placed" : "pending";
+        const status = paymentMethod === "COD" || "wallet" ? "placed" : "pending";
         const order = new Order({
             deliveryAddress: address,
-            userId: req.session.user_id,
+            userId: userId,
             userName :userData.name,
             paymentMethod: paymentMethod,
             products: products,
@@ -44,10 +45,19 @@ const placeOrder = async(req,res)=>{
                 await Product.findByIdAndUpdate({_id:productId},{$inc:{stock: -count}});
 
             }
-            if(order.status == "placed"){
-                // const wallet = totalPrice - Total;
+            if(order.paymentMethod == "wallet"){
+                const walletData = await Wallet.findOne({userId: userId});
+                const wallet = walletData.walletAmount;
+                const totalWallet = wallet - order.totalAmount;
+                await Wallet.findOneAndUpdate({ userId: userId }, { $set: { walletAmount: totalWallet } });
+                await Wallet.findOneAndUpdate({ userId: userId }, { $push: { wallet: { amount: orderData.totalAmount, transactionType: "Debited" } } });
+                await Order.updateOne({ _id: orderId }, { $set: { month: date } });
+                await Cart.deleteOne({ user: userId });
+                res.json({ codSuccess: true });
+
+            }else if(order.status == "placed"){
                 await Order.updateOne({_id:orderId},{$set:{month:date}});
-                await Cart.deleteOne({user: req.session.user_id});
+                await Cart.deleteOne({ user: userId });
                 res.json({codSuccess : true});
             } else {
                 
@@ -256,7 +266,6 @@ const returnApproved = async(req,res)=>{
     if(walletData){
         const wallet = walletData.walletAmount;
         const totalWallet = wallet + orderData.totalAmount;
-        console.log("wallet",totalWallet);
         await Wallet.findOneAndUpdate({userId: userId},{ $set: { walletAmount: totalWallet } });
         await Wallet.findOneAndUpdate({ userId: userId }, { $push: { wallet: { amount: orderData.totalAmount, transactionType: "Credited"} } })
         for (const product of orderData.products) {

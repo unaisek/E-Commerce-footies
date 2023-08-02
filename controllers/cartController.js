@@ -2,6 +2,9 @@ const User = require ("../models/userModel");
 const Product = require("../models/productModel");
 const Cart= require("../models/cartModel");
 const Address = require('../models/addressModel'); 
+const Wallet = require('../models/walletModel');
+const Coupon = require('../models/couponModel');
+
 const { query } = require("express");
 
 const loadCart = async(req,res)=>{
@@ -59,7 +62,7 @@ const loadCart = async(req,res)=>{
 
 const addToCart = async(req,res)=>{
     try {
-        const productId = req.query.id;
+        const productId = req.body.query;
         const userData = await User.findOne({_id:req.session.user_id});
         const productData = await Product.findOne({_id:productId});
         
@@ -67,37 +70,40 @@ const addToCart = async(req,res)=>{
         if(req.session.user_id){
             const userId = req.session.user_id;
             const cartData = await Cart.findOne({user:userId});
-            if(cartData){
-                const productExist = await cartData.products.findIndex((product)=>
-                    product.productId == productId
-                )
-                if(productExist != -1){
-                    await Cart.updateOne({user:userId,"products.productId":productId},{$inc:{"products.$.count":1}});
-                    // res.json({success:true});
-                    res.redirect('/cart');
-                } else {
-                    await Cart.findOneAndUpdate({user:userId},{$push:{products:{productId:productId,productPrice:productData.price}}});
-                    // res.json({success:true});
-                    res.redirect('/cart');
+            if(productData.stock > 0){
 
-                }
-            }else {
-                const cart = new Cart({
-                    user : userData._id,
-                    userName : userData.name,
-                    products:[{
-                        productId : productId,
-                        productPrice:productData.price
-                    }]
-                });
-
-                const cartData = await cart.save();
                 if(cartData){
-                    // res.json({success:true});
-                    res.redirect('/cart');
-                } else {
-                    res.redirect('/');
+                    const productExist = await cartData.products.findIndex((product)=>
+                        product.productId == productId
+                    )
+                    if(productExist != -1){
+                        await Cart.updateOne({user:userId,"products.productId":productId},{$inc:{"products.$.count":1}});
+                        res.json({success:true});
+                        // res.redirect('/cart');
+                    } else {
+                        await Cart.findOneAndUpdate({user:userId},{$push:{products:{productId:productId,productPrice:productData.price}}});
+                        res.json({success:true});
+                        // res.redirect('/cart');
+    
+                    }
+                }else {
+                    const cart = new Cart({
+                        user : userData._id,
+                        userName : userData.name,
+                        products:[{
+                            productId : productId,
+                            productPrice:productData.price
+                        }]
+                    });
+    
+                    const cartData = await cart.save();
+                    if(cartData){
+                        res.json({success:true});
+                        // res.redirect('/cart');
+                    } 
                 }
+            } else {
+                res.json({check:true})
             }
         } else {
             res.redirect('/login');
@@ -148,6 +154,8 @@ const loadCheckout = async(req,res)=>{
         const loggedIn = req.session.user_id;
         const userData = await User.findOne({_id :req.session.user_id});
         const addressData = await Address.findOne({userId:req.session.user_id});
+        const wallet = await Wallet.findOne({ userId: req.session.user_id });
+        const coupons = await Coupon.find({ status:true });
         if(addressData){
             const addresses = addressData.addresses;
             const total = await Cart.aggregate([
@@ -173,7 +181,7 @@ const loadCheckout = async(req,res)=>{
                     }
                 ]);
                 const Total = total[0].total
-                res.render('checkout',{loggedIn,addresses,userData,Total});
+                res.render('checkout',{ loggedIn, addresses, userData, Total, wallet, coupons });
 
 
         } else {

@@ -68,10 +68,14 @@
                                                 </div>
                                             </li> -->
                                             <li>
-                                                <a href="/addToCart?id=<%= product._id %> %>" class="theme-btn-1 btn btn-effect-1">
+                                                <!-- <a href="/addToCart?id=<%= product._id %> %>" class="theme-btn-1 btn btn-effect-1" onclick="addToCart('<%= product._id  %>')">
                                                     <i class="fas fa-shopping-cart"></i>
                                                     <span>ADD TO CART</span>
-                                                </a>
+                                                </a> -->
+                                                <button class="theme-btn-1 btn btn-effect-1" onclick="addToCart('<%=product._id %>')">
+                                                    <i class="far fa-shopping-cart"></i>
+                                                    <span>Add to Cart</span>
+                                                </button>
                                                 <!-- <a href="#" class="theme-btn-1 btn btn-effect-1" onclick="addToCart('<%= product._id %>')">Add to Cart</a> -->
                                             </li>
                                         </ul>
@@ -354,7 +358,7 @@
 
     <!-- SHOP DETAILS AREA END -->
     <script>
-        function addToWishlist(id){
+       function addToWishlist(id){
             $.ajax({
                 url: '/addToWishlist',
                 method: 'post',
@@ -370,6 +374,23 @@
                 }
             })
         }
+            function addToCart(id) {
+                console.log("hi");
+                    $.ajax({
+                        url: '/addToCart',
+                        method: 'post',
+                        data: {
+                            query: id
+                        },
+                        success: (response) => {
+                            if (response.success) {
+                                toastr.success("Product added to Cart");
+                            } else if (response.check) {
+                                toastr.error("Out of Stock!!");
+                            }
+                        }
+                    })
+                }
     </script>
     <%- include('../partials/userPartials/footer.ejs') -%>
 
