@@ -396,7 +396,8 @@ const loadProfile = async(req,res)=>{
         const loggedIn = req.session.user_id;
         const userData = await User.findOne({_id :req.session.user_id});
         const addressData = await Address.findOne({userId:req.session.user_id});
-        res.render('myAccount',{user:userData,loggedIn,addressData});
+        const walletData =  await Wallet.findOne({userId: req.session.user_id})
+        res.render('myAccount',{user:userData,loggedIn,addressData,walletData});
 
         
     } catch (error) {
