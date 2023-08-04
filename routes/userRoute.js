@@ -16,8 +16,6 @@ userRoute.use(session({
     saveUninitialized: true
 }))
 
-
-userRoute.set('view engine', 'ejs');
 userRoute.set('views', './views/user');
 
 // load home
@@ -72,10 +70,12 @@ userRoute.post('/editAddress',addressController.doEditAddress)
 // checkout
 userRoute.get('/checkout',userAuth.isLogin,cartController.loadCheckout);
 // orderplace
-userRoute.post('/checkout',orderController.placeOrder);
-userRoute.post('/verifyPayment',orderController.verifyPayment);
+userRoute.post('/checkout', userAuth.isLogin, orderController.placeOrder);
+userRoute.post('/verifyPayment', userAuth.isLogin, orderController.verifyPayment);
 // apply Coupon 
-userRoute.post('/applyCoupon',couponController.applyCoupon)
+userRoute.post('/applyCoupon', userAuth.isLogin, couponController.applyCoupon);
+// order success
+userRoute.get('/orderSuccess',userAuth.isLogin,orderController.loadOrderSuccess);
 
 // orders
 userRoute.get('/myOrders',userAuth.isLogin,orderController.loadMyOrders);

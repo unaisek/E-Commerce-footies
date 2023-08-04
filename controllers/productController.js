@@ -10,31 +10,33 @@ const sharp = require('sharp');
 
 
 // user home page
-const loadProductList  = async(req,res)=>{
+const loadProductList  = async(req,res,next)=>{
     try {
         const productData = await Product.find({})
         res.render('productList', { products: productData });
         
     } catch (error) {
         console.log(error.message);
+        next(error);
     }
 }
 
 
 // loading add product page
-const loadAddProduct = async (req, res) => {
+const loadAddProduct = async (req, res, next) => {
     try {
         const catDAta = await Category.find({})
         res.render('addProduct', { category: catDAta });
 
     } catch (error) {
         console.log(error.message);
+        next(error);
     }
 }
 
 // add products
 
-const addProduct = async(req,res)=>{
+const addProduct = async(req,res,next)=>{
     try {
         const images = [];
         for (let i = 0; i < req.files.length; i++) {
@@ -79,12 +81,13 @@ const addProduct = async(req,res)=>{
 
     } catch (error) {
         console.log(error.message);
+        next(error);
     }
 }
 
 // load edit product page
 
-const loadEditProduct = async(req,res)=>{
+const loadEditProduct = async(req,res,next)=>{
     try {
         
         const producData = await Product.findById({_id:req.query.id});
@@ -92,18 +95,19 @@ const loadEditProduct = async(req,res)=>{
         if(producData){
             res.render('editProduct',{products:producData,category:catData})
         } else {
-            req.redirect('/admin/dashboard')
+            res.redirect('/admin/dashboard')
         }
 
 
     } catch (error) {
         console.log(error.message);
+        next(error);
     }
 }
 
 // update Product
 
-const updateProduct = async(req,res)=>{
+const updateProduct = async(req,res,next)=>{
     try {
         const prodData = await Product.findById({_id:req.query.id});
         const { productName, description, price, stock,category } = req.body;
@@ -133,12 +137,13 @@ const updateProduct = async(req,res)=>{
 
     } catch (error) {
         console.log(error.message);
+        next(error);
     }
 }
 
 // delete images of product
 
-const deleteImage = async(req,res)=>{
+const deleteImage = async(req,res,next)=>{
     try {
         const productId = req.query.id
         const fileName = req.query.fileName
@@ -158,6 +163,7 @@ const deleteImage = async(req,res)=>{
             await fs.unlink(path.join(__dirname, "../public/adminAsset/productImages", req.query.fileName), (error) => {
                 if (error) {
                     console.log(error.message);
+        next(error);
                 }
             });
             res.redirect(`/admin/editProduct/?id=${productId}`);
@@ -168,11 +174,12 @@ const deleteImage = async(req,res)=>{
 
     } catch (error) {
         console.log(error.message);
+        next(error);
     }
 }
 
 // unlist product 
- const doUnlistProducrt = async(req,res)=>{
+ const doUnlistProducrt = async(req,res,next)=>{
     try {
 
         await Product.findByIdAndUpdate({ _id: req.query.id }, { $set: { status: false }});
@@ -180,12 +187,13 @@ const deleteImage = async(req,res)=>{
         
     } catch (error) {
         console.log(error.message);
+        next(error);
     }
  }
 
 //  list product
 
-const doListProducrt = async (req, res) => {
+const doListProducrt = async (req, res, next) => {
     try {
 
         await Product.findByIdAndUpdate({ _id: req.query.id }, { $set: { status: true } });
@@ -193,6 +201,7 @@ const doListProducrt = async (req, res) => {
 
     } catch (error) {
         console.log(error.message);
+        next(error);
     }
 }
 

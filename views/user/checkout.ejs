@@ -136,7 +136,7 @@
                 <div class="cart-coupon mt-3">
                     <input type="text" name="cart-coupon" placeholder="Coupon code" id="code">
                     <button type="submit" class="btn theme-btn-2 btn-effect-2">Apply Coupon</button>
-                    <p>Available Coupons <a href="#" id="show-coupons-link" data-bs-toggle="modal"
+                    <p>Available Coupons..? <a href="#" id="show-coupons-link" data-bs-toggle="modal"
                             data-bs-target="#couponsModal">Click Here</a></p>
                 </div>
             </form>
@@ -151,12 +151,19 @@
                         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                     </div>
                     <div class="modal-body">
-                        coupons.forEach(coupon)
-                        <ul>
-                            <li>Coupon 1: 10% Off</li>
-                            <li>Coupon 2: $5 Off</li>
-                            <!-- Add more coupons here -->
-                        </ul>
+                        <% coupons.forEach(coupon=>{ %>
+                            <ul>
+                                <% if(coupon.discountType == "Fixed Amount"){ %>
+                                    <li><%=coupon.couponName %>: ₹<%=coupon.discountAmount %> off</li>
+                                <% }else{%>
+                                    <li>
+                                        <%=coupon.couponName %>: <%=coupon.discountAmount %>% off
+                                    </li>
+                                <% } %>
+
+                            </ul>
+
+                        <% }) %>
                     </div>
                     <div class="modal-footer">
                         <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
@@ -190,7 +197,7 @@
                         toastr.success("COD payment successful!");
                         // Redirect to "/myOrders" after a short delay (e.g., 1 second)
                         setTimeout(function () {
-                            window.location.href = "/myOrders";
+                            window.location.href = "/orderSuccess";
                         }, 1500);
                     } else {
                         razorpayPayment(response.order)
@@ -245,7 +252,7 @@
                 },
                 success:(response)=>{
                     if(response.success){
-                        window.location.href = "/myOrders"
+                        window.location.href = "/orderSuccess"
                     } else {
                         alert('payment failed');
                     }
@@ -269,33 +276,17 @@
                     success: (response) => {
                         console.log(response);
                         if (response.user) {
-                            console.log("This user has already used this coupon");
                             toastr.warning("Oops! This user has already used this coupon");
                         } else if (response.status) {
-                            console.log("This coupon is not in use");
                             toastr.warning("Oops! This coupon is not in use");
                         } else if (response.cartAmount) {
-                            console.log("You can't use the coupon... Buy more");
                             toastr.warning("Oops! You can't use the coupon... Buy more");
                         } else if (response.date) {
-                            console.log("Coupon date expired");
                             toastr.warning("Oops! Coupon date expired");
                         } else if (response.amountkey) {
-                            console.log("hi",response.discAmount);
-                            console.log(response.disTotal);
-
                             document.getElementById('discountAmount').innerText = response.discAmount;
                           document.getElementById('newTotal').innerHTML = response.disTotal;
-                        //   $("#grandTotal").html(response.disTotal)
-
-
-
-
-                            
-                            console.log("Done");
-                            toastr.success("Coupon Added");
                         } else if (response.invalid) {
-                            console.log("Invalid coupon");
                             toastr.warning("Oops! Invalid coupon");
                         }
                     }

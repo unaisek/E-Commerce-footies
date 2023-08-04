@@ -62,21 +62,11 @@
                                     </div>
                                     <div class="ltn__product-details-menu-2">
                                         <ul>
-                                            <!-- <li>
-                                                <div class="cart-plus-minus">
-                                                    <input type="text" value="02" name="qtybutton" class="cart-plus-minus-box">
-                                                </div>
-                                            </li> -->
                                             <li>
-                                                <!-- <a href="/addToCart?id=<%= product._id %> %>" class="theme-btn-1 btn btn-effect-1" onclick="addToCart('<%= product._id  %>')">
-                                                    <i class="fas fa-shopping-cart"></i>
-                                                    <span>ADD TO CART</span>
-                                                </a> -->
                                                 <button class="theme-btn-1 btn btn-effect-1" onclick="addToCart('<%=product._id %>')">
                                                     <i class="far fa-shopping-cart"></i>
                                                     <span>Add to Cart</span>
                                                 </button>
-                                                <!-- <a href="#" class="theme-btn-1 btn btn-effect-1" onclick="addToCart('<%= product._id %>')">Add to Cart</a> -->
                                             </li>
                                         </ul>
                                     </div>
@@ -135,227 +125,12 @@
                                     <p><%= product.description %></p>
                                 </div>
                             </div>
-                            <!-- <div class="tab-pane fade" id="liton_tab_details_1_2">
-                                <div class="ltn__shop-details-tab-content-inner">
-                                    <h4 class="title-2">Customer Reviews</h4>
-                                    <div class="product-ratting">
-                                        <ul>
-                                            <li><a href="#"><i class="fas fa-star"></i></a></li>
-                                            <li><a href="#"><i class="fas fa-star"></i></a></li>
-                                            <li><a href="#"><i class="fas fa-star"></i></a></li>
-                                            <li><a href="#"><i class="fas fa-star-half-alt"></i></a></li>
-                                            <li><a href="#"><i class="far fa-star"></i></a></li>
-                                            <li class="review-total"> <a href="#"> ( 95 Reviews )</a></li>
-                                        </ul>
-                                    </div>
-                                    <hr>
-                                    comment-area
-                                    <div class="ltn__comment-area mb-30">
-                                        <div class="ltn__comment-inner">
-                                            <ul>
-                                                <li>
-                                                    <div class="ltn__comment-item clearfix">
-                                                        <div class="ltn__commenter-img">
-                                                            <img src="userAsset/img//testimonial/1.jpg" alt="Image">
-                                                        </div>
-                                                        <div class="ltn__commenter-comment">
-                                                            <h6><a href="#">Adam Smit</a></h6>
-                                                            <div class="product-ratting">
-                                                                <ul>
-                                                                    <li><a href="#"><i class="fas fa-star"></i></a></li>
-                                                                    <li><a href="#"><i class="fas fa-star"></i></a></li>
-                                                                    <li><a href="#"><i class="fas fa-star"></i></a></li>
-                                                                    <li><a href="#"><i class="fas fa-star-half-alt"></i></a></li>
-                                                                    <li><a href="#"><i class="far fa-star"></i></a></li>
-                                                                </ul>
-                                                            </div>
-                                                            <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Doloribus, omnis fugit corporis iste magnam ratione.</p>
-                                                            <span class="ltn__comment-reply-btn">September 3, 2020</span>
-                                                        </div>
-                                                    </div>
-                                                </li>
-                                                <li>
-                                                    <div class="ltn__comment-item clearfix">
-                                                        <div class="ltn__commenter-img">
-                                                            <img src="userAsset/img//testimonial/3.jpg" alt="Image">
-                                                        </div>
-                                                        <div class="ltn__commenter-comment">
-                                                            <h6><a href="#">Adam Smit</a></h6>
-                                                            <div class="product-ratting">
-                                                                <ul>
-                                                                    <li><a href="#"><i class="fas fa-star"></i></a></li>
-                                                                    <li><a href="#"><i class="fas fa-star"></i></a></li>
-                                                                    <li><a href="#"><i class="fas fa-star"></i></a></li>
-                                                                    <li><a href="#"><i class="fas fa-star-half-alt"></i></a></li>
-                                                                    <li><a href="#"><i class="far fa-star"></i></a></li>
-                                                                </ul>
-                                                            </div>
-                                                            <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Doloribus, omnis fugit corporis iste magnam ratione.</p>
-                                                            <span class="ltn__comment-reply-btn">September 2, 2020</span>
-                                                        </div>
-                                                    </div>
-                                                </li>
-                                                <li>
-                                                    <div class="ltn__comment-item clearfix">
-                                                        <div class="ltn__commenter-img">
-                                                            <img src="userAsset/img//testimonial/2.jpg" alt="Image">
-                                                        </div>
-                                                        <div class="ltn__commenter-comment">
-                                                            <h6><a href="#">Adam Smit</a></h6>
-                                                            <div class="product-ratting">
-                                                                <ul>
-                                                                    <li><a href="#"><i class="fas fa-star"></i></a></li>
-                                                                    <li><a href="#"><i class="fas fa-star"></i></a></li>
-                                                                    <li><a href="#"><i class="fas fa-star"></i></a></li>
-                                                                    <li><a href="#"><i class="fas fa-star-half-alt"></i></a></li>
-                                                                    <li><a href="#"><i class="far fa-star"></i></a></li>
-                                                                </ul>
-                                                            </div>
-                                                            <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Doloribus, omnis fugit corporis iste magnam ratione.</p>
-                                                            <span class="ltn__comment-reply-btn">September 2, 2020</span>
-                                                        </div>
-                                                    </div>
-                                                </li>
-                                            </ul>
-                                        </div>
-                                    </div> -->
-                                    <!-- comment-reply -->
-                                    <!-- <div class="ltn__comment-reply-area ltn__form-box mb-30">
-                                        <form action="#">
-                                            <h4 class="title-2">Add a Review</h4>
-                                            <div class="mb-30">
-                                                <div class="add-a-review">
-                                                    <h6>Your Ratings:</h6>
-                                                    <div class="product-ratting">
-                                                        <ul>
-                                                            <li><a href="#"><i class="fas fa-star"></i></a></li>
-                                                            <li><a href="#"><i class="fas fa-star"></i></a></li>
-                                                            <li><a href="#"><i class="fas fa-star"></i></a></li>
-                                                            <li><a href="#"><i class="fas fa-star-half-alt"></i></a></li>
-                                                            <li><a href="#"><i class="far fa-star"></i></a></li>
-                                                        </ul>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                            <div class="input-item input-item-textarea ltn__custom-icon">
-                                                <textarea placeholder="Type your comments...."></textarea>
-                                            </div>
-                                            <div class="input-item input-item-name ltn__custom-icon">
-                                                <input type="text" placeholder="Type your name....">
-                                            </div>
-                                            <div class="input-item input-item-email ltn__custom-icon">
-                                                <input type="email" placeholder="Type your email....">
-                                            </div>
-                                            <div class="input-item input-item-website ltn__custom-icon">
-                                                <input type="text" name="website" placeholder="Type your website....">
-                                            </div>
-                                            <label class="mb-0"><input type="checkbox" name="agree"> Save my name, email, and website in this browser for the next time I comment.</label>
-                                            <div class="btn-wrapper">
-                                                <button class="btn theme-btn-1 btn-effect-1 text-uppercase" type="submit">Submit</button>
-                                            </div>
-                                        </form>
-                                    </div> -->
-                                <!-- </div> -->
-                            <!-- </div>  -->
                         </div>
                     </div>
-                    <!-- Shop Tab End -->
                 </div>
-                <!-- <div class="col-lg-4">
-                    <aside class="sidebar ltn__shop-sidebar ltn__right-sidebar"> -->
-                        <!-- Top Rated Product Widget -->
-                        <!-- <div class="widget ltn__top-rated-product-widget">
-                            <h4 class="ltn__widget-title ltn__widget-title-border">Top Rated Product</h4>
-                            <ul>
-                                <li>
-                                    <div class="top-rated-product-item clearfix">
-                                        <div class="top-rated-product-img">
-                                            <a href="product-details.html"><img src="userAsset/img//product/1.png" alt="#"></a>
-                                        </div>
-                                        <div class="top-rated-product-info">
-                                            <div class="product-ratting">
-                                                <ul>
-                                                    <li><a href="#"><i class="fas fa-star"></i></a></li>
-                                                    <li><a href="#"><i class="fas fa-star"></i></a></li>
-                                                    <li><a href="#"><i class="fas fa-star"></i></a></li>
-                                                    <li><a href="#"><i class="fas fa-star"></i></a></li>
-                                                    <li><a href="#"><i class="fas fa-star"></i></a></li>
-                                                </ul>
-                                            </div>
-                                            <h6><a href="product-details.html">Mixel Solid Seat Cover</a></h6>
-                                            <div class="product-price">
-                                                <span>$49.00</span>
-                                                <del>$65.00</del>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </li>
-                                <li>
-                                    <div class="top-rated-product-item clearfix">
-                                        <div class="top-rated-product-img">
-                                            <a href="product-details.html"><img src="userAsset/img//product/2.png" alt="#"></a>
-                                        </div>
-                                        <div class="top-rated-product-info">
-                                            <div class="product-ratting">
-                                                <ul>
-                                                    <li><a href="#"><i class="fas fa-star"></i></a></li>
-                                                    <li><a href="#"><i class="fas fa-star"></i></a></li>
-                                                    <li><a href="#"><i class="fas fa-star"></i></a></li>
-                                                    <li><a href="#"><i class="fas fa-star"></i></a></li>
-                                                    <li><a href="#"><i class="fas fa-star"></i></a></li>
-                                                </ul>
-                                            </div>
-                                            <h6><a href="product-details.html">Thermometer Gun</a></h6>
-                                            <div class="product-price">
-                                                <span>$49.00</span>
-                                                <del>$65.00</del>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </li>
-                                <li>
-                                    <div class="top-rated-product-item clearfix">
-                                        <div class="top-rated-product-img">
-                                            <a href="product-details.html"><img src="userAsset/img//product/3.png" alt="#"></a>
-                                        </div>
-                                        <div class="top-rated-product-info">
-                                            <div class="product-ratting">
-                                                <ul>
-                                                    <li><a href="#"><i class="fas fa-star"></i></a></li>
-                                                    <li><a href="#"><i class="fas fa-star"></i></a></li>
-                                                    <li><a href="#"><i class="fas fa-star"></i></a></li>
-                                                    <li><a href="#"><i class="fas fa-star-half-alt"></i></a></li>
-                                                    <li><a href="#"><i class="far fa-star"></i></a></li>
-                                                </ul>
-                                            </div>
-                                            <h6><a href="product-details.html">Coil Spring Conversion</a></h6>
-                                            <div class="product-price">
-                                                <span>$49.00</span>
-                                                <del>$65.00</del>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </li>
-                            </ul>
-                        </div> -->
-                        <!-- Banner Widget -->
-                        <!-- <div class="widget ltn__banner-widget">
-                            <a href="shop.html"><img src="userAsset/img//banner/2.jpg" alt="#"></a>
-                        </div>
-                    </aside>
-                </div> -->
             </div>
         </div>
     </div>
-    <!-- </div> -->
-    <!-- Modal popup message -->
-    <!-- <div id="popupMessage" class="modal">
-        <div class="modal-content">
-            <span class="close">&times;</span>
-            <p id="popupText"></p>
-        </div>
-    </div> -->
-
     <!-- SHOP DETAILS AREA END -->
     <script>
        function addToWishlist(id){
@@ -384,9 +159,15 @@
                         },
                         success: (response) => {
                             if (response.success) {
-                                toastr.success("Product added to Cart");
+                                toastr.success("Product added to Cart","",{
+                                    timeOut: 1500,
+                                    progressBar: true
+                                });
                             } else if (response.check) {
-                                toastr.error("Out of Stock!!");
+                                toastr.error("Out of Stock!!","",{
+                                    timeOut: 1500,
+                                    progressBar: true
+                                });
                             }
                         }
                     })

@@ -1,6 +1,6 @@
 const Coupon = require('../models/couponModel');
 
-const showCouponList = async(req,res)=>{
+const showCouponList = async(req,res,next)=>{
     try {
         
         const couponData = await Coupon.find({});
@@ -8,10 +8,11 @@ const showCouponList = async(req,res)=>{
 
     } catch (error) {
         console.log(error.message);
+        next(error);
     }
 }
 
-const loadAddCoupon =async(req,res)=>{
+const loadAddCoupon =async(req,res,next)=>{
 
     try {
 
@@ -19,9 +20,10 @@ const loadAddCoupon =async(req,res)=>{
         
     } catch (error) {
         console.log(error.message);
+        next(error);
     }
 }
-const addNewCoupon = async(req,res)=>{
+const addNewCoupon = async(req,res,next)=>{
     try {
 
         const { couponName, discountType, discountAmount, minCartAmount, maxDiscAmount, expired} = req.body
@@ -45,12 +47,13 @@ const addNewCoupon = async(req,res)=>{
         
     } catch (error) {
         console.log(error.message);
+        next(error);
     }
 
     
 };
 
-const loadEditCoupon = async(req,res)=>{
+const loadEditCoupon = async(req,res,next)=>{
     try {
 
         const couponId =  req.query.id;
@@ -59,10 +62,11 @@ const loadEditCoupon = async(req,res)=>{
         
     } catch (error) {
         console.log(error.message);
+        next(error);
     }
 };
 
-const updateCoupon = async(req,res)=>{
+const updateCoupon = async(req,res,next)=>{
     try {
         const orderId = req.query.id;
         // const { couponName, discountType, discountAmount, minCartAmount, maxDiscAmount, expired } = req.body
@@ -73,12 +77,13 @@ const updateCoupon = async(req,res)=>{
 
     } catch (error) {
         console.log(error.message);
+        next(error);
     }
 }
 
 // user apply Coupon
 
-const applyCoupon = async(req,res)=>{
+const applyCoupon = async(req,res,next)=>{
     try {
 
         const code = req.body.code;
@@ -127,6 +132,7 @@ const applyCoupon = async(req,res)=>{
         }
     } catch (error) {
         console.log(error.message);
+        next(error);
     }
 }
 module.exports = {

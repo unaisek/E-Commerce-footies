@@ -3,19 +3,22 @@ const Product = require('../models/productModel');
 const Category = require('../models/categoryModel');
 const Address = require('../models/addressModel');
 const Wallet = require('../models/walletModel');
+const Banner = require('../models/bannerModel')
 const bcrypt = require('bcrypt');
 const nodemailer = require('nodemailer');
 require('dotenv').config();
 
 // load LandingPage
-const loadHome = async(req,res)=>{
+const loadHome = async(req,res,next)=>{
     try {
         const loggedIn = req.session.user_id;
-        const producData = await Product.find({});
-        res.render('index',{loggedIn,products:producData});
+        const producData = await Product.find({status:true}).limit(8);
+        const banners = await Banner.find({});
+        res.render('index',{loggedIn,products:producData, banners});
         
     } catch (error) {
         console.log(error.message);
+        next(error);
     }
 }
 
@@ -28,10 +31,11 @@ const productDetails = async (req, res) => {
         res.render('productDetails',{loggedIn,product:productData});
     } catch (error) {
         console.log(error.message);
+        next(error);
     }
 }
 // load login page
-const loadLogin = async(req,res)=>{
+const loadLogin = async(req,res,next)=>{
     try {
         const loggedIn = req.session.user_id
         if(req.session.user_id){
@@ -42,10 +46,11 @@ const loadLogin = async(req,res)=>{
 
     } catch (error) {
         console.log(error.message);
+        next(error);
     }
 }
 
-const verifyLogin = async(req,res)=>{
+const verifyLogin = async(req,res,next)=>{
     try {
         const { email,password } = req.body;
         const userData = await User.findOne({email:email});     
@@ -74,10 +79,11 @@ const verifyLogin = async(req,res)=>{
 
     } catch (error) {
         console.log(error.message);
+        next(error);
     }
 }
 
-const userLogout = async(req,res)=>{
+const userLogout = async(req,res,next)=>{
     try {
         req.session.destroy((err)=>{
             if(err){
@@ -88,17 +94,19 @@ const userLogout = async(req,res)=>{
         });
     } catch (error) {
         console.log(error.message);
+        next(error);
     }
 }
 
 // load register page
-const loadRegister = async(req,res)=>{
+const loadRegister = async(req,res,next)=>{
     try {
 
         res.render('register');
         
     } catch (error) {
         console.log(error.message);
+        next(error);
     }
 }
 
@@ -110,6 +118,7 @@ const securePassword = async(password)=>{
 
     } catch (error) {
         console.log(error.message);
+        next(error);
     }
 }
 
@@ -151,13 +160,14 @@ const sendMail = async(name,email,user_id)=>{
 
     } catch (error) {
         console.log(error.message);
+        next(error);
         
     }
 }
 
 // user signup
 
-const registerUser = async (req, res) => {
+const registerUser = async (req, res, next) => {
     try {
         const  email = req.body.email;
         const existingUser = await User.findOne({ email: email });
@@ -190,12 +200,13 @@ const registerUser = async (req, res) => {
         }
     } catch (error) {
         console.log(error.message);
+        next(error);
     }
 };
 
 // confirm otp
 
-const verifyMail = async(req,res)=>{
+const verifyMail = async(req,res,next)=>{
 
     try {
         let recivedotp = req.body.otp
@@ -209,6 +220,7 @@ const verifyMail = async(req,res)=>{
         }
     } catch (error) {
         console.log(error.message);
+        next(error);
     }
 }
 
@@ -253,13 +265,14 @@ const sendResetPassMail = async (name, email, user_id) => {
 
     } catch (error) {
         console.log(error.message);
+        next(error);
 
     }
 }
 
 // load forget password page
 
-const loadForgetPasswordPage = async(req,res)=>{
+const loadForgetPasswordPage = async(req,res,next)=>{
     try {
         const loggedIn = req.session.user_id
         if (req.session.user_id) {
@@ -270,12 +283,13 @@ const loadForgetPasswordPage = async(req,res)=>{
         
     } catch (error) {
         console.log(error.message);
+        next(error);
     }
 }
 
 // verify email in forget password page
 
-const verifyForgetPassword = async(req,res)=>{
+const verifyForgetPassword = async(req,res,next)=>{
     try {
 
         const email = req.body.email;
@@ -289,12 +303,13 @@ const verifyForgetPassword = async(req,res)=>{
         }
     } catch (error) {
         console.log(error.message);
+        next(error);
     }
 }
 
 // load reset password page verify resetPass otp
 
-const verifyResetPassOtp = async(req,res)=>{
+const verifyResetPassOtp = async(req,res,next)=>{
     try {
         
         let recivedOtp = req.body.otp;
@@ -308,12 +323,13 @@ const verifyResetPassOtp = async(req,res)=>{
 
     } catch (error) {
         console.log(error.message);
+        next(error);
     }
 }
 
 // verify New password
 
-const verifyNewPassword = async(req,res)=>{
+const verifyNewPassword = async(req,res,next)=>{
     try {
         
         const password = req.body.password1;
@@ -335,12 +351,13 @@ const verifyNewPassword = async(req,res)=>{
 
     } catch (error) {
         console.log(error.message);
+        next(error);
     }
 }
 
 // load shop page
 
-const loadShopPage = async(req,res)=>{
+const loadShopPage = async(req,res,next)=>{
     try {
 
         const page = Number(req.query.page) || 1;
@@ -385,13 +402,14 @@ const loadShopPage = async(req,res)=>{
         }
         
     } catch (error) {
-        console.log(error.message);        
+        console.log(error.message);
+        next(error);        
     }
 }
 
 // load profile
 
-const loadProfile = async(req,res)=>{
+const loadProfile = async(req,res,next)=>{
     try {
 
         const loggedIn = req.session.user_id;
@@ -403,6 +421,7 @@ const loadProfile = async(req,res)=>{
         
     } catch (error) {
         console.log(error.message);
+        next(error);
     }
 }
 

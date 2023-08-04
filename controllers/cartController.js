@@ -7,7 +7,7 @@ const Coupon = require('../models/couponModel');
 
 const { query } = require("express");
 
-const loadCart = async(req,res)=>{
+const loadCart = async(req,res,next)=>{
     try {
 
         const id = req.session.user_id;
@@ -57,10 +57,11 @@ const loadCart = async(req,res)=>{
         
     } catch (error) {
         console.log(error.message);
+        next(error);
     }
 }
 
-const addToCart = async(req,res)=>{
+const addToCart = async(req,res,next)=>{
     try {
         const productId = req.body.query;
         const userData = await User.findOne({_id:req.session.user_id});
@@ -111,9 +112,10 @@ const addToCart = async(req,res)=>{
 
     } catch (error) {
         console.log(error.message);
+        next(error);
     }
 }
-const removeFromCart = async(req,res)=>{
+const removeFromCart = async(req,res,next)=>{
     try {
 
        const user = req.session.user_id;
@@ -123,10 +125,11 @@ const removeFromCart = async(req,res)=>{
 
     } catch (error) {
         console.log(error.message);
+        next(error);
     }
 }
 
-const changeQuantity=async(req,res)=>{
+const changeQuantity=async(req,res,next)=>{
     try {
 
         const userId = req.body.user;
@@ -146,16 +149,17 @@ const changeQuantity=async(req,res)=>{
         
     } catch (error) {
         console.log(error.message);
+        next(error);
     }
 }
 
-const loadCheckout = async(req,res)=>{
+const loadCheckout = async(req,res,next)=>{
     try {
         const loggedIn = req.session.user_id;
         const userData = await User.findOne({_id :req.session.user_id});
         const addressData = await Address.findOne({userId:req.session.user_id});
         const wallet = await Wallet.findOne({ userId: req.session.user_id });
-        const coupons = await Coupon.find({ status:true });
+        const coupons = await Coupon.find({ status: true, usedUsers: { $ne: req.session.user_id },expired: { $gte: new Date() } });
         if(addressData){
             const addresses = addressData.addresses;
             const total = await Cart.aggregate([
@@ -192,6 +196,7 @@ const loadCheckout = async(req,res)=>{
         
     } catch (error) {
         console.log(error.message);
+        next(error);
     }
 }
 

@@ -1,0 +1,63 @@
+<%- include('../partials/adminPartials/adminHeader.ejs') -%>
+    <section class="content-main">
+        <div class="row">
+            <div class="col-9">
+                <div class="content-header">
+                    <h2 class="content-title">Add New Banner</h2>
+                </div>
+            </div>
+            <form action="/admin/addBanner" method="post" enctype="multipart/form-data"
+                onsubmit=" return validateForm()">
+                <div class="col-lg-6">
+                    <div class="card mb-4">
+                        <div class="card-body">
+                            <div class="mb-4">
+                                <label for="product_name" class="form-label">Banner Title</label>
+                                <input type="text" placeholder="Type here" class="form-control" id="banner_name"
+                                    name="bannerTitle" required />
+                            </div>
+                            <div class="mb-4">
+                                <label class="form-label">Description</label>
+                                <textarea placeholder="Type here" class="form-control" rows="4" name="description" id="description"
+                                    required></textarea>
+                            </div>
+                            <div>
+                                <div class="mb-4">
+                                    <label class="form-label">Images</label>
+                                    <input class="form-control" type="file" name="images"
+                                        accept=".png, .jpg, .jpeg, .webp, .gif" required />
+                                </div>
+                                <button class="btn btn-md rounded font-sm hover-up" type="submit">Add Banner</button>
+                            </div>
+                            <% if (typeof message!=='undefined' ) { %>
+                                <p class="text-danger">
+                                    <%= message %>
+                                </p>
+                                <% } %>
+                        </div>
+                    </div>
+                </div>
+            </form>
+        </div>
+
+    </section>
+    <script>
+        function validateForm() {
+            const bannerTittle = document.getElementById("banner_name").value;
+            if (productName.trim() === "") {
+                alert("Banner Title cannot be empty");
+                return false;
+            }
+
+            const description = document.getElementById("description").value;
+            if (description.trim() === "") {
+                alert("Description cannot be empty");
+                return false;
+            }
+            return true;
+        }
+    </script>
+
+
+
+    <%- include('../partials/adminPartials/adminFooter.ejs') -%>

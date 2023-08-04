@@ -1,7 +1,7 @@
 const Address = require('../models/addressModel');
 const User = require('../models/userModel');
 
-const loadAddAddress = async(req,res)=>{
+const loadAddAddress = async(req ,res,next)=>{
     try {
         if(req.session.user_id){
             const loggedIn = req.session.user_id;
@@ -17,12 +17,13 @@ const loadAddAddress = async(req,res)=>{
         
     } catch (error) {
         console.log(error.message);
+        next(error);
     }
 }
 
 // user profile add address
 
-const addNewAddress = async(req,res)=>{
+const addNewAddress = async(req,res,next)=>{
     try {
 
         const userId = req.session.user_id;
@@ -75,11 +76,12 @@ const addNewAddress = async(req,res)=>{
             }
         }
     } catch (error) {
-       console.log(error.message); 
+       console.log(error.message);
+        next(error); 
     }
 }
 
-const loadEditAddress =  async(req,res)=>{
+const loadEditAddress =  async(req,res,next)=>{
     try {
         const userId = req.session.user_id;
         const addressId = req.query.id;
@@ -88,10 +90,11 @@ const loadEditAddress =  async(req,res)=>{
         res.render("editAddress", { address: aData ,loggedIn :userId})       
     } catch (error) {
         console.log(error.message);
+        next(error);
     }
 }
 
-const doEditAddress = async (req, res) => {
+const doEditAddress = async (req, res, next) => {
     try {
         const userId = req.session.user_id;
         console.log(req.body);
@@ -118,6 +121,7 @@ const doEditAddress = async (req, res) => {
 
     } catch (error) {
         console.log(error.message);
+        next(error);
     }
 };
 

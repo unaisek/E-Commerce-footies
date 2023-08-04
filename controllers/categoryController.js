@@ -12,11 +12,12 @@ const loadCategory = async (req, res) => {
         res.render('category',{category:categoryData});
     } catch (error) {
         console.log(error.message);
+        next(error);
     }
 }
 
 // add category
-const addCategory = async(req,res)=>{
+const addCategory = async(req,res,next)=>{
     try {
         const categoryName = upperCase.upperCase(req.body.categoryName)
         const {description} = req.body;
@@ -39,20 +40,22 @@ const addCategory = async(req,res)=>{
         
     } catch (error) {
         console.log(error.message);
+        next(error);
     }
 }
 
-const loadEditCategory = async(req,res)=>{
+const loadEditCategory = async(req,res,next)=>{
     try {
 
         const categoryData = await Category.findById({_id:req.query.id})
         res.render('editCategory',{category:categoryData});        
     } catch (error) {
         console.log(error.message);
+        next(error);
     }
 }
 
-const updateCategory = async(req,res)=>{
+const updateCategory = async(req,res,next)=>{
     try {
         const categoryName = upperCase.upperCase(req.body.categoryName);
         const {description} = req.body;
@@ -67,6 +70,7 @@ const updateCategory = async(req,res)=>{
 
     } catch (error) {
         console.log(error.message);
+        next(error);
     }
 }
 
@@ -80,6 +84,7 @@ const doUnlistCategory = async (req, res) => {
 
     } catch (error) {
         console.log(error.message);
+        next(error);
     }
 }
 
@@ -93,11 +98,12 @@ const doListCategory = async (req, res) => {
 
     } catch (error) {
         console.log(error.message);
+        next(error);
     }
 }
 
 
-// const deleteCategory = async(req,res)=>{
+// const deleteCategory = async(req,res,next)=>{
 //     try {
         
 //         const catData = await Category.findByIdAndUpdate({_id:req.query.id},{$set:{status:false}});

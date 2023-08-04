@@ -1,0 +1,63 @@
+<%- include('../partials/adminPartials/adminHeader.ejs') -%>
+
+    <section class="content-main">
+        <div class="content-header">
+            <div>
+                <h2 class="content-title card-title">Banner List</h2>
+            </div>
+            <div>
+                <a href="/admin/addBanner" class="btn btn-primary"><i
+                        class="icon material-icons md-local_offer"></i>Add New Banner</a>
+            </div>
+        </div>
+        <div class="card-body">
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th scope="col">Image</th>
+                        <th scope="col">Banner Title</th>
+                        <th scope="col">Description</th>
+                        <th scope="col">Status</th>
+                        <th scope="col">Action</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <% if(bannerData.length > 0) {%>
+                        <% bannerData.forEach(banner=> { %>
+                            <tr>
+                                <td>
+                                    <img src="/adminAsset/productImages/<%= banner.images %>"
+                                        class="img-sm img-thumbnail" alt="Item" />
+                                </td>
+                                <td>
+                                    <%= banner.bannerTitle%>
+                                </td>
+                                <td>
+                                    <%= banner.description%>
+                                </td>
+                                <% if (banner.status===true) { %>
+                                    <td><a href="/admin/unlistBanner?id=<%= banner._id %>"
+                                            class="btn btn-sm font-sm btn-brand">Listed</a></td>
+                                <% } else {%>
+                                    <td><a href="/admin/listBanner?id=<%= banner._id %>"
+                                            class="btn btn-sm btn-danger font-sm ">Unlisted</a></td>
+                                <% } %>
+                                    <td>
+                                        <a href="/admin/editBanner?id=<%= banner._id %>"
+                                            class="btn btn-sm font-sm rounded btn-outline-secondary">
+                                            <i class="material-icons md-edit"></i> Edit</a>
+                                    </td>
+                            </tr>
+                        <% }) %>
+                    <% } else { %>
+                        <tr>
+                            <td class="text-danger" colspan="7">No banner found.</td>
+                        </tr>
+                    <% } %>
+                </tbody>
+            </table>
+        </div>
+        </div>
+    </section>
+
+    <%- include('../partials/adminPartials/adminFooter.ejs') -%>

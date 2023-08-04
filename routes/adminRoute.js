@@ -7,6 +7,7 @@ const categoryController = require('../controllers/categoryController');
 const productController = require('../controllers/productController');
 const orderController = require('../controllers/orderController');
 const couponController = require('../controllers/couponController');
+const bannerController = require('../controllers/bannerController');
 const adminAuth = require('../middlewares/adminAuth');
 const multer = require('../config/multer')
 
@@ -17,8 +18,6 @@ adminRoute.use(session({
     saveUninitialized: true
 }))
 
-
-adminRoute.set('view engine','ejs');
 adminRoute.set('views','./views/admin');
 
 adminRoute.get('/',adminAuth.isLogout, adminController.loadLogin);
@@ -65,6 +64,19 @@ adminRoute.get('/addCoupon', adminAuth.isLogin, couponController.loadAddCoupon);
 adminRoute.post('/addCoupon',couponController.addNewCoupon);
 adminRoute.get('/editCoupon', adminAuth.isLogin, couponController.loadEditCoupon);
 adminRoute.post('/editCoupon',couponController.updateCoupon)
+
+
+// Banner
+
+adminRoute.get('/banner',adminAuth.isLogin,bannerController.loadBannerList);
+adminRoute.get('/addBanner',adminAuth.isLogin,bannerController.loadAddBanner);
+adminRoute.post('/addBanner', adminAuth.isLogin, multer.upload.single('images'), bannerController.addNewBanner);
+adminRoute.get('/editBanner', adminAuth.isLogin, bannerController.loadEditBanner);
+adminRoute.post('/editBanner', adminAuth.isLogin, multer.upload.single('images'), bannerController.updateBanner);
+adminRoute.get('/unlistBanner', adminAuth.isLogin, bannerController.doUnlistBanner);
+adminRoute.get('/listBanner', adminAuth.isLogin, bannerController.doListBanner);
+
+
 
 
 module.exports = adminRoute;

@@ -7,7 +7,7 @@ const bcrypt = require('bcrypt');
 
 
 // ADMIN LOGIN
-const loadLogin = async(req,res)=>{
+const loadLogin = async(req,res,next)=>{
     try {
 
         if(req.session.admin_id){   
@@ -18,11 +18,12 @@ const loadLogin = async(req,res)=>{
         
     } catch (error) {
         console.log(error.message);
+        next(error);
     }
 
 }
 
-const verifyAdmin = async(req,res)=>{
+const verifyAdmin = async(req,res,next)=>{
     try {
         const {email, password} = req.body;
         const adminData = await User.findOne({is_admin:1});
@@ -38,13 +39,14 @@ const verifyAdmin = async(req,res)=>{
             res.render('login', { message: "incorrect email or password" });
         }
     } catch (error) {
-        console.log(error.message);  
+        console.log(error.message);
+        next(error);  
      }
 }
 
 // admin Logout
 
-const adminLogout = async(req,res)=>{
+const adminLogout = async(req,res,next)=>{
     try {
         
         req.session.destroy();
@@ -52,10 +54,11 @@ const adminLogout = async(req,res)=>{
 
     } catch (error) {
         console.log(error.message);
+        next(error);
     }
 }
 
-const loadDashboard = async(req,res)=>{
+const loadDashboard = async(req,res,next)=>{
     try {
         const admin = req.session.admin_id;
         res.render('dashboard',{admin:admin});
@@ -63,12 +66,13 @@ const loadDashboard = async(req,res)=>{
 
     } catch (error) {
         console.log(error.message);
+        next(error);
     }
 }
 
 // load users list 
 
-const loadUsers = async(req,res)=>{
+const loadUsers = async(req,res,next)=>{
     try {
         
     const userData = await User.find({is_admin:0});
@@ -76,12 +80,13 @@ const loadUsers = async(req,res)=>{
 
     } catch (error) {
         console.log(error.message);
+        next(error);
     }
 }
 
 // block user
 
-const blockUser = async(req,res)=>{
+const blockUser = async(req,res,next)=>{
     try {     
         const id = req.query.id;
         const findUser = await User.findOne({_id:id});
@@ -94,12 +99,13 @@ const blockUser = async(req,res)=>{
 
     } catch (error) {
         console.log(error.message);
+        next(error);
     }
 }
 
 // unblock user
 
-const unblockUser = async (req, res) => {
+const unblockUser = async (req, res, next) => {
     try {
 
         const id = req.query.id;
@@ -113,6 +119,7 @@ const unblockUser = async (req, res) => {
 
     } catch (error) {
         console.log(error.message);
+        next(error);
     }
 }
 
