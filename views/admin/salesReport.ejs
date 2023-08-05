@@ -1,0 +1,100 @@
+<%- include('../partials/adminPartials/adminHeader.ejs') %>
+    <section class="content-main">
+        <div class="content-header">
+            <div>
+                <h2 class="content-title card-title">Sales Report</h2>
+            </div>
+            <div>
+                <input type="text" placeholder="Search order ID" class="form-control bg-white" />
+            </div>
+        </div>
+        <div class="card mb-4">
+        <header class="card-header">
+            <form action="/admin/salesReport" class="row gx-3 align-items-center">
+                <div class="col-lg-2 col-md-3">
+                    <select class="form-select" name="sortData">
+                        <option value="date" <%=sortData==='date' ? 'selected' : '' %>>Date</option>
+                        <option value="totalAmount" <%=sortData==='totalAmount' ? 'selected' : '' %>>Amount</option>
+                    </select>
+                </div>
+                <div class="col-lg-2 col-md-3">
+                    <select class="form-select" name="sortOrder">
+                        <option <%=sortOrder==='Ascending' ? 'selected' : '' %>>Ascending</option>
+                        <option <%=sortOrder==='Descending' ? 'selected' : '' %>>Descending</option>
+                    </select>
+                </div>
+                <div class="col-lg-2 col-md-3">
+                    <button class="btn btn-primary">Sort</button>
+                </div>
+                <div class="col-lg-6 col-md-3 mt-md-0 mt-3">
+                    <form action="/admin/salesReport" class="row g-2">
+                        <div class="col-md-4">
+                            <label for="fromDate" class="form-label">From Date:</label>
+                            <input type="date" class="form-control" id="fromDate" name="from" value="<%= from %>">
+                        </div>
+                        <div class="col-md-4">
+                            <label for="toDate" class="form-label">To Date:</label>
+                            <input type="date" class="form-control" id="toDate" name="to" value="<%= to %>">
+                        </div>
+                        <div class="col-md-2 mt-2 mt-md-0">
+                            <button class="btn btn-primary">Filter</button>
+                        </div>
+                    </form>
+                </div>
+            </form>
+        </header>
+
+            <!-- card-header end// -->
+            <div class="card-body">
+                <div class="table-responsive">
+                    <table class="table table-hover">
+                        <thead>
+                            <tr>
+                                <th  scope="col">OrderId</th>
+                                <th scope="col">Date</th>
+                                <th scope="col">Total</th>
+                                <th scope="col">Payment Method</th>
+                                <th scope="col">Status</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <% orders.forEach(order=> { %>
+                                <tr>
+                                    <td>
+                                        <%=order._id %>
+                                    </td>
+                                    <td>
+                                        <%=order.date.toISOString().substring(0,10) %>
+                                    </td>
+                                    <td>&#8377;<%=order.totalAmount %>
+                                    </td>
+                                    <td>
+                                        <%=order.paymentMethod %>
+                                    </td>
+                                    <td><%=order.status %></td>
+                                </tr>
+                                <% }); %>
+                        </tbody>
+                    </table>
+                </div>
+                <!-- table-responsive //end -->
+            </div>
+            <!-- card-body end// -->
+        </div>
+        <!-- card end// -->
+        <!-- <div class="pagination-area mt-15 mb-50">
+            <nav aria-label="Page navigation example">
+                <ul class="pagination justify-content-start">
+                    <li class="page-item active"><a class="page-link" href="#">01</a></li>
+                    <li class="page-item"><a class="page-link" href="#">02</a></li>
+                    <li class="page-item"><a class="page-link" href="#">03</a></li>
+                    <li class="page-item"><a class="page-link dot" href="#">...</a></li>
+                    <li class="page-item"><a class="page-link" href="#">16</a></li>
+                    <li class="page-item">
+                        <a class="page-link" href="#"><i class="material-icons md-chevron_right"></i></a>
+                    </li>
+                </ul>
+            </nav>
+        </div> -->
+    </section>
+    <%- include('../partials/adminPartials/adminFooter.ejs') %>

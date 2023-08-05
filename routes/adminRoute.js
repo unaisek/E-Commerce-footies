@@ -25,11 +25,13 @@ adminRoute.post('/', adminController.verifyAdmin);
 adminRoute.get('/logout', adminController.adminLogout);
 adminRoute.get('/dashboard', adminAuth.isLogin, adminController.loadDashboard);
 
+// user Mangment
 
 adminRoute.get('/users', adminAuth.isLogin, adminController.loadUsers);
 adminRoute.get('/block', adminAuth.isLogin, adminController.blockUser);
 adminRoute.get('/unblock', adminAuth.isLogin, adminController.unblockUser);
 
+// category managmnet
 adminRoute.get('/category', adminAuth.isLogin, categoryController.loadCategory);
 adminRoute.post('/category', categoryController.addCategory);
 adminRoute.get('/unlistCategory', adminAuth.isLogin, categoryController.doUnlistCategory);
@@ -37,6 +39,7 @@ adminRoute.get('/listCategory', adminAuth.isLogin, categoryController.doListCate
 adminRoute.get('/editCategory', adminAuth.isLogin, categoryController.loadEditCategory);
 adminRoute.post('/editCategory', categoryController.updateCategory);
 
+// product managment
 
 adminRoute.get('/productList', adminAuth.isLogin, productController.loadProductList);
 adminRoute.get('/addProduct', adminAuth.isLogin, productController.loadAddProduct);
@@ -57,6 +60,10 @@ adminRoute.get('/orderDetails',adminAuth.isLogin,orderController.showOrderDetail
 adminRoute.get('/returnConfirm', adminAuth.isLogin, orderController.returnConfirmPage);
 adminRoute.get('/returnApproved',adminAuth.isLogin,orderController.returnApproved);
 adminRoute.get('/returnRejected', adminAuth.isLogin, orderController.returnRejected);
+
+// sales Report
+
+adminRoute.get('/salesReport', adminAuth.isLogin, orderController.loadSalesReport);
 
 // coupon 
 adminRoute.get('/coupon', adminAuth.isLogin, couponController.showCouponList);

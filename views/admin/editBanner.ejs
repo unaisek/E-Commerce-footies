@@ -25,14 +25,12 @@
                                 <div class="mb-4">
                                     <label class="form-label">Images</label>
                                     <div class="mb-4 d-flex">
-                                            <div class="border border-info">
-                                                <img src="/adminAsset/productImages/<%=banner.images %>" class="img-sm  img-thumbnail" alt="item">
-                                            </div>
-
-                                    
+                                        <div class="border border-info">
+                                            <img src="/adminAsset/productImages/<%=banner.images %>" class="img-sm  img-thumbnail" alt="item">
+                                        </div>                                    
                                     </div>
                                     <input class="form-control" type="file" name="images"
-                                        accept=".png, .jpg, .jpeg, .webp, .gif" required />
+                                        accept=".png, .jpg, .jpeg, .webp, .gif" value="<%=banner.images %>"/>
                                 </div>
                                 <button class="btn btn-md rounded font-sm hover-up" type="submit">Edit Banner</button>
                             </div>

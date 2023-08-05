@@ -5,6 +5,7 @@ const Address = require('../models/addressModel');
 const Order = require('../models/orderModel');
 const Wallet = require('../models/walletModel');
 const Razorpay = require('razorpay');
+const { off } = require("process");
 require('dotenv').config();
 
 var instance = new Razorpay ({
@@ -254,6 +255,7 @@ const returnOrder = async(req,res,next)=>{
 
  const adminOrderLists = async(req,res,next)=>{
     try {
+
         const orderData = await Order.find({}).sort({ date: -1 });
         res.render('orderList',{ orders: orderData });
         
@@ -344,6 +346,8 @@ const returnApproved = async(req,res,next)=>{
 
 }
 
+// return Rejected
+
 const returnRejected = async(req,res,next)=>{
     try {
 
@@ -355,12 +359,71 @@ const returnRejected = async(req,res,next)=>{
         next(error);
     }
 }
+
+//  show Order Details
+
 const showOrderDetails = async(req,res,next)=>{
     try {
         const orderId = req.query.id;
         const orderData = await Order.findOne({ _id: orderId }).populate('products.productId');
         const products = orderData.products;
         res.render('orderDetails',{ order:orderData,products});
+        
+    } catch (error) {
+        console.log(error.message);
+        next(error);
+    }
+}
+
+// load Sales Report
+
+
+const loadSalesReport = async(req,res,next)=>{
+    try {
+
+        // const itemPerPage = 10;
+        const{from,to,seeAll,sortData,sortOrder} = req.query
+        // let page = Number (req.query.page);
+        // if(isNaN(page) || page < 1){
+        //     page = 1;
+        // }
+        const condition ={ status: "Delivered"}
+        if(from && to){
+            condition.date = {
+                $gte : from,
+                $lte : to
+            }
+        } else if(from){
+            $gte : from
+        } else if(to){
+            condition.date = {
+                $lte : to
+            }
+        }
+        const sort ={}
+        if(sortData){
+            if(sortOrder === "Ascending"){
+                sort[sortData] = 1
+            } else {
+                sort [sortData] = -1
+            }
+        } else {
+            sort['date'] = -1
+        } 
+
+        // const orderCount = await Order.countDocuments({ status:"Delivered"});
+        // const orderData = await Order.find({status:"Delivered"});
+        const orders = await Order.find(condition).sort(sort)
+        res.render('salesReport',{
+            orders: orders,
+            from: from,
+            to: to,
+            sortData: sortData,
+            sortOrder: sortOrder
+
+        });
+
+
         
     } catch (error) {
         console.log(error.message);
@@ -383,5 +446,6 @@ module.exports = {
     returnConfirmPage,
     returnApproved,
     returnRejected,
-    showOrderDetails
+    showOrderDetails,
+    loadSalesReport
 }
