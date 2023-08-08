@@ -73,9 +73,9 @@ const updateBanner = async(req,res,next)=>{
     try {
 
         const bannerId = req.query.id;
-        const images = req.file.filename;
+        // const images = req.file.filename;
         const{bannerTitle, description} = req.body;
-        const bannerData = await Banner.findOneAndUpdate({ _id: bannerId },{ $set : { bannerTitle, description, images, updated: Date.now()}} );
+        const bannerData = await Banner.findOneAndUpdate({ _id: bannerId }, { $set: { bannerTitle, description, updated: Date.now()}} );
         if(bannerData){
             res.redirect('/admin/banner')
         }

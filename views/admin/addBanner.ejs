@@ -43,8 +43,9 @@
     </section>
     <script>
         function validateForm() {
+            console.log("hi");
             const bannerTittle = document.getElementById("banner_name").value;
-            if (productName.trim() === "") {
+            if (bannerTittle.trim() === "") {
                 alert("Banner Title cannot be empty");
                 return false;
             }

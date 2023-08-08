@@ -48,7 +48,7 @@ adminRoute.get('/unlistProduct', adminAuth.isLogin, productController.doUnlistPr
 adminRoute.get('/listProduct', adminAuth.isLogin, productController.doListProducrt);
 adminRoute.get('/editProduct', adminAuth.isLogin, productController.loadEditProduct);
 adminRoute.post('/editProduct', multer.upload.array('images', 10), productController.updateProduct);
-adminRoute.get('/deleteImage',productController.deleteImage);
+adminRoute.get('/deleteImage', adminAuth.isLogin, productController.deleteImage);
 
 // order details
 

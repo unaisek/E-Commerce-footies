@@ -1,7 +1,7 @@
 const Address = require('../models/addressModel');
 const User = require('../models/userModel');
 
-const loadAddAddress = async(req ,res,next)=>{
+const loadAddAddress = async(req,res,next)=>{
     try {
         if(req.session.user_id){
             const loggedIn = req.session.user_id;

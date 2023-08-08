@@ -82,7 +82,7 @@ const addToCart = async(req,res,next)=>{
                         res.json({success:true});
                         // res.redirect('/cart');
                     } else {
-                        await Cart.findOneAndUpdate({user:userId},{$push:{products:{productId:productId,productPrice:productData.price}}});
+                        await Cart.findOneAndUpdate({ user:userId },{ $push:{ products:{productId:productId, productPrice:productData.price,}}});
                         res.json({success:true});
                         // res.redirect('/cart');
     
@@ -93,7 +93,7 @@ const addToCart = async(req,res,next)=>{
                         userName : userData.name,
                         products:[{
                             productId : productId,
-                            productPrice:productData.price
+                            productPrice:productData.price,
                         }]
                     });
     
@@ -139,6 +139,7 @@ const changeQuantity=async(req,res,next)=>{
         const cartData = await Cart.findOne({user: userId });
         const [{count:quantity}] = cartData.products;
         const productData = await Product.findOne({ _id: proId });
+        const total = productData.price * (quantity+count)
         if(productData.stock < quantity+count){
             res.json({check:true});
         } else {

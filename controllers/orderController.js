@@ -19,63 +19,80 @@ const placeOrder = async(req,res,next)=>{
         const userData = await User.findOne({ _id: userId });
         const address = req.body.address;
         const paymentMethod = req.body.payment;
-        const cartData = await Cart.findOne({ user: userId });
-        const products = cartData.products;
-        const total = parseInt(req.body.amount);
-        const grandTotal = parseInt(req.body.total);
-        const status = paymentMethod === "COD" || "wallet" ? "placed" : "pending";
-        const order = new Order({
-            deliveryAddress: address,
-            userId: userId,
-            userName :userData.name,
-            paymentMethod: paymentMethod,
-            products: products,
-            amount: total,
-            totalAmount: grandTotal,
-            date: new Date(),
-            status: status,
-        });
-
-        const orderData = await order.save();
-        const date = orderData.date.toISOString().substring(5,7);
-        const orderId = orderData._id;
-        if(orderData){
-            for(let i=0;i<products.length;i++){
-                const productId = products[i].productId;
-                const count = products[i].count;
-                await Product.findByIdAndUpdate({_id:productId},{$inc:{stock: -count}});
-
-            }
-            if(order.paymentMethod == "wallet"){
-                const walletData = await Wallet.findOne({userId: userId});
-                const wallet = walletData.walletAmount;
-                const totalWallet = wallet - order.totalAmount;
-                await Wallet.findOneAndUpdate({ userId: userId }, { $set: { walletAmount: totalWallet } });
-                await Wallet.findOneAndUpdate({ userId: userId }, { $push: { wallet: { amount: orderData.totalAmount, transactionType: "Debited" } } });
-                await Order.updateOne({ _id: orderId }, { $set: { month: date } });
-                await Cart.deleteOne({ user: userId });
-                res.json({ codSuccess: true });
-
-            } else if (order.paymentMethod == "COD"){
-                await Order.updateOne({_id:orderId},{$set:{month:date}});
-                await Cart.deleteOne({ user: userId });
-                res.json({codSuccess : true});
-            } else {
-                
-                const orderId = orderData._id;
-                await Order.updateOne({ _id: orderId }, { $set:{ month: date }});
-                const totalAmount = orderData.totalAmount;
-                var options = {
-                    amount :totalAmount * 100,
-                    currency: "INR",
-                    receipt: "" + orderId
+        
+        if(address && paymentMethod){
+            const cartData = await Cart.findOne({ user: userId }).populate("products.productId");
+            const products = cartData.products;
+            let flag = 0;
+            let productName,stockCount
+            products.forEach(product=>{
+                if(product.count > product.productId.stock){
+                    flag = 1;  
+                    productName = product.productId.productName  
+                    stockCount = product.productId.stock               
                 }
-                instance.orders.create(options,function(err,order){
-                    res.json({order});
-                })
+            });
+            if(flag == 1){
+              return res.json({ stock: true, productName: productName, stockCount: stockCount });
+            }
+            const total = parseInt(req.body.amount);
+            const grandTotal = parseInt(req.body.total);
+            const status = paymentMethod === "COD" || "wallet" ? "placed" : "pending";
+            const order = new Order({
+                deliveryAddress: address,
+                userId: userId,
+                userName :userData.name,
+                paymentMethod: paymentMethod,
+                products: products,
+                amount: total,
+                totalAmount: grandTotal,
+                date: new Date(),
+                status: status,
+            });
+    
+            const orderData = await order.save();
+            const date = orderData.date.toISOString().substring(5,7);
+            const orderId = orderData._id;
+            if(orderData){
+                for(let i=0;i<products.length;i++){
+                    const productId = products[i].productId._id;
+                    const count = products[i].count;
+                    await Product.findByIdAndUpdate({_id:productId},{$inc:{stock: -count}});
+    
+                }
+                if(order.paymentMethod == "wallet"){
+                    const walletData = await Wallet.findOne({userId: userId});
+                    const wallet = walletData.walletAmount;
+                    const totalWallet = wallet - order.totalAmount;
+                    await Wallet.findOneAndUpdate({ userId: userId }, { $set: { walletAmount: totalWallet } });
+                    await Wallet.findOneAndUpdate({ userId: userId }, { $push: { wallet: { amount: orderData.totalAmount, transactionType: "Debited" } } });
+                    await Order.updateOne({ _id: orderId }, { $set: { month: date } });
+                    await Cart.deleteOne({ user: userId });
+                    res.json({ codSuccess: true });
+    
+                } else if (order.paymentMethod == "COD"){
+                    await Order.updateOne({_id:orderId},{$set:{month:date}});
+                    await Cart.deleteOne({ user: userId });
+                    res.json({codSuccess : true});
+                } else {
+                    
+                    const orderId = orderData._id;
+                    await Order.updateOne({ _id: orderId }, { $set:{ month: date }});
+                    const totalAmount = orderData.totalAmount;
+                    var options = {
+                        amount :totalAmount * 100,
+                        currency: "INR",
+                        receipt: "" + orderId
+                    }
+                    instance.orders.create(options,function(err,order){
+                        res.json({order});
+                    })
+                }
+            } else {
+                res.redirect('/checkout');
             }
         } else {
-            res.redirect('/checkout');
+            res.json({check:true});
         }
         
     } catch (error) {
@@ -172,21 +189,23 @@ const cancelOrder = async(req,res,next)=>{
         const orderData = await Order.findOne({ _id: orderId });
         if(orderData){
             if(orderData.status == "placed"  || orderData.status == "Shipped"){
-                if(walletData){
-                    let wallet = walletData.walletAmount        
-                    const totalWallet = wallet + orderData.totalAmount;
-                    await Wallet.findOneAndUpdate({ userId: userId }, { $set: { walletAmount: totalWallet } });
-                    await Wallet.findOneAndUpdate({ userId: userId }, { $push: { wallet: { amount: orderData.totalAmount, transactionType: "Credited" } } });
-                } else {
-                    const wallet = new Wallet({
-                        userId: userId,
-                        walletAmount: orderData.totalAmount,
-                        wallet: [{
-                            amount: orderData.totalAmount,
-                            transactionType: "Credited",
-                        }]
-                    });
-                     await wallet.save();
+                if(orderData.paymentMethod == "onlinePayment" || orderData.paymentMethod == "wallet"){ 
+                    if(walletData){
+                        let wallet = walletData.walletAmount        
+                        const totalWallet = wallet + orderData.totalAmount;
+                        await Wallet.findOneAndUpdate({ userId: userId }, { $set: { walletAmount: totalWallet } });
+                        await Wallet.findOneAndUpdate({ userId: userId }, { $push: { wallet: { amount: orderData.totalAmount, transactionType: "Credited" } } });
+                    } else {
+                        const wallet = new Wallet({
+                            userId: userId,
+                            walletAmount: orderData.totalAmount,
+                            wallet: [{
+                                amount: orderData.totalAmount,
+                                transactionType: "Credited",
+                            }]
+                        });
+                         await wallet.save();
+                    }
                 }
 
                 for (const product of orderData.products) {

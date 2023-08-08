@@ -101,18 +101,43 @@
                                                 <span class="d-inline-block fi">ADD NEW ADDRESS</span>
                                             </a>
                                             <div class="row mt-5">
-                                                <div class="col-md-6 col-12 learts-mb-30">
-                                                    <address>
-                                                        <p><strong>Alex Tuntuni</strong></p>
-                                                        <p>1355 Market St, Suite 900 <br>
-                                                            San Francisco, CA 94103</p>
-                                                        <p>Mobile: (123) 456-7890</p>
-                                                    </address>
-                                                    <a href="/editAddress?id=" class="btn-outline-success-light"><i class="fas fa-edit"></i>
-                                                        Edit </a>
+                                                <!-- <% addresses.forEach(address=>{ %>
+
+                                                    <div class="col-md-6 col-12 learts-mb-30">
+                                                        <address>
+                                                            <p><strong><%=address.UserName %></strong></p>
+                                                            <p><%=address.address %></p>
+                                                                <p>Mobile: <%= address.mobile %></p>
+                                                                <p>City: <%=address.city %> State: <%=address.state %></p>
+                                                                <p>Zipcode: <%=address.pincode%></p>
+                                                            </address>
+                                                        <a href="/editAddress?id=" class="btn-outline-success-light"><i class="fas fa-edit"></i>
+                                                            Edit </a>
                                                         <a href="/editAddress?id=" class="btn-outline-danger"><i class="fas fa-trash"></i>
                                                             Delete </a>
-                                                </div>
+                                                    </div>
+                                                <% }) %> -->
+
+                                                <% addresses.forEach((item)=> { %>
+                                                    <div class="col-lg-6 col-md-6 mt-3 ms-3 ">
+                                                        <div class="card" style="width: 18rem;">
+                                                            <div class="card-body">
+                                                                <h5 class="card-title">
+                                                                    <%= item.userName %>
+                                                                </h5>
+                                                                <h6 class="card-subtitle mb-2 text-muted">
+                                                                    <%=item.mobile%>
+                                                                </h6>
+                                                                <p class="card-text">
+                                                                    <%=item.address%>,<%=item.city%> <br>
+                                                                            <%=item.state%>,<%=item.pincode%>
+                                                                </p>
+                                                                <a href="/editAddress?id=<%=item._id%>" class="btn-outline-success-light"><i class="fas fa-edit"></i>
+                                                                    Edit </a>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                    <% }) %>
 
                                             </div>
                                         </div>

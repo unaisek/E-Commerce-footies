@@ -35,29 +35,33 @@
                                                     <span class="d-inline-block fi">ADD NEW ADDRESS</span>
                                                 </a>
                                             </div>
-                                            <% addresses.forEach((item)=> { %>
-                                                <div class="col-lg-3 col-md-6 mt-3 ms-3 ">
-                                                    <div class="card" style="width: 18rem;">
-                                                        <div class="card-body">
-                                                            <input type="radio"
-                                                                value="<%=item.userName%>,<%=item.mobile%>,<%=item.alternativeMob%>,<%=item.address%>,<%=item.city%>,<%=item.state%>,<%=item.pincode%>"
-                                                                name="selectAddress">
-                                                            <h5 class="card-title">
-                                                                <%= item.userName %>
-                                                            </h5>
-                                                            <h6 class="card-subtitle mb-2 text-muted">
-                                                                <%=item.mobile%>
-                                                            </h6>
-                                                            <p class="card-text">
-                                                                <%=item.address%>,<%=item.city%> <br>
-                                                                        <%=item.state%>,<%=item.pincode%>
-                                                            </p>
-                                                            <a href="/editAddress?id=<%=item._id%>" class="btn-outline-success-light"><i class="fas fa-edit"></i>
-                                                                Edit </a>
+                                            <% if(addresses.length > 0 ){%>
+                                                <% addresses.forEach((item)=> { %>
+                                                    <div class="col-lg-3 col-md-6 mt-3 ms-3 ">
+                                                        <div class="card" style="width: 18rem;">
+                                                            <div class="card-body">
+                                                                <input type="radio"
+                                                                    value="<%=item.userName%>,<%=item.mobile%>,<%=item.alternativeMob%>,<%=item.address%>,<%=item.city%>,<%=item.state%>,<%=item.pincode%>"
+                                                                    name="selectAddress">
+                                                                <h5 class="card-title">
+                                                                    <%= item.userName %>
+                                                                </h5>
+                                                                <h6 class="card-subtitle mb-2 text-muted">
+                                                                    <%=item.mobile%>
+                                                                </h6>
+                                                                <p class="card-text">
+                                                                    <%=item.address%>,<%=item.city%> <br>
+                                                                            <%=item.state%>,<%=item.pincode%>
+                                                                </p>
+                                                                <a href="/editAddress?id=<%=item._id%>" class="btn-outline-success-light"><i class="fas fa-edit"></i>
+                                                                    Edit </a>
+                                                            </div>
                                                         </div>
                                                     </div>
-                                                </div>
                                                 <% }) %>
+                                                <% } else { %>
+                                                <p class="text-danger"> Address Not Found..Please add your Address</p>
+                                                <% } %>
                                         </div>
                                     </div>
                                 </div>
@@ -183,6 +187,10 @@
             const totalAmount = document.getElementById("grandtotal").innerHTML;
             let address = $("input[name=selectAddress]:checked").val();
             let payment = $("input[name=payment]:checked").val();
+            if(address == "undefined"){
+                toastr.error("please select a address")
+            }
+            console.log(address);
             $.ajax({
                 url :"/checkout",
                 method :"post",
@@ -193,12 +201,19 @@
                     payment :payment
                 },
                 success:(response)=>{
-                    if(response.codSuccess==true){
-                        toastr.success("COD payment successful!");
-                        // Redirect to "/myOrders" after a short delay (e.g., 1 second)
-                        setTimeout(function () {
-                            window.location.href = "/orderSuccess";
-                        }, 1500);
+                    if(response.check == true){
+                        toastr.error("please select a address or Payment Method","",{
+                          timeOut: 2500,
+                         progressBar : true
+                        });
+                    } else if(response.stock == true){
+                         toastr.error(`${response.productName} is out of stock....!!! please check your cart..Available stock is ${response.stockCount}`, "", {
+                            timeOut: 2500,
+                            progressBar: true
+                        });
+                   
+                    }else if(response.codSuccess==true){
+                        window.location.href = "/orderSuccess";
                     } else {
                         razorpayPayment(response.order)
                     }
@@ -286,6 +301,7 @@
                         } else if (response.amountkey) {
                             document.getElementById('discountAmount').innerText = response.discAmount;
                           document.getElementById('newTotal').innerHTML = response.disTotal;
+                          toastr.success("Coupon Applyed")
                         } else if (response.invalid) {
                             toastr.warning("Oops! Invalid coupon");
                         }
