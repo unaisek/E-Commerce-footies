@@ -20,9 +20,14 @@ adminRoute.use(session({
 
 adminRoute.set('views','./views/admin');
 
+// admin login 
+
 adminRoute.get('/',adminAuth.isLogout, adminController.loadLogin);
 adminRoute.post('/', adminController.verifyAdmin);
 adminRoute.get('/logout', adminController.adminLogout);
+
+// admin dashboard
+
 adminRoute.get('/dashboard', adminAuth.isLogin, adminController.loadDashboard);
 
 // user Mangment
@@ -50,7 +55,7 @@ adminRoute.get('/editProduct', adminAuth.isLogin, productController.loadEditProd
 adminRoute.post('/editProduct', multer.upload.array('images', 10), productController.updateProduct);
 adminRoute.get('/deleteImage', adminAuth.isLogin, productController.deleteImage);
 
-// order details
+// order Managment
 
 adminRoute.get('/orderList',adminAuth.isLogin,orderController.adminOrderLists);
 adminRoute.get('/shipping', adminAuth.isLogin, orderController.shippedOrder);
@@ -65,7 +70,8 @@ adminRoute.get('/returnRejected', adminAuth.isLogin, orderController.returnRejec
 
 adminRoute.get('/salesReport', adminAuth.isLogin, orderController.loadSalesReport);
 
-// coupon 
+// coupon   managment
+
 adminRoute.get('/coupon', adminAuth.isLogin, couponController.showCouponList);
 adminRoute.get('/addCoupon', adminAuth.isLogin, couponController.loadAddCoupon);
 adminRoute.post('/addCoupon',couponController.addNewCoupon);
@@ -73,7 +79,7 @@ adminRoute.get('/editCoupon', adminAuth.isLogin, couponController.loadEditCoupon
 adminRoute.post('/editCoupon',couponController.updateCoupon)
 
 
-// Banner
+// Banner managment 
 
 adminRoute.get('/banner',adminAuth.isLogin,bannerController.loadBannerList);
 adminRoute.get('/addBanner',adminAuth.isLogin,bannerController.loadAddBanner);

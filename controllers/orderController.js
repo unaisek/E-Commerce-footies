@@ -13,6 +13,8 @@ var instance = new Razorpay ({
     key_secret: process.env.RAZORPAY_SECRET_KEY
 });
 
+// order placing function
+
 const placeOrder = async(req,res,next)=>{
     try {
         const userId = req.session.user_id;
@@ -68,7 +70,7 @@ const placeOrder = async(req,res,next)=>{
                     await Wallet.findOneAndUpdate({ userId: userId }, { $push: { wallet: { amount: orderData.totalAmount, transactionType: "Debited" } } });
                     await Order.updateOne({ _id: orderId }, { $set: { month: date } });
                     await Cart.deleteOne({ user: userId });
-                    res.json({ codSuccess: true });
+                    res.json({ codSuccess: true, orderId:orderId });
     
                 } else if (order.paymentMethod == "COD"){
                     await Order.updateOne({_id:orderId},{$set:{month:date}});
@@ -101,6 +103,8 @@ const placeOrder = async(req,res,next)=>{
     }
 }
 
+// online payment razorpays
+
 const verifyPayment = async(req,res,next)=>{
     try {
 
@@ -130,6 +134,7 @@ const verifyPayment = async(req,res,next)=>{
 }
 
 // order success
+
 const loadOrderSuccess = async (req, res) => {
     try {
 
@@ -158,6 +163,7 @@ const loadMyOrders = async(req,res,next)=>{
     }
 }
 
+// view single order full details
 
 const viewOrderedProduct = async(req,res,next)=>{
     try {
@@ -284,6 +290,8 @@ const returnOrder = async(req,res,next)=>{
     }
 }
 
+// order status changing to shipped 
+
 const shippedOrder = async(req,res,next)=>{
     try {
         const orderId = req.query.id;
@@ -295,6 +303,8 @@ const shippedOrder = async(req,res,next)=>{
         next(error);
     }
 }
+
+// order status changing to Delivered 
 
 const deliveredOrder = async (req, res) => {
     try {
@@ -325,6 +335,8 @@ const returnConfirmPage = async(req,res,next)=>{
         next(error);
     }
 }
+
+// admin return approval
 
 const returnApproved = async(req,res,next)=>{
     try {

@@ -213,7 +213,7 @@
                         });
                    
                     }else if(response.codSuccess==true){
-                        window.location.href = "/orderSuccess";
+                        window.location.href = `/orderSuccess`;
                     } else {
                         razorpayPayment(response.order)
                     }
@@ -267,7 +267,7 @@
                 },
                 success:(response)=>{
                     if(response.success){
-                        window.location.href = "/orderSuccess"
+                        window.location.href = `/orderSuccess`
                     } else {
                         alert('payment failed');
                     }

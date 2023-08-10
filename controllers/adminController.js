@@ -1,7 +1,9 @@
 const User = require('../models/userModel');
 const Product = require("../models/productModel");
 const Category = require("../models/categoryModel");
+const Order = require('../models/orderModel');
 const bcrypt = require('bcrypt');
+const dashboardHelpers = require('../helpers/dashboardHelper')
 //---------------------------------------------
 
 
@@ -58,10 +60,80 @@ const adminLogout = async(req,res,next)=>{
     }
 }
 
+// load admin dashboard
+
 const loadDashboard = async(req,res,next)=>{
     try {
-        const admin = req.session.admin_id;
-        res.render('dashboard',{admin:admin});
+        const productCount = await Product.count();
+        const categoryCount = await Category.count(); 
+        const orderCount = await Order.count();
+        const today = new Date();
+        today.setHours(0, 0, 0, 0);
+        const yesterday = new Date(today.getDate() - 1);
+        const now = new Date();
+        const currentYear = now.getFullYear();
+        const currentMonth = now.getMonth();
+        const currMonthStartDate = new Date(currentYear,currentMonth, 1, 0, 0, 0);
+
+
+        const promises = [
+            dashboardHelpers.totalRevenue(),
+            dashboardHelpers.paymentMethod(),
+            dashboardHelpers.dailyChart(),
+            dashboardHelpers.monthlyTotalRevenue(currMonthStartDate, now)
+        ]
+        const results = await Promise.all(promises);
+
+        const totalRevenue = results[0];
+        const paymentMethod = results[1];
+        const dailyChart = results[2];
+        const monthlyTotalRevenue = results[3];
+
+
+        let codPayAmount,onlinePayAmount,walletPayAmount;
+        if (paymentMethod[0]._id === 'COD'){
+            codPayAmount = paymentMethod[0].amount;
+        } else if (paymentMethod[0]._id === 'onlinePayment'){
+            onlinePayAmount = paymentMethod[0].amount;
+        } else if(paymentMethod[0]._id = "wallet"){
+            walletPayAmount = paymentMethod[0].amount
+        }
+
+        if (paymentMethod[1]._id === 'COD') {
+            codPayAmount = paymentMethod[1].amount;
+        } else if (paymentMethod[1]._id === 'onlinePayment') {
+            onlinePayAmount = paymentMethod[1].amount;
+        } else if (paymentMethod[1]._id = "wallet") {
+            walletPayAmount = paymentMethod[1].amount
+        }
+
+        if (paymentMethod[2]._id === 'COD') {
+            codPayAmount = paymentMethod[2].amount;
+        } else if (paymentMethod[2]._id === 'onlinePayment') {
+            onlinePayAmount = paymentMethod[2].amount;
+        } else if (paymentMethod[2]._id = "wallet") {
+            walletPayAmount = paymentMethod[2].amount
+        }
+        
+        // const codPayAmount = paymentMethod && paymentMethod.length > 0 ? paymentMethod[0].amount.toString() : 0 ;
+        // console.log("code",codPayAmount);
+        // const onlinePayAmount = paymentMethod && paymentMethod.length > 0 ? paymentMethod[1].amount.toString() : 0;
+        // console.log("onli", onlinePayAmount);
+        
+        res.render('dashboard',{
+            // admin:admin,
+            totalRevenue: totalRevenue,
+            onlinePayAmount: onlinePayAmount,
+            codPayAmount: codPayAmount,
+            walletPayAmount: walletPayAmount,
+            dailyChart: dailyChart,
+            productCount: productCount,
+            orderCount: orderCount,
+            categoryCount: categoryCount,
+            monthlyTotalRevenue: monthlyTotalRevenue
+
+
+        });
 
 
     } catch (error) {
