@@ -31,7 +31,7 @@
                                     <div class="ltn__checkout-single-content-info">
                                         <div class="row">
                                             <div class="mb-5">
-                                                <a href="/addAddress" class="theme-btn-1 btn btn-effect-1">
+                                                <a href="/addAddress?page=checkout" class="theme-btn-1 btn btn-effect-1">
                                                     <span class="d-inline-block fi">ADD NEW ADDRESS</span>
                                                 </a>
                                             </div>
@@ -53,8 +53,11 @@
                                                                     <%=item.address%>,<%=item.city%> <br>
                                                                             <%=item.state%>,<%=item.pincode%>
                                                                 </p>
-                                                                <a href="/editAddress?id=<%=item._id%>" class="btn-outline-success-light"><i class="fas fa-edit"></i>
-                                                                    Edit </a>
+                                                                <div>
+                                                                    <a href="/editAddress?id=<%=item._id%>&page=checkot" class="btn-outline-success-light"><i class="fas fa-edit"></i>
+                                                                        Edit </a>
+                                                                        <span><a href="/deleteAddress?id=<%=item._id%>&page=checkot" class="btn-outline-danger"><i class="fas fa-trash"></i></a></span>
+                                                                </div>
                                                             </div>
                                                         </div>
                                                     </div>

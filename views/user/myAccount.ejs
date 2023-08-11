@@ -70,36 +70,38 @@
                                                             <th>amount</th>
                                                         </tr>
                                                     </thead>
-                                                    <% walletData.wallet.forEach(wallet=>{ %>
+                                                    <%for(let i = walletData.wallet.length -1; i>=0; i--){ %>
                                                         
                                                     <tbody>
-                                                        <td><%=wallet.date.toISOString().substring(0,10)%></td>
+                                                        <td><%=walletData.wallet[i].date.toISOString().substring(0,10)%></td>
                                                         <td>
-                                                            <%= wallet.date.toLocaleTimeString() %>
+                                                            <%= walletData.wallet[i].date.toLocaleTimeString() %>
                                                         </td>
-                                                        <% if(wallet.transactionType == "Credited") {%>
-                                                            <td class="text-success"><%=wallet.transactionType %></td>
-                                                            <td class="text-success">+<%= wallet.amount %></td>
+                                                        <% if(walletData.wallet[i].transactionType == "Credited") {%>
+                                                            <td class="text-success"><%=walletData.wallet[i].transactionType %></td>
+                                                            <td class="text-success">+<%= walletData.wallet[i].amount %></td>
                                                         <% } else {%>
                                                             <td class="text-danger">
-                                                                <%=wallet.transactionType %>
+                                                                <%=walletData.wallet[i].transactionType %>
                                                             </td>
-                                                            <td class="text-danger">-<%= wallet.amount %>
+                                                            <td class="text-danger">-<%= walletData.wallet[i].amount %>
                                                             </td>
                                                             <% } %>
 
 
                                                         </tbody>
-                                                        <% }) %>
+                                                        <% }%>
                                                 </table>
                                             </div>
                                         </div>
                                     </div>
                                     <div class="tab-pane fade" id="liton_tab_1_4">
                                         <div class="ltn__myaccount-tab-content-inner">
-                                            <a href="/addAddress?page=profile" class="theme-btn-1 btn btn-effect-1">
-                                                <span class="d-inline-block fi">ADD NEW ADDRESS</span>
-                                            </a>
+                                            <div>
+                                                <a href="/addAddress?page=profile" class="theme-btn-1 btn btn-effect-1">
+                                                    <span class="d-inline-block fi">ADD NEW ADDRESS</span>
+                                                </a>
+                                            </div>
                                             <div class="row mt-5">
                                                 <!-- <% addresses.forEach(address=>{ %>
 
@@ -119,7 +121,7 @@
                                                 <% }) %> -->
 
                                                 <% addresses.forEach((item)=> { %>
-                                                    <div class="col-lg-6 col-md-6 mt-3 ms-3 ">
+                                                    <div class="col-lg-6 col-md-6 pt-3 pb-3 ">
                                                         <div class="card" style="width: 18rem;">
                                                             <div class="card-body">
                                                                 <h5 class="card-title">
@@ -132,8 +134,9 @@
                                                                     <%=item.address%>,<%=item.city%> <br>
                                                                             <%=item.state%>,<%=item.pincode%>
                                                                 </p>
-                                                                <a href="/editAddress?id=<%=item._id%>" class="btn-outline-success-light"><i class="fas fa-edit"></i>
+                                                                <a href="/editAddress?id=<%=item._id%>&page=profile" class="btn-outline-success-light"><i class="fas fa-edit"></i>
                                                                     Edit </a>
+                                                                    <a href="/deleteAddress?id=<%=item._id%>&page=profile" class="btn-outline-danger"><i class="fas fa-trash"></i></a>
                                                             </div>
                                                         </div>
                                                     </div>
@@ -144,29 +147,23 @@
                                     </div>
                                     <div class="tab-pane fade" id="liton_tab_1_5">
                                         <div class="ltn__myaccount-tab-content-inner">
-                                            <p>The following addresses will be used on the checkout page by default.</p>
                                             <div class="ltn__form-box">
                                                 <form action="#">
                                                     <div class="row mb-50">
-                                                        <div class="col-md-6">
-                                                            <label>First name:</label>
-                                                            <input type="text" name="ltn__name">
+                                                        <div class="col-md-12">
+                                                            <label>User Name:</label>
+                                                            <input type="text" name="ltn__name" value="<%=user.name %>">
                                                         </div>
-                                                        <div class="col-md-6">
-                                                            <label>Last name:</label>
-                                                            <input type="text" name="ltn__lastname">
+                                                        <div class="col-md-12">
+                                                            <label>User Email:</label>
+                                                            <input type="email" name="ltn__lastname" value="<%=user.email %>">
                                                         </div>
-                                                        <div class="col-md-6">
-                                                            <label>Display Name:</label>
-                                                            <input type="text" name="ltn__lastname" placeholder="Ethan">
-                                                        </div>
-                                                        <div class="col-md-6">
-                                                            <label>Display Email:</label>
-                                                            <input type="email" name="ltn__lastname"
-                                                                placeholder="example@example.com">
+                                                        <div class="col-md-12">
+                                                            <label>Mobile:</label>
+                                                            <input type="text" name="ltn__lastname" value="<%=user.mobile %>">
                                                         </div>
                                                     </div>
-                                                    <fieldset>
+                                                    <!-- <fieldset>
                                                         <legend>Password change</legend>
                                                         <div class="row">
                                                             <div class="col-md-12">
@@ -180,11 +177,10 @@
                                                                 <input type="password" name="ltn__lastname">
                                                             </div>
                                                         </div>
-                                                    </fieldset>
+                                                    </fieldset> -->
                                                     <div class="btn-wrapper">
                                                         <button type="submit"
-                                                            class="btn theme-btn-1 btn-effect-1 text-uppercase">Save
-                                                            Changes</button>
+                                                            class="btn theme-btn-1 btn-effect-1 text-uppercase"><a href=""></a>Edit Profile</button>
                                                     </div>
                                                 </form>
                                             </div>

@@ -62,9 +62,10 @@ userRoute.get('/myAccount',userController.loadProfile);
 // address 
 
 userRoute.get('/addAddress',userAuth.isLogin,addressController.loadAddAddress);
-userRoute.post('/addAddress',addressController.addNewAddress);
+userRoute.post('/addAddress', userAuth.isLogin, addressController.addNewAddress);
 userRoute.get('/editAddress', userAuth.isLogin, addressController.loadEditAddress);
-userRoute.post('/editAddress',addressController.doEditAddress)
+userRoute.post('/editAddress', userAuth.isLogin, addressController.doEditAddress);
+userRoute.get('/deleteAddress', userAuth.isLogin, addressController.deleteAddress);
 
 
 // checkout
@@ -80,7 +81,7 @@ userRoute.get('/orderSuccess',userAuth.isLogin,orderController.loadOrderSuccess)
 // orders
 userRoute.get('/myOrders',userAuth.isLogin,orderController.loadMyOrders);
 userRoute.get('/orderedProduct', userAuth.isLogin, orderController.viewOrderedProduct);
-userRoute.post('/cancelOrder',orderController.cancelOrder);
+userRoute.post('/cancelOrder', userAuth.isLogin, orderController.cancelOrder);
 
 // return Order
 userRoute.get('/returnOrder', userAuth.isLogin, orderController.loadReturnPage);

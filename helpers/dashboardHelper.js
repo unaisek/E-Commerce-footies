@@ -4,7 +4,13 @@ const Order = require('../models/orderModel');
 const totalRevenue = async()=>{
     const revenue = await Order.aggregate([
         {
-            $match: { status: { $ne: "pending"}}
+            $match: { 
+                status: { 
+                    $ne: "pending",
+                    $ne: "Cancelled",
+                    $ne: "Returned"
+                }
+            } 
         },
         {
             $group: 

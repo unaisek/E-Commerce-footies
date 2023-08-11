@@ -4,9 +4,10 @@
             <div>
                 <h2 class="content-title card-title">Sales Report</h2>
             </div>
-            <div>
-                <input type="text" placeholder="Search order ID" class="form-control bg-white" />
-            </div>
+        <div>
+            <button href="#" class="btn btn-light rounded font-md" onclick="generateExcel()">Excel</button>
+            <button class="btn btn-light rounded font-md" onclick="generatePDF()">PDF Download</button>
+        </div>
         </div>
         <div class="card mb-4">
         <header class="card-header">
@@ -50,7 +51,7 @@
                     <table class="table table-hover">
                         <thead>
                             <tr>
-                                <th  scope="col">OrderId</th>
+                                <th scope="col">OrderId</th>
                                 <th scope="col">Date</th>
                                 <th scope="col">Total</th>
                                 <th scope="col">Payment Method</th>
@@ -97,4 +98,74 @@
             </nav>
         </div> -->
     </section>
+
+    <script>
+
+        // pdf 
+        function generatePDF() {
+                const orders = document.querySelectorAll('.table tbody tr');
+
+                const orderRows = [];
+                orders.forEach(order => {
+                    const orderId = order.cells[0].innerText;
+                    const date = order.cells[1].innerText;
+                    const total = order.cells[2].innerText;
+                    const paymentMethod = order.cells[3].innerText;
+                    const status = order.cells[4].innerText;
+
+                    orderRows.push([orderId, date, total, paymentMethod, status]);
+                });
+
+                const pdfFormat = {
+                    content: [
+                        { text: 'Sales Report', style: 'header' },
+                        {
+                            table: {
+                                headerRows: 1,
+                                widths: [170, 70, 60, 45, 50, 50, 50],
+                                body: [['OrderId', 'Date', 'Total', 'Payment Method', 'Status'], ...orderRows]
+                            }
+                        }
+                    ],
+                    styles: {
+                        header: {
+                            fontSize: 20,
+                            bold: true,
+                            alignment: 'center',
+                            margin: [0, 0, 0, 10]
+                        }
+                    }
+                };
+
+                pdfMake.createPdf(pdfFormat).print();
+            }
+             function generateExcel() {
+                    const orders = document.querySelectorAll('.table tbody tr');
+
+                    const orderData = [];
+                    orders.forEach(order => {
+                     const orderId = order.cells[0].innerText;
+                     const date = order.cells[1].innerText;
+                     const total = order.cells[2].innerText;
+                     const paymentMethod = order.cells[3].innerText;
+                     const status = order.cells[4].innerText;
+
+                     orderData.push([orderId, date, total, paymentMethod, status]);
+                 });
+
+
+                    const header = ['OrderId', 'Date', 'Total', 'Payment Method', 'Status'] ;
+                    const data = [header, ...orderData];
+
+                    const ws = XLSX.utils.aoa_to_sheet(data);
+                    const wb = XLSX.utils.book_new();
+                    XLSX.utils.book_append_sheet(wb, ws, 'Sales Report');
+
+                    // Generating filename based on the current date and time
+                    const filename = 'Sales_Report_' + new Date().toISOString().slice(0, 19).replace(/:/g, '-') + '.xlsx';
+
+                    // Convert the workbook to a binary Excel file and trigger the download
+                    XLSX.writeFile(wb, filename);
+                }
+    </script>
     <%- include('../partials/adminPartials/adminFooter.ejs') %>

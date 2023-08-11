@@ -4,10 +4,11 @@ const User = require('../models/userModel');
 const loadAddAddress = async(req,res,next)=>{
     try {
         if(req.session.user_id){
+            const page= req.query.page;
             const loggedIn = req.session.user_id;
             // const userData = await User.findOne({_id :user_id})
             if(req.session.user_id){
-                res.render('addAddress',{loggedIn});
+                res.render('addAddress',{loggedIn,page});
             } else {
                 req.redirect('/');
             }
@@ -48,9 +49,17 @@ const addNewAddress = async(req,res,next)=>{
                 }
             );
             if (updatedAddress){
-                res.redirect('/checkout');
+                if (req.body.page == "profile") {
+                    res.redirect('/myAccount')
+                } else {
+                    res.redirect('/checkout');
+                }
             } else {
-                req.redirect('/checkout');
+                if (req.body.page == "profile") {
+                    res.redirect('/myAccount')
+                } else {
+                    res.redirect('/checkout');
+                }
             }
 
         } else {
@@ -70,7 +79,11 @@ const addNewAddress = async(req,res,next)=>{
 
             const addressData = await userAdress.save();
             if(addressData){
-                res.redirect('/checkout');
+                if(req.body.page== "profile"){
+                    res.redirect('/myAccount')
+                }else{
+                    res.redirect('/checkout');
+                }
             } else {
                 res.render('addAddress')
             }
@@ -81,23 +94,27 @@ const addNewAddress = async(req,res,next)=>{
     }
 }
 
+// load edit address page
+
 const loadEditAddress =  async(req,res,next)=>{
     try {
         const userId = req.session.user_id;
         const addressId = req.query.id;
+        const page = req.query.page
         const addressData = await Address.findOne({ userId: userId ,"addresses._id":addressId})
         const aData = addressData.addresses.find((addr) => addr._id.toString()=== addressId);
-        res.render("editAddress", { address: aData ,loggedIn :userId})       
+        res.render("editAddress", { address: aData, loggedIn: userId, page })       
     } catch (error) {
         console.log(error.message);
         next(error);
     }
 }
 
+// update address
+
 const doEditAddress = async (req, res, next) => {
     try {
         const userId = req.session.user_id;
-        console.log(req.body);
         const { userName, mobile, altMobile, address, city, state, pincode, landmark } = req.body;
 
          const updateData = await Address.findOneAndUpdate({ userId:userId, "addresses._id": req.query.id }, {
@@ -114,7 +131,11 @@ const doEditAddress = async (req, res, next) => {
         });
         if(updateData){
 
-            res.redirect('/checkout');
+            if (req.body.page == "profile") {
+                res.redirect('/myAccount')
+            } else {
+                res.redirect('/checkout');
+            }
         } else {
             console.log("log not updated");
         }
@@ -125,11 +146,34 @@ const doEditAddress = async (req, res, next) => {
     }
 };
 
+//  delete address
+
+const deleteAddress = async (req, res, next)=>{
+    try {
+        
+        const userId  = req.session.user_id;
+        const addressId = req.query.id;
+        const updatedAddress = await Address.updateOne({ userId:userId } , { $pull: { addresses: { _id: addressId} }});
+        console.log(updatedAddress);
+        if (updatedAddress){
+            if (req.query.page == "profile") {
+                res.redirect('/myAccount')
+            } else {
+                res.redirect('/checkout');
+            }
+        }
+
+    } catch (error) {
+        next(error);
+    }
+}
+
 
 module.exports = {
     loadAddAddress,
     addNewAddress,
     loadEditAddress,
-    doEditAddress
+    doEditAddress,
+    deleteAddress
 
 }

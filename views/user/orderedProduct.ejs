@@ -21,19 +21,80 @@
     </div>
     <div class="ltn__team-area pt-110--- pb-90">
         <div class="container">
-            <div >
-                <div class="col-md-8 col-sm-12 mt-10">
-                    <h3>User Details</h3>
-                    <p>User Name: <%= orderData.userName %>
+            <div class="col-md-4">
+                <div class=" mt-10">
+                    <h3>Devilvery Address</h3>
+                    <p class="font-weight-6"><%= orderData.userName %>
                     </p>
-                    <p class="mb-0 text-wrap">Address: <%= orderData.deliveryAddress %>
+                    <p class="mb-0" style="overflow-wrap: break-word;"><%= orderData.deliveryAddress %>
                     </p>
                     <p>Payment Method: <%=orderData.paymentMethod %></p>
+                    <p>Order Date: <%=orderData.date.toISOString().substring(0,10) %></p>
                 </div>
                 <div class="col-md-4"></div>
                 <hr>
+            </div>
+            <div class="table-responsive">
+                <table class="table">
+                    <thead>
+                        <tr>
+                            <th>Product Image</th>
+                            <th>Product Name</th>
+                            <th>Product Count</th>
+                            <th>Order Status</th>
+                            <th>Amount</th>
+                        </tr>
+                    </thead>  
+                    <tbody>
+                            <% products.forEach(product=> { %>
+                            <tr>
+                                <td><div style="height: 100px; width: 75px;">
+                                    <a href="/productDetails?id=<%=product.productId._id %>"><img
+                                            src="/adminAsset/productImages/<%=product.productId.images[product.productId.images.length-1] %>" alt="#"></a>
+                                </div></td>
+                                <td class="pt-5"><%=product.productId.productName %></td>
+                                <td class="pt-5">
+                                    <%=product.count%>
+                                </td>
+                                <td class="pt-5"><%=orderData.status %></td>
+
+                                <td class="pt-5"><%=product.productId.price%></td>
+                            </tr>
+                            <% }) %>
+                            <tr>
+                                <td colspan="5">
+                                    <div class="shoping-cart-total">
+                                        <h4>Order Totals</h4>
+                                        <table class="table">
+                                            <tbody>
+                                                <tr>
+                                                    <td>Order Subtotal</td>
+                                                    <td>&#8377;<%=orderData.totalAmount %>
+                                                    </td>
+                                                </tr>
+                                                <tr>
+                                                    <td>Shipping and Handing</td>
+                                                    <td>&#8377;00.00</td>
+                                                </tr>
+                                                <tr>
+                                                    <td>Discount</td>
+                                                    <td>&#8377;<%= orderData.amount - orderData.totalAmount %></td>
+                                                </tr>
+                                                <tr>
+                                                    <td><strong>Order Total</strong></td>
+                                                    <td><strong>&#8377;<%=orderData.totalAmount %></strong></td>
+                                                </tr>
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </td>
+                            </tr>
+                        </tbody>
+
+                </table>
+            </div>
                 
-                <h3>Product Details</h3>
+                <!-- <h3>Product Details</h3>
                 <div class="row">
                     <% products.forEach(product=> { %>
                         <div class="col-lg-4 col-md-6 w-lg-25 h-lg-25 w-md-50 h-md-50 mt-5">
@@ -53,7 +114,7 @@
                                 </div>
                             </div>
                         </div>
-                    <% }) %>
+                    <% }) %> -->
             </div>
         </div>
     </div>
