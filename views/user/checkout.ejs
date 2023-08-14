@@ -24,94 +24,94 @@
         <form id="checkout-form" >
             <div class="container">
                 <div class="row">
-                        <div class="col-lg-12">
-                            <div class="ltn__checkout-inner">
-                                <div class="ltn__checkout-single-content mt-50">
-                                    <h4 class="title-2">Delivery Address</h4>
-                                    <div class="ltn__checkout-single-content-info">
-                                        <div class="row">
-                                            <div class="mb-5">
-                                                <a href="/addAddress?page=checkout" class="theme-btn-1 btn btn-effect-1">
-                                                    <span class="d-inline-block fi">ADD NEW ADDRESS</span>
-                                                </a>
-                                            </div>
-                                            <% if(addresses.length > 0 ){%>
-                                                <% addresses.forEach((item)=> { %>
-                                                    <div class="col-lg-3 col-md-6 mt-3 ms-3 ">
-                                                        <div class="card" style="width: 18rem;">
-                                                            <div class="card-body">
-                                                                <input type="radio"
-                                                                    value="<%=item.userName%>,<%=item.mobile%>,<%=item.alternativeMob%>,<%=item.address%>,<%=item.city%>,<%=item.state%>,<%=item.pincode%>"
-                                                                    name="selectAddress">
-                                                                <h5 class="card-title">
-                                                                    <%= item.userName %>
-                                                                </h5>
-                                                                <h6 class="card-subtitle mb-2 text-muted">
-                                                                    <%=item.mobile%>
-                                                                </h6>
-                                                                <p class="card-text">
-                                                                    <%=item.address%>,<%=item.city%> <br>
-                                                                            <%=item.state%>,<%=item.pincode%>
-                                                                </p>
-                                                                <div>
-                                                                    <a href="/editAddress?id=<%=item._id%>&page=checkot" class="btn-outline-success-light"><i class="fas fa-edit"></i>
-                                                                        Edit </a>
-                                                                        <span><a href="/deleteAddress?id=<%=item._id%>&page=checkot" class="btn-outline-danger"><i class="fas fa-trash"></i></a></span>
-                                                                </div>
+                    <div class="col-lg-12">
+                        <div class="ltn__checkout-inner">
+                            <div class="ltn__checkout-single-content mt-50">
+                                <h4 class="title-2">Delivery Address</h4>
+                                <div class="ltn__checkout-single-content-info">
+                                    <div class="row">
+                                        <div class="mb-5">
+                                            <a href="/addAddress?page=checkout" class="theme-btn-1 btn btn-effect-1">
+                                                <span class="d-inline-block fi">ADD NEW ADDRESS</span>
+                                            </a>
+                                        </div>
+                                        <% if(addresses.length > 0 ){%>
+                                            <% addresses.forEach((item)=> { %>
+                                                <div class="col-lg-3 col-md-6 mt-3 ms-3 ">
+                                                    <div class="card" style="width: 18rem;">
+                                                        <div class="card-body">
+                                                            <input type="radio"
+                                                                value="<%=item.userName%>,<%=item.mobile%>,<%=item.alternativeMob%>,<%=item.address%>,<%=item.city%>,<%=item.state%>,<%=item.pincode%>"
+                                                                name="selectAddress">
+                                                            <h5 class="card-title">
+                                                                <%= item.userName %>
+                                                            </h5>
+                                                            <h6 class="card-subtitle mb-2 text-muted">
+                                                                <%=item.mobile%>
+                                                            </h6>
+                                                            <p class="card-text">
+                                                                <%=item.address%>,<%=item.city%> <br>
+                                                                        <%=item.state%>,<%=item.pincode%>
+                                                            </p>
+                                                            <div>
+                                                                <a href="/editAddress?id=<%=item._id%>&page=checkot" class="btn-outline-success-light"><i class="fas fa-edit"></i>
+                                                                    Edit </a>
+                                                                    <span><a href="/deleteAddress?id=<%=item._id%>&page=checkot" class="btn-outline-danger"><i class="fas fa-trash"></i></a></span>
                                                             </div>
                                                         </div>
                                                     </div>
-                                                <% }) %>
-                                                <% } else { %>
-                                                <p class="text-danger"> Address Not Found..Please add your Address</p>
-                                                <% } %>
-                                        </div>
+                                                </div>
+                                            <% }) %>
+                                            <% } else { %>
+                                            <p class="text-danger"> Address Not Found..Please add your Address</p>
+                                            <% } %>
                                     </div>
                                 </div>
                             </div>
                         </div>
-                        <div class="row">
-                            <div class="col-lg-6">
-                                <div class="ltn__checkout-payment-method mt-50">
-                                    <h4 class="title-2">Payment Method</h4>
-                                    <div id="checkout_accordion_1 " style="color: black;">
-                                        <% if(wallet.walletAmount >= Total) {%>
-                                            <div class="card">
-                                                <label>
-                                                    <input type="radio" name="payment" value="wallet" id="wallet" />
-                                                    Wallet payments
-                                                </label>
-                                                <div class="card-body">
-                                                    <p>Wallet Amount : <%=wallet.walletAmount %></p>
-                                                </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-lg-6">
+                            <div class="ltn__checkout-payment-method mt-50">
+                                <h4 class="title-2">Payment Method</h4>
+                                <div id="checkout_accordion_1 " style="color: black;">
+                                    <% if(wallet.walletAmount >= Total) {%>
+                                        <div class="card">
+                                            <label>
+                                                <input type="radio" name="payment" value="wallet" id="wallet" />
+                                                Wallet payments
+                                            </label>
+                                            <div class="card-body">
+                                                <p>Wallet Amount : <%=wallet.walletAmount %></p>
                                             </div>
-                                            <% } %>
-                                        <div class="card">
-                                            <label>
-                                                <input type="radio" name="payment" value="COD" id="COD"/>
-                                                Cash on delivery
-                                            </label>
                                         </div>
-                                        <div class="card">
-                                            <label>
-                                                <input type="radio" name="payment" value="onlinePayment" id="onlinePayment" />
-                                                Razorpay
-                                                <!-- <img src="img/icons/payment-3.png" alt="#"> -->
-                                            </label>
-                                        </div>
+                                        <% } %>
+                                    <div class="card">
+                                        <label>
+                                            <input type="radio" name="payment" value="COD" id="COD"/>
+                                            Cash on delivery
+                                        </label>
                                     </div>
-
-                                    <div class="ltn__payment-note mt-30 mb-30">
-                                        <p>Your personal data will be used to process your order, support your experience throughout this website, and for other purposes described in our privacy policy.</p>
+                                    <div class="card">
+                                        <label>
+                                            <input type="radio" name="payment" value="onlinePayment" id="onlinePayment" />
+                                            Razorpay
+                                            <!-- <img src="img/icons/payment-3.png" alt="#"> -->
+                                        </label>
                                     </div>
-                                    <button class="btn theme-btn-1 btn-effect-1 text-uppercase mt-5" type="submit">Place order</button>
                                 </div>
+
+                                <div class="ltn__payment-note mt-30 mb-30">
+                                    <p>Your personal data will be used to process your order, support your experience throughout this website, and for other purposes described in our privacy policy.</p>
+                                </div>
+                                <button class="btn theme-btn-1 btn-effect-1 text-uppercase mt-5" type="submit">Place order</button>
                             </div>
-                            <div class="col-lg-6">
-                                <div class="shoping-cart-total mt-50">
-                                    <h4 class="title-2">Cart Totals</h4>
-                                    <table class="table">
-                                        <tbody>
+                        </div>
+                        <div class="col-lg-6">
+                            <div class="shoping-cart-total mt-50">
+                                <h4 class="title-2">Cart Totals</h4>
+                                <table class="table">
+                                    <tbody>
                                         <tr>
                                             <td>Subtotal</td>
                                             <td id="total">&#8377;<%=Total %>
@@ -125,16 +125,16 @@
                                             <td>Discount Amount</td>
                                             <td id="discountAmount">&#8377;00.00</td>
                                         </tr>
-
                                         <tr>
                                             <td><strong>Grand Total</strong></td>
                                             <td id="grandtotal"><strong id="newTotal">&#8377;<%=Total %></strong></td>
                                         </tr>
-                                        </tbody>
-                                    </table>
-                                </div>
+                                    </tbody>
+                                </table>
                             </div>
                         </div>
+                    </div>
+                    <input type="hidden" id="appliedCouponName" name="appliedCouponName" value="">
                 </div>
             </div>
         </form>
@@ -184,12 +184,14 @@
 
     <script>
 
+
         $("#checkout-form").submit((e)=>{
             e.preventDefault();
             const amount = document.getElementById("total").innerHTML;
             const totalAmount = document.getElementById("grandtotal").innerHTML;
             let address = $("input[name=selectAddress]:checked").val();
             let payment = $("input[name=payment]:checked").val();
+            const couponName = $("#appliedCouponName").val();
             if(address == "undefined"){
                 toastr.error("please select a address")
             }
@@ -201,7 +203,8 @@
                     amount:parseInt(amount.replace(/[^\d.]/g, '')),
                     total: parseInt(totalAmount.replace(/[^\d.]/g, '')),
                     address: address,
-                    payment :payment
+                    payment :payment,
+                    couponName: couponName
                 },
                 success:(response)=>{
                     if(response.check == true){
@@ -302,6 +305,7 @@
                         } else if (response.date) {
                             toastr.warning("Oops! Coupon date expired");
                         } else if (response.amountkey) {
+                             $("#appliedCouponName").val(response.couponName);
                             document.getElementById('discountAmount').innerText = response.discAmount;
                           document.getElementById('newTotal').innerHTML = response.disTotal;
                           toastr.success("Coupon Applyed")

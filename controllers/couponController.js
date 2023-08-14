@@ -103,23 +103,38 @@ const applyCoupon = async(req,res,next)=>{
                         if(couponData.minCartAmount >= amount){
                             res.json({cartAmount :true});
                         } else {
-                            await Coupon.findByIdAndUpdate(couponData._id, { $push: { usedUsers: req.session.user_id }});
                             if (couponData.discountType == "Fixed Amount"){
                                 const discAmount = couponData.discountAmount;
-                                const disTotal = Math.round(amount - discAmount);
-
-                                return res.json({ amountkey:true, discAmount, disTotal })
+                                let disTotal;
+                                if(discAmount > amount){
+                                     disTotal = 0
+                                }else{
+                                    disTotal = Math.round(amount - discAmount);
+                                }
+                                return res.json({ amountkey: true, discAmount, disTotal, couponName: code })
                             } else {
                                 const perAmount = (amount * couponData.discountAmount) /100;
                                 if(perAmount <= couponData.maxDiscAmount){
                                     const discAmount = perAmount;
-                                    const disTotal = Math.round( amount - discAmount);
-                                    return res.json({amountKey: true, discAmount, disTotal});
+                                    // const disTotal = Math.round( amount - discAmount);
+                                    let disTotal;
+                                    if (discAmount > amount) {
+                                        disTotal = 0
+                                    } else {
+                                        disTotal = Math.round(amount - discAmount);
+                                    }
+                                    return res.json({ amountKey: true, discAmount, disTotal, couponName: code });
 
                                 }else {
                                     const discAmount = couponData.maxDiscAmount;
-                                    const disTotal = Math.round(amount - discAmount);
-                                    return res.json({amountKey: true, discAmount,disTotal});
+                                    // const disTotal = Math.round(amount - discAmount);
+                                    let disTotal;
+                                    if (discAmount > amount) {
+                                        disTotal = 0
+                                    } else {
+                                        disTotal = Math.round(amount - discAmount);
+                                    }
+                                    return res.json({ amountKey: true, discAmount, disTotal, couponName: code });
                                 }
                             }
                         }

@@ -5,6 +5,7 @@ const Address = require('../models/addressModel');
 const Order = require('../models/orderModel');
 const Wallet = require('../models/walletModel');
 const Razorpay = require('razorpay');
+const Coupon = require('../models/couponModel')
 const { off } = require("process");
 require('dotenv').config();
 
@@ -21,6 +22,7 @@ const placeOrder = async(req,res,next)=>{
         const userData = await User.findOne({ _id: userId });
         const address = req.body.address;
         const paymentMethod = req.body.payment;
+        const couponName = req.body.couponName;
         
         if(address && paymentMethod){
             const cartData = await Cart.findOne({ user: userId }).populate("products.productId");
@@ -56,6 +58,12 @@ const placeOrder = async(req,res,next)=>{
             const date = orderData.date.toISOString().substring(5,7);
             const orderId = orderData._id;
             if(orderData){
+
+                if(couponName.length>0){
+
+                    const updatedData = await Coupon.findOneAndUpdate({ couponName: couponName }, { $push: { usedUsers: req.session.user_id } });
+                    console.log(updatedData);
+                }
                 for(let i=0;i<products.length;i++){
                     const productId = products[i].productId._id;
                     const count = products[i].count;
