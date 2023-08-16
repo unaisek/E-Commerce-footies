@@ -49,15 +49,20 @@ const loadWishlist = async(req,res,next)=>{
         const userId = req.session.user_id;
         const userData = await User.findOne({_id:userId});
         const wishlistData = await Wishlist.findOne({user:userId}).populate("products.productId")
-        const wish = wishlistData.products;
-        if(wish.length >0){
-            if(req.session.user_id){
-                res.render('wishlist',{loggedIn:userId,userData,wish});
+        if(wishlistData)
+        {
+            const wish = wishlistData.products;
+            if(wish.length >0){
+                if(req.session.user_id){
+                    res.render('wishlist',{loggedIn:userId,userData,wish});
+                } else {
+                    res.redirect('/');
+                }
             } else {
-                res.redirect('/');
+                res.render('emptyWishlist',{loggedIn:userId,message:"No product Added to Wishlist!!"})
             }
         } else {
-            res.render('emptyWishlist',{loggedIn:userId,message:"No product Added to Wishlist!!"})
+            res.render('emptyWishlist', { loggedIn: userId, message: "No product Added to Wishlist!!" })
         }
     } catch (error) {
         console.log(error.message);
