@@ -84,7 +84,7 @@
                                                     </div>
                                                 <% } else { %>
                                                     <div>
-                                                        <button class="btn-sm font-sm btn-danger" onclick="cancel('<%= order._id %>')">Cancel</button>
+                                                        <button class="btn-sm font-sm btn-danger" onclick="showCancelConfirmation('<%= order._id %>')">Cancel</button>
                                                     </div>
                                                     <% } %>
                                         </td>
@@ -116,51 +116,43 @@
 
     <!-- cancel or return functions -->
     <script>
-        function cancel(orderId){
-            if (confirm("Are you sure you want to cancel this order?")){
-
-                $.ajax({
-                    url: "/cancelOrder",
-                    data: {
-                        orderId: orderId
-                    },
-                    method: "post",
-                    success:(response)=>{
-                        if(response.success){
-                            toastr.success("Order canceled successfully!", "Success", {
-                                timeOut: 3000,
-                                closeButton: true,
-                                progressBar: true,
-                            });
-                            location.reload();
+        function showCancelConfirmation(orderId) {
+                swal({
+                    title: "Are you sure?",
+                    text: "Once canceled, you will not be able to undo this action.",
+                    icon: "warning",
+                    buttons: true,
+                    dangerMode: true,
+                })
+                    .then((willCancel) => {
+                        if (willCancel) {
+                            // If the user confirms the cancellation, proceed with canceling the order
+                            cancelOrder(orderId);
+                        } else {
+                            // If the user cancels the confirmation, do nothing
                         }
-                    }
-                });
+                    });
             }
-        }
 
-        // function returnOrder(orderId) {
-        //         if (confirm("Are you sure you want to return this order?")) {
-
-        //             $.ajax({
-        //                 url: "/returnOrder",
-        //                 data: {
-        //                     orderId: orderId
-        //                 },
-        //                 method: "post",
-        //                 success: (response) => {
-        //                     if (response.success) {
-        //                         toastr.success("Order canceled successfully!", "Success", {
-        //                             timeOut: 3000,
-        //                             closeButton: true,
-        //                             progressBar: true,
-        //                         });
-        //                         location.reload();
-        //                     }
-        //                 }
-        //             });
-        //         }
-        //     }
+            function cancelOrder(orderId) {
+                    $.ajax({
+                        url: "/cancelOrder",
+                        data: {
+                            orderId: orderId
+                        },
+                        method: "post",
+                        success: (response) => {
+                            if (response.success) {
+                                toastr.success("Order canceled successfully!", "Success", {
+                                    timeOut: 3000,
+                                    closeButton: true,
+                                    progressBar: true,
+                                });
+                                location.reload();
+                            }
+                        }
+                    });
+                }
     </script>
 
 <%- include('../partials/userPartials/footer.ejs') %>

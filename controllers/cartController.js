@@ -139,12 +139,17 @@ const changeQuantity=async(req,res,next)=>{
         const cartData = await Cart.findOne({user: userId });
         const [{count:quantity}] = cartData.products;
         const productData = await Product.findOne({ _id: proId });
-        const total = productData.price * (quantity+count)
-        if(productData.stock < quantity+count){
-            res.json({check:true});
-        } else {
-            res.json({success:true});
-            await Cart.updateOne({user:userId,"products.productId":proId},{$inc:{"products.$.count":count}});
+        // const total = productData.price * (quantity+count)
+        if(count == -1){
+            res.json({ success: true });
+            await Cart.updateOne({ user: userId, "products.productId": proId }, { $inc: { "products.$.count": count } });
+        }else {
+            if(productData.stock < quantity+count){
+                res.json({check:true});
+            } else {
+                res.json({success:true});
+                await Cart.updateOne({user:userId,"products.productId":proId},{$inc:{"products.$.count":count}});
+            }
         }
 
         

@@ -73,7 +73,7 @@
                                                     <% } %>
 
                                         </td>
-                                        <td class="cart-product-subtotal">&#8377;<%= product.productId.price %></td>
+                                        <td class="cart-product-subtotal">&#8377;<%= (product.productId.price * product.count) %></td>
                                     </tr>
                                     <% }) %>
                                     <tr class="cart-coupon-row">
