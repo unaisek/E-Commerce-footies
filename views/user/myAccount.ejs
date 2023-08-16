@@ -60,6 +60,7 @@
                                                 <h3><strong>MY WALLET AMOUNT:  ₹<%=walletData.walletAmount %></strong></h3>
                                             </div>
                                             <h5 class="mt-5">Wallet transactions</h5>
+                                            <% if(walletData.wallet.length > 0){ %>
                                             <div class="table-responsive">
                                                 <table class="table">
                                                     <thead>
@@ -87,12 +88,13 @@
                                                             <td class="text-danger">-<%= walletData.wallet[i].amount %>
                                                             </td>
                                                             <% } %>
-
-
-                                                        </tbody>
+                                                    </tbody>
                                                         <% }%>
                                                 </table>
                                             </div>
+                                                <% }else{ %>
+                                                    <p>No transaction</p>
+                                                <% } %>    
                                         </div>
                                     </div>
                                     <div class="tab-pane fade" id="liton_tab_1_4">
@@ -127,7 +129,7 @@
                                                         </div>
                                                         <% }) %>
                                                     <% } else { %>
-                                                        <p>No address Added..Please Add New Address</p>
+                                                        <p>No address Added..Please Add New Adress</p>
                                                     <% } %>
 
                                             </div>

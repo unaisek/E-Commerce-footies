@@ -417,13 +417,19 @@ const loadProfile = async(req,res,next)=>{
         // const addressData = await Address.findOne({userId:req.session.user_id});
         // const walletData =  await Wallet.findOne({userId: req.session.user_id});
        
-        const [userData, addressData, walletData] = await Promise.all([
+        const [userData, addressData, walletDatas] = await Promise.all([
             User.findOne({ _id: req.session.user_id }),
             Address.findOne({ userId: req.session.user_id }),
             Wallet.findOne({ userId: req.session.user_id })
         ]);
-        const addresses = addressData.addresses
-
+        let addresses = [];
+        if(addressData!==null){
+            addresses = addressData.addresses;
+        }
+        let walletData = { walletAmount :0,wallet:[]};
+        if(walletDatas!==null){
+            walletData = walletDatas;
+        }
         res.render('myAccount', { user: userData, loggedIn, addresses,walletData});
 
         
