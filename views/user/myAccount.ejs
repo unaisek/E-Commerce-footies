@@ -70,7 +70,7 @@
                                                             <th>amount</th>
                                                         </tr>
                                                     </thead>
-                                                    <%for(let i = walletData.wallet.length -1; i>=0; i--){ %>
+                                                    <% for(let i = walletData.wallet.length -1; i>=0; i--){ %>
                                                         
                                                     <tbody>
                                                         <td><%=walletData.wallet[i].date.toISOString().substring(0,10)%></td>
@@ -103,44 +103,32 @@
                                                 </a>
                                             </div>
                                             <div class="row mt-5">
-                                                <!-- <% addresses.forEach(address=>{ %>
+                                                <% if(addresses.length > 0) {%>
 
-                                                    <div class="col-md-6 col-12 learts-mb-30">
-                                                        <address>
-                                                            <p><strong><%=address.UserName %></strong></p>
-                                                            <p><%=address.address %></p>
-                                                                <p>Mobile: <%= address.mobile %></p>
-                                                                <p>City: <%=address.city %> State: <%=address.state %></p>
-                                                                <p>Zipcode: <%=address.pincode%></p>
-                                                            </address>
-                                                        <a href="/editAddress?id=" class="btn-outline-success-light"><i class="fas fa-edit"></i>
-                                                            Edit </a>
-                                                        <a href="/editAddress?id=" class="btn-outline-danger"><i class="fas fa-trash"></i>
-                                                            Delete </a>
-                                                    </div>
-                                                <% }) %> -->
-
-                                                <% addresses.forEach((item)=> { %>
-                                                    <div class="col-lg-6 col-md-6 pt-3 pb-3 ">
-                                                        <div class="card" style="width: 18rem;">
-                                                            <div class="card-body">
-                                                                <h5 class="card-title">
-                                                                    <%= item.userName %>
-                                                                </h5>
-                                                                <h6 class="card-subtitle mb-2 text-muted">
-                                                                    <%=item.mobile%>
-                                                                </h6>
-                                                                <p class="card-text">
-                                                                    <%=item.address%>,<%=item.city%> <br>
-                                                                            <%=item.state%>,<%=item.pincode%>
-                                                                </p>
-                                                                <a href="/editAddress?id=<%=item._id%>&page=profile" class="btn-outline-success-light"><i class="fas fa-edit"></i>
-                                                                    Edit </a>
-                                                                    <a href="/deleteAddress?id=<%=item._id%>&page=profile" class="btn-outline-danger"><i class="fas fa-trash"></i></a>
+                                                    <% addresses.forEach((item)=> { %>
+                                                        <div class="col-lg-6 col-md-6 pt-3 pb-3 ">
+                                                            <div class="card" style="width: 18rem;">
+                                                                <div class="card-body">
+                                                                    <h5 class="card-title">
+                                                                        <%= item.userName %>
+                                                                    </h5>
+                                                                    <h6 class="card-subtitle mb-2 text-muted">
+                                                                        <%=item.mobile%>
+                                                                    </h6>
+                                                                    <p class="card-text">
+                                                                        <%=item.address%>,<%=item.city%> <br>
+                                                                                <%=item.state%>,<%=item.pincode%>
+                                                                    </p>
+                                                                    <a href="/editAddress?id=<%=item._id%>&page=profile" class="btn-outline-success-light"><i class="fas fa-edit"></i>
+                                                                        Edit </a>
+                                                                        <a href="/deleteAddress?id=<%=item._id%>&page=profile" class="btn-outline-danger"><i class="fas fa-trash"></i></a>
+                                                                </div>
                                                             </div>
                                                         </div>
-                                                    </div>
-                                                    <% }) %>
+                                                        <% }) %>
+                                                    <% } else { %>
+                                                        <p>No address Added..Please Add New Address</p>
+                                                    <% } %>
 
                                             </div>
                                         </div>
