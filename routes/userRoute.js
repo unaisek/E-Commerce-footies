@@ -37,6 +37,9 @@ userRoute.post('/forgetPassword', userController.verifyForgetPassword);
 userRoute.post('/verifyPassOtp',userController.verifyResetPassOtp);
 userRoute.post('/changePassword',userController.verifyNewPassword);
 
+// load contact
+userRoute.get('/contact',userController.loadContact)
+
 // Shop page
 userRoute.get('/shop',userController.loadShopPage);
 userRoute.get('/productDetails',userController.productDetails);

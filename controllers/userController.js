@@ -439,6 +439,20 @@ const loadProfile = async(req,res,next)=>{
     }
 }
 
+// load contact page
+
+const loadContact = async(req,res,next)=>{
+    try {
+        
+        const loggedIn = req.session.user_id;
+        res.render('contact',{loggedIn});
+
+    } catch (error) {
+        next(error);
+    }   
+    
+}
+
 module.exports = {
     loadHome,
     loadLogin,
@@ -453,7 +467,8 @@ module.exports = {
     verifyResetPassOtp,
     verifyNewPassword,
     loadShopPage,
-    loadProfile
+    loadProfile,
+    loadContact
 
     
 }
