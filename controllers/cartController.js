@@ -166,8 +166,10 @@ const loadCheckout = async(req,res,next)=>{
         const addressData = await Address.findOne({userId:req.session.user_id});
         const wallet = await Wallet.findOne({ userId: req.session.user_id });
         const coupons = await Coupon.find({ status: true, usedUsers: { $ne: req.session.user_id },expired: { $gte: new Date() } });
-        if(addressData){
-            const addresses = addressData.addresses;
+            let addresses =[];
+            if(addressData !== null){
+                addresses = addressData.addresses;
+            }
             const total = await Cart.aggregate([
                 { 
                     $match: { 
@@ -192,13 +194,6 @@ const loadCheckout = async(req,res,next)=>{
                 ]);
                 const Total = total[0].total
                 res.render('checkout',{ loggedIn, addresses, userData, Total, wallet, coupons });
-
-
-        } else {
-            console.log("no address");
-        }
-
-
         
     } catch (error) {
         console.log(error.message);

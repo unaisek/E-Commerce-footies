@@ -75,16 +75,18 @@
                             <div class="ltn__checkout-payment-method mt-50">
                                 <h4 class="title-2">Payment Method</h4>
                                 <div id="checkout_accordion_1 " style="color: black;">
-                                    <% if(wallet.walletAmount >= Total) {%>
-                                        <div class="card">
-                                            <label>
-                                                <input type="radio" name="payment" value="wallet" id="wallet" />
-                                                Wallet payments
-                                            </label>
-                                            <div class="card-body">
-                                                <p>Wallet Amount : <%=wallet.walletAmount %></p>
+                                    <% if(wallet !== null){ %>
+                                        <% if(wallet.walletAmount >= Total) {%>
+                                            <div class="card">
+                                                <label>
+                                                    <input type="radio" name="payment" value="wallet" id="wallet" />
+                                                    Wallet payments
+                                                </label>
+                                                <div class="card-body">
+                                                    <p>Wallet Amount : <%=wallet.walletAmount %></p>
+                                                </div>
                                             </div>
-                                        </div>
+                                            <% } %>
                                         <% } %>
                                     <div class="card">
                                         <label>
