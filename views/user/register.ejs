@@ -22,6 +22,8 @@
     <link rel="stylesheet" href="userAsset/css/style.css">
     <!-- Responsive userAsset/css -->
     <link rel="stylesheet" href="userAsset/css/responsive.css">
+    <!-- Toastr -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.css" rel="stylesheet" />
 </head>
 
 <body>
@@ -293,6 +295,8 @@
                             <input type="text" name="mobile" placeholder="Mobile Name" id="mobile" required>
                             <input type="email" name="email" placeholder="Email*" id="email" required>
                             <input type="password" name="password" placeholder="Password*" id="pass" required>
+                            <input type="password" name="confirmPassword" placeholder=" Confirm Password*" id="pass1" required>
+                            
                             <div class="btn-wrapper">
                                 <button class="theme-btn-1 btn reverse-color btn-block" type="submit">CREATE ACCOUNT</button>
                             </div>
@@ -379,7 +383,7 @@
                             </div>
                         </div>
                     </div>
-                    <div class="col-xl-2 col-md-6 col-sm-6 col-12">
+                    <div class="col-xl-2 col-md-6 col-sm-6 col-12 d-none d-md-block">
                         <div class="footer-widget footer-menu-widget clearfix">
                             <h4 class="footer-title">Company</h4>
                             <div class="footer-menu">
@@ -394,7 +398,7 @@
                             </div>
                         </div>
                     </div>
-                    <div class="col-xl-2 col-md-6 col-sm-6 col-12">
+                    <div class="col-xl-2 col-md-6 col-sm-6 col-12 d-none d-md-block">
                         <div class="footer-widget footer-menu-widget clearfix">
                             <h4 class="footer-title">Services</h4>
                             <div class="footer-menu">
@@ -473,6 +477,9 @@
     <script src="userAsset/js/plugins.js"></script>
     <!-- Main JS -->
     <script src="userAsset/js/main.js"></script>
+    <!-- Toastr -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js"></script>
+
     <script>
         function formValidation(){
             let status = true;
@@ -481,14 +488,17 @@
             let mobile = document.getElementById('mobile').value.trim();
             let email = document.getElementById('email').value.trim();
             let password = document.getElementById('pass').value.trim();
-
+            let confirmPass = document.getElementById('pass1').value.trim();
             if(name === "" || mobile === "" || email === "" || password === "" ){
-                alert("please fill all fields");
+                toastr.error("please fill all fields..!");
                 status = false;
             } else if (!/^([a-zA-Z0-9\_.]+)@([a-zA-Z0-9]+).([a-z]+).([a-z]+)?$/.test(email)) {
-                alert("Please re-check at email");
+                toastr.error("Invalid email format..! Please re-check your email");
                 status = false;
 
+            } else if(password!==confirmPass){
+                toastr.error("Passwords do not match..!")
+                status = false
             }
 
             return status;
