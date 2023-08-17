@@ -194,6 +194,7 @@
             let address = $("input[name=selectAddress]:checked").val();
             let payment = $("input[name=payment]:checked").val();
             const couponName = $("#appliedCouponName").val();
+            console.log("hii");
             if(address == "undefined"){
                 toastr.error("please select a address")
             }
