@@ -1,7 +1,7 @@
 <%- include('../partials/userPartials/header.ejs') -%>
 
     <!-- BREADCRUMB AREA START -->
-    <div class="ltn__breadcrumb-area text-left bg-overlay-white-30 bg-image" >
+    <div class="ltn__breadcrumb-area text-left bg-overlay-white-30 bg-image">
         <div class="container">
             <div class="row">
                 <div class="col-lg-12 ">
@@ -9,7 +9,8 @@
                         <h1 class="page-title">Product Details</h1>
                         <div class="ltn__breadcrumb-list">
                             <ul>
-                                <li><a href="/"><span class="ltn__secondary-color"><i class="fas fa-home"></i></span> Home</a></li>
+                                <li><a href="/"><span class="ltn__secondary-color"><i class="fas fa-home"></i></span>
+                                        Home</a></li>
                                 <li>Product Details</li>
                             </ul>
                         </div>
@@ -19,15 +20,16 @@
         </div>
     </div>
     <!-- BREADCRUMB AREA END -->
-     <!-- SHOP DETAILS AREA START -->
+    <!-- SHOP DETAILS AREA START -->
     <div class="ltn__shop-details-area pb-85">
         <div class="container">
             <div class="row">
                 <div class="col-lg-12 col-md-12">
+
                     <div class="ltn__shop-details-inner mb-60">
                         <div class="row">
 
-                            <div class="col-md-6">
+                            <!-- <div class="col-md-6">
                                 <div class="ltn__shop-details-img-gallery">
                                     <div class="ltn__shop-details-large-img">
                                          <% for(let i=0;i<product.images.length;i++) {%>
@@ -44,18 +46,44 @@
                                         <% } %>
                                      </div>
                                 </div>
+                            </div> -->
+
+                            <div class="col-md-6">
+                                <div class="ltn__shop-details-img-gallery">
+                                    <div class="ltn__shop-details-large-img">
+                                        <% for( let i=0; i < product.images.length; i++ ) { %>
+                                            <div class="single-large-img">
+                                                <img src="adminAsset/productImages/<%= product.images[i] %>" alt="Image"
+                                                    class="zoom-image">
+                                            </div>
+                                            <% } %>
+                                    </div>
+
+                                    <div class="ltn__shop-details-small-img slick-arrow-2">
+                                        <% for( let i=0; i < product.images.length; i++ ) { %>
+                                            <div class="single-small-img">
+                                                <img src="adminAsset/productImages/<%= product.images[i] %>"
+                                                    alt="Image">
+                                            </div>
+                                            <% } %>
+                                    </div>
+                                </div>
                             </div>
+
                             <div class="col-md-6">
                                 <div class="modal-product-info shop-details-info pl-0">
-                                    <h3><%=product.productName %></h3>
+                                    <h3>
+                                        <%=product.productName %>
+                                    </h3>
                                     <div class="product-price">
                                         <span>&#8377;<%=product.price %></span>
                                     </div>
                                     <div class="modal-product-meta ltn__product-details-menu-1">
                                         <ul>
                                             <li>
-                                                <strong>Categories:</strong> 
-                                                <span><%=product.category %>
+                                                <strong>Categories:</strong>
+                                                <span>
+                                                    <%=product.category %>
                                                 </span>
                                             </li>
                                         </ul>
@@ -63,7 +91,8 @@
                                     <div class="ltn__product-details-menu-2">
                                         <ul>
                                             <li>
-                                                <button class="theme-btn-1 btn btn-effect-1" onclick="addToCart('<%=product._id %>')">
+                                                <button class="theme-btn-1 btn btn-effect-1"
+                                                    onclick="addToCart('<%=product._id %>')">
                                                     <i class="far fa-shopping-cart"></i>
                                                     <span>Add to Cart</span>
                                                 </button>
@@ -77,11 +106,12 @@
                                                     <i class="far fa-heart"></i>
                                                     <span>Add to Wishlist</span>
                                                 </a> -->
-                                                <button class="text-success" onclick="addToWishlist('<%=product._id %>')">
+                                                <button class="text-success"
+                                                    onclick="addToWishlist('<%=product._id %>')">
                                                     <i class="far fa-heart"></i>
                                                     <span>Add to Wishlist</span>
                                                 </button>
-                                              
+
                                             </li>
                                             <!-- <li>
                                                 <a href="#" class="" title="Compare" data-bs-toggle="modal" data-bs-target="#quick_view_modal">
@@ -99,7 +129,7 @@
                                             <li><a href="#" title="Twitter"><i class="fab fa-twitter"></i></a></li>
                                             <li><a href="#" title="Linkedin"><i class="fab fa-linkedin"></i></a></li>
                                             <li><a href="#" title="Instagram"><i class="fab fa-instagram"></i></a></li>
-                                            
+
                                         </ul>
                                     </div>
                                     <hr>
@@ -115,14 +145,19 @@
                     <div class="ltn__shop-details-tab-inner ltn__shop-details-tab-inner-2">
                         <div class="ltn__shop-details-tab-menu">
                             <div class="nav">
-                                <a class="active show" data-bs-toggle="tab" href="#liton_tab_details_1_1">Description</a>
+                                <a class="active show" data-bs-toggle="tab"
+                                    href="#liton_tab_details_1_1">Description</a>
                             </div>
                         </div>
                         <div class="tab-content">
                             <div class="tab-pane fade active show" id="liton_tab_details_1_1">
                                 <div class="ltn__shop-details-tab-content-inner">
-                                    <h4 class="title-2"><%=product.productName%></h4>
-                                    <p><%= product.description %></p>
+                                    <h4 class="title-2">
+                                        <%=product.productName%>
+                                    </h4>
+                                    <p>
+                                        <%= product.description %>
+                                    </p>
                                 </div>
                             </div>
                         </div>
@@ -133,45 +168,44 @@
     </div>
     <!-- SHOP DETAILS AREA END -->
     <script>
-       function addToWishlist(id){
+        function addToWishlist(id) {
             $.ajax({
                 url: '/addToWishlist',
                 method: 'post',
                 data: {
                     query: id
                 },
-                success: (response)=>{
-                    if(response.success){
+                success: (response) => {
+                    if (response.success) {
                         toastr.success("Product added to Wishlist");
-                    } else if(response.check){
+                    } else if (response.check) {
                         toastr.error("Already added to wishlsit");
                     }
                 }
             })
         }
-            function addToCart(id) {
-                console.log("hi");
-                    $.ajax({
-                        url: '/addToCart',
-                        method: 'post',
-                        data: {
-                            query: id
-                        },
-                        success: (response) => {
-                            if (response.success) {
-                                toastr.success("Product added to Cart","",{
-                                    timeOut: 1500,
-                                    progressBar: true
-                                });
-                            } else if (response.check) {
-                                toastr.error("Out of Stock!!","",{
-                                    timeOut: 1500,
-                                    progressBar: true
-                                });
-                            }
-                        }
-                    })
+        function addToCart(id) {
+            console.log("hi");
+            $.ajax({
+                url: '/addToCart',
+                method: 'post',
+                data: {
+                    query: id
+                },
+                success: (response) => {
+                    if (response.success) {
+                        toastr.success("Product added to Cart", "", {
+                            timeOut: 1500,
+                            progressBar: true
+                        });
+                    } else if (response.check) {
+                        toastr.error("Out of Stock!!", "", {
+                            timeOut: 1500,
+                            progressBar: true
+                        });
+                    }
                 }
+            })
+        }
     </script>
     <%- include('../partials/userPartials/footer.ejs') -%>
-

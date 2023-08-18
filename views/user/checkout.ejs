@@ -38,7 +38,7 @@
                                         <% if(addresses.length > 0 ){%>
                                             <% addresses.forEach((item)=> { %>
                                                 <div class="col-lg-3 col-md-6 mt-3 ms-3 ">
-                                                    <div class="card" style="width: 18rem;">
+                                                    <div class="card">
                                                         <div class="card-body">
                                                             <input type="radio"
                                                                 value="<%=item.userName%>,<%=item.mobile%>,<%=item.alternativeMob%>,<%=item.address%>,<%=item.city%>,<%=item.state%>,<%=item.pincode%>"
@@ -184,141 +184,142 @@
     </div>
     <!-- WISHLIST AREA START -->
 
-    <script>
-
-
-        $("#checkout-form").submit((e)=>{
-            e.preventDefault();
-            const amount = document.getElementById("total").innerHTML;
-            const totalAmount = document.getElementById("grandtotal").innerHTML;
-            let address = $("input[name=selectAddress]:checked").val();
-            let payment = $("input[name=payment]:checked").val();
-            const couponName = $("#appliedCouponName").val();
-            console.log("hii");
-            if(address == "undefined"){
-                toastr.error("please select a address")
-            }
-            console.log(address);
-            $.ajax({
-                url :"/checkout",
-                method :"post",
-                data :{
-                    amount:parseInt(amount.replace(/[^\d.]/g, '')),
-                    total: parseInt(totalAmount.replace(/[^\d.]/g, '')),
-                    address: address,
-                    payment :payment,
-                    couponName: couponName
-                },
-                success:(response)=>{
-                    if(response.check == true){
-                        toastr.error("please select a address or Payment Method","",{
-                          timeOut: 2500,
-                         progressBar : true
-                        });
-                    } else if(response.stock == true){
-                         toastr.error(`${response.productName} is out of stock....!!! please check your cart..Available stock is ${response.stockCount}`, "", {
-                            timeOut: 2500,
-                            progressBar: true
-                        });
-                   
-                    }else if(response.codSuccess==true){
-                        window.location.href = `/orderSuccess`;
-                    } else {
-                        razorpayPayment(response.order)
-                    }
-                }
-            })
-        })
-
-       function razorpayPayment(order) {
-        console.log("ONLINE PAAYMENT");
-
-            var options = {
-                "key": "rzp_test_B0cfXKkM2OrzLj", // Enter the Key ID generated from the Dashboard
-                "amount": order.amount, // Amount is in currency subunits. Default currency is INR. Hence, 50000 refers to 50000 paise
-                "currency": "INR",
-                "name": "Footies-Footwear", //your business name
-                "description": "Test Transaction",
-                "image": "https://example.com/your_logo",
-                "order_id": order.id,
-                "handler": function (response) {
-                    verifyPayment(response, order);
-                },
-                "prefill": {
-                    "name": "Gaurav Kumar", 
-                    "email": "gaurav.kumar@example.com",
-                    "contact": "9000090000"
-                },
-                "notes": {
-                    "address": "Razorpay Corporate Office"
-                },
-                "theme": {
-                    "color": "#3399cc"
-                }
-            };
-            var rzp1 = new Razorpay(options);
-            rzp1.open();
-        }
-
-
-        function verifyPayment(payment,order){
-            console.log("verify");
-            const amount = document.getElementById("total").innerHTML;
-            const totalAmount = document.getElementById("grandtotal").innerHTML;
-            $.ajax({
-                url: "/verifyPayment",
-                method: "post",
-                data :{
-                    payment,
-                    amount,
-                    totalAmount,
-                    order
-                },
-                success:(response)=>{
-                    if(response.success){
-                        window.location.href = `/orderSuccess`
-                    } else {
-                        alert('payment failed');
-                    }
-                }
-            })
-        }
-
-        // apply coupon
-            $("#coupon-form").submit((e) => {
-                e.preventDefault();
-                const code = $("#code").val();
-                const amount = document.getElementById("grandtotal").innerHTML;
-                console.log("amount",amount);
-                $.ajax({
-                    url: "/applyCoupon",
-                    method: "post",
-                    data: {
-                        code: code,
-                        amount: parseInt(amount.replace(/[^\d.]/g, ''))
-                    },
-                    success: (response) => {
-                        console.log(response);
-                        if (response.user) {
-                            toastr.warning("Oops! This user has already used this coupon");
-                        } else if (response.status) {
-                            toastr.warning("Oops! This coupon is not in use");
-                        } else if (response.cartAmount) {
-                            toastr.warning("Oops! You can't use the coupon... Buy more");
-                        } else if (response.date) {
-                            toastr.warning("Oops! Coupon date expired");
-                        } else if (response.amountkey) {
-                             $("#appliedCouponName").val(response.couponName);
-                            document.getElementById('discountAmount').innerText = response.discAmount;
-                          document.getElementById('newTotal').innerHTML = response.disTotal;
-                          toastr.success("Coupon Applyed")
-                        } else if (response.invalid) {
-                            toastr.warning("Oops! Invalid coupon");
-                        }
-                    }
-                });
-            });
-
-    </script>
+   
 
 <%- include('../partials/userPartials/footer.ejs') %>
+<script>
+
+
+    $("#checkout-form").submit((e) => {
+        e.preventDefault();
+        const amount = document.getElementById("total").innerHTML;
+        const totalAmount = document.getElementById("grandtotal").innerHTML;
+        let address = $("input[name=selectAddress]:checked").val();
+        let payment = $("input[name=payment]:checked").val();
+        const couponName = $("#appliedCouponName").val();
+        console.log("hii");
+        if (address == "undefined") {
+            toastr.error("please select a address")
+        }
+        console.log(address);
+        $.ajax({
+            url: "/checkout",
+            method: "post",
+            data: {
+                amount: parseInt(amount.replace(/[^\d.]/g, '')),
+                total: parseInt(totalAmount.replace(/[^\d.]/g, '')),
+                address: address,
+                payment: payment,
+                couponName: couponName
+            },
+            success: (response) => {
+                if (response.check == true) {
+                    toastr.error("please select a address or Payment Method", "", {
+                        timeOut: 2500,
+                        progressBar: true
+                    });
+                } else if (response.stock == true) {
+                    toastr.error(`${response.productName} is out of stock....!!! please check your cart..Available stock is ${response.stockCount}`, "", {
+                        timeOut: 2500,
+                        progressBar: true
+                    });
+
+                } else if (response.codSuccess == true) {
+                    window.location.href = `/orderSuccess`;
+                } else {
+                    razorpayPayment(response.order)
+                }
+            }
+        })
+    })
+
+    function razorpayPayment(order) {
+        console.log("ONLINE PAAYMENT");
+
+        var options = {
+            "key": "rzp_test_B0cfXKkM2OrzLj", // Enter the Key ID generated from the Dashboard
+            "amount": order.amount, // Amount is in currency subunits. Default currency is INR. Hence, 50000 refers to 50000 paise
+            "currency": "INR",
+            "name": "Footies-Footwear", //your business name
+            "description": "Test Transaction",
+            "image": "https://example.com/your_logo",
+            "order_id": order.id,
+            "handler": function (response) {
+                verifyPayment(response, order);
+            },
+            "prefill": {
+                "name": "Gaurav Kumar",
+                "email": "gaurav.kumar@example.com",
+                "contact": "9000090000"
+            },
+            "notes": {
+                "address": "Razorpay Corporate Office"
+            },
+            "theme": {
+                "color": "#3399cc"
+            }
+        };
+        var rzp1 = new Razorpay(options);
+        rzp1.open();
+    }
+
+
+    function verifyPayment(payment, order) {
+        console.log("verify");
+        const amount = document.getElementById("total").innerHTML;
+        const totalAmount = document.getElementById("grandtotal").innerHTML;
+        $.ajax({
+            url: "/verifyPayment",
+            method: "post",
+            data: {
+                payment,
+                amount,
+                totalAmount,
+                order
+            },
+            success: (response) => {
+                if (response.success) {
+                    window.location.href = `/orderSuccess`
+                } else {
+                    alert('payment failed');
+                }
+            }
+        })
+    }
+
+    // apply coupon
+    $("#coupon-form").submit((e) => {
+        e.preventDefault();
+        const code = $("#code").val();
+        const amount = document.getElementById("grandtotal").innerHTML;
+        console.log("amount", amount);
+        $.ajax({
+            url: "/applyCoupon",
+            method: "post",
+            data: {
+                code: code,
+                amount: parseInt(amount.replace(/[^\d.]/g, ''))
+            },
+            success: (response) => {
+                console.log(response);
+                if (response.user) {
+                    toastr.warning("Oops! This user has already used this coupon");
+                } else if (response.status) {
+                    toastr.warning("Oops! This coupon is not in use");
+                } else if (response.cartAmount) {
+                    toastr.warning("Oops! You can't use the coupon... Buy more");
+                } else if (response.date) {
+                    toastr.warning("Oops! Coupon date expired");
+                } else if (response.amountkey) {
+                    $("#appliedCouponName").val(response.couponName);
+                    document.getElementById('discountAmount').innerText = response.discAmount;
+                    document.getElementById('newTotal').innerHTML = response.disTotal;
+                    toastr.success("Coupon Applyed")
+                } else if (response.invalid) {
+                    toastr.warning("Oops! Invalid coupon");
+                }
+            }
+        });
+    });
+
+</script>
