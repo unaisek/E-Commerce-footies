@@ -71,7 +71,8 @@ const addProduct = async(req,res,next)=>{
             const productData = await product.save();
             const categoryData = await Category.find({});
             if(productData){
-                res.render('addProduct',{message:"product Added Succesfully..!",category:categoryData});
+                // res.render('addProduct',{message:"product Added Succesfully..!",category:categoryData});
+                res.redirect('/admin/productList');
             } else{
                 res.render('addProduct', { message: "product Adding Failed..!", category: categoryData });
             }
