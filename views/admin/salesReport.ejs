@@ -122,17 +122,17 @@
 
             if(fromDate > today){
                 event.preventDefault();
-                toastr.error('From date cannot be in the future.');
+                toastr.error('From date cannot be greater than today date');
                 return;
             }
             if (toDate > today) {
                 event.preventDefault();
-                toastr.error('To date cannot be in the future.');
+                toastr.error('To date cannot be greater than today date');
                 return;
             }
             if (fromDate > toDate) {
                 event.preventDefault();
-                toastr.error('From date cannot be greater than to date.');
+                toastr.error('From date cannot be greater than To date.');
                 return;
             }
         })
