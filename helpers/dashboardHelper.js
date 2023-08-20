@@ -6,9 +6,7 @@ const totalRevenue = async()=>{
         {
             $match: { 
                 status: { 
-                    $ne: "pending",
-                    $ne: "Cancelled",
-                    $ne: "Returned"
+                  $eq:"Delivered"
                 }
             } 
         },
@@ -29,7 +27,7 @@ const totalRevenue = async()=>{
 const paymentMethod = async()=>{
     const totalPayment = await Order.aggregate([
         {
-            $match : { status: { $ne: "pending"} }
+            $match : { status: { $eq: "Delivered"} }
         },
         {
             $group: {
@@ -47,7 +45,7 @@ const paymentMethod = async()=>{
 const dailyChart = async()=>{
     const dailyOrder = await Order.aggregate([
         {
-            $match: { status: { $ne : "pending"} }
+            $match: { status: { $eq: "Delivered"} }
         },
         {
             $group:{
@@ -78,7 +76,7 @@ const monthlyTotalRevenue = async(currMonthStartDate, now)=>{
                 },
                 status: 
                 {
-                    $ne: "pending"
+                    $eq: "Delivered"
                 }
             }
         },
