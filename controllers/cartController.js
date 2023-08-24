@@ -63,12 +63,10 @@ const loadCart = async(req,res,next)=>{
 
 const addToCart = async(req,res,next)=>{
     try {
-        const productId = req.body.query;
-        const userData = await User.findOne({_id:req.session.user_id});
-        const productData = await Product.findOne({_id:productId});
-        
-
         if(req.session.user_id){
+            const productId = req.body.query;
+            const userData = await User.findOne({_id:req.session.user_id});
+            const productData = await Product.findOne({_id:productId});
             const userId = req.session.user_id;
             const cartData = await Cart.findOne({user:userId});
             if(productData.stock > 0){
@@ -107,7 +105,7 @@ const addToCart = async(req,res,next)=>{
                 res.json({check:true})
             }
         } else {
-            res.redirect('/login');
+            res.json({user:false})
         }
 
     } catch (error) {

@@ -47,7 +47,7 @@ userRoute.get('/productDetails',userController.productDetails);
 // Cart
 
 userRoute.get('/cart', userAuth.isLogin,cartController.loadCart);
-userRoute.post('/addToCart', userAuth.isLogin,cartController.addToCart);
+userRoute.post('/addToCart',cartController.addToCart);
 userRoute.get('/removeFromCart', userAuth.isLogin,cartController.removeFromCart);
 userRoute.post('/changeProductQuantity',userAuth.isLogin,cartController.changeQuantity);
 

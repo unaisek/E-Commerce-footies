@@ -31,27 +31,57 @@
                             <div class="col-lg-4">
                                 <div class="ltn__tab-menu-list mb-50">
                                     <div class="nav">
-                                        <a class="active show" data-bs-toggle="tab" href="#liton_tab_1_1">Dashboard <i
-                                                class="fas fa-home"></i></a>
+                                        <a class="active show" data-bs-toggle="tab" href="#liton_tab_1_1">Account Details <i
+                                                class="fas fa-user"></i></a>
                                         <a data-bs-toggle="tab" href="#liton_tab_1_3">Wallet<i
                                                 class="fas fa-wallet"></i></a>
                                         <a data-bs-toggle="tab" href="#liton_tab_1_4">address <i
                                                 class="fas fa-map-marker-alt"></i></a>
-                                        <a data-bs-toggle="tab" href="#liton_tab_1_5">Account Details <i
-                                                class="fas fa-user"></i></a>
                                         <a href="/logout">Logout <i class="fas fa-sign-out-alt"></i></a>
                                     </div>
                                 </div>
                             </div>
                             <div class="col-lg-8">
                                 <div class="tab-content">
-                                    <div class="tab-pane fade active show" id="liton_tab_1_1">
+                                    <div class="tab-pane fade  active show" id="#liton_tab_1_1">
                                         <div class="ltn__myaccount-tab-content-inner">
-                                            <p>Hello <strong>UserName</strong> (not <strong>UserName</strong>? <small><a
-                                                        href="login-register.html">Log out</a></small> )</p>
-                                            <p>From your account dashboard you can view your <span>recent orders</span>,
-                                                manage your <span>shipping and billing addresses</span>, and <span>edit
-                                                    your password and account details</span>.</p>
+                                            <div class="ltn__form-box">
+                                                <form action="#">
+                                                    <div class="row mb-50">
+                                                        <div class="col-md-12">
+                                                            <label>User Name:</label>
+                                                            <input type="text" name="ltn__name" value="<%=user.name %>">
+                                                        </div>
+                                                        <div class="col-md-12">
+                                                            <label>User Email:</label>
+                                                            <input type="email" name="ltn__lastname" value="<%=user.email %>">
+                                                        </div>
+                                                        <div class="col-md-12">
+                                                            <label>Mobile:</label>
+                                                            <input type="text" name="ltn__lastname" value="<%=user.mobile %>">
+                                                        </div>
+                                                    </div>
+                                                    <!-- <fieldset>
+                                                            <legend>Password change</legend>
+                                                            <div class="row">
+                                                                <div class="col-md-12">
+                                                                    <label>Current password (leave blank to leave
+                                                                        unchanged):</label>
+                                                                    <input type="password" name="ltn__name">
+                                                                    <label>New password (leave blank to leave
+                                                                        unchanged):</label>
+                                                                    <input type="password" name="ltn__lastname">
+                                                                    <label>Confirm new password:</label>
+                                                                    <input type="password" name="ltn__lastname">
+                                                                </div>
+                                                            </div>
+                                                        </fieldset> -->
+                                                    <div class="btn-wrapper">
+                                                        <button type="submit" class="btn theme-btn-1 btn-effect-1 text-uppercase"><a href=""></a>Edit
+                                                            Profile</button>
+                                                    </div>
+                                                </form>
+                                            </div>
                                         </div>
                                     </div>
                                     <div class="tab-pane fade" id="liton_tab_1_3">
@@ -135,47 +165,6 @@
                                             </div>
                                         </div>
                                     </div>
-                                    <div class="tab-pane fade" id="liton_tab_1_5">
-                                        <div class="ltn__myaccount-tab-content-inner">
-                                            <div class="ltn__form-box">
-                                                <form action="#">
-                                                    <div class="row mb-50">
-                                                        <div class="col-md-12">
-                                                            <label>User Name:</label>
-                                                            <input type="text" name="ltn__name" value="<%=user.name %>">
-                                                        </div>
-                                                        <div class="col-md-12">
-                                                            <label>User Email:</label>
-                                                            <input type="email" name="ltn__lastname" value="<%=user.email %>">
-                                                        </div>
-                                                        <div class="col-md-12">
-                                                            <label>Mobile:</label>
-                                                            <input type="text" name="ltn__lastname" value="<%=user.mobile %>">
-                                                        </div>
-                                                    </div>
-                                                    <!-- <fieldset>
-                                                        <legend>Password change</legend>
-                                                        <div class="row">
-                                                            <div class="col-md-12">
-                                                                <label>Current password (leave blank to leave
-                                                                    unchanged):</label>
-                                                                <input type="password" name="ltn__name">
-                                                                <label>New password (leave blank to leave
-                                                                    unchanged):</label>
-                                                                <input type="password" name="ltn__lastname">
-                                                                <label>Confirm new password:</label>
-                                                                <input type="password" name="ltn__lastname">
-                                                            </div>
-                                                        </div>
-                                                    </fieldset> -->
-                                                    <div class="btn-wrapper">
-                                                        <button type="submit"
-                                                            class="btn theme-btn-1 btn-effect-1 text-uppercase"><a href=""></a>Edit Profile</button>
-                                                    </div>
-                                                </form>
-                                            </div>
-                                        </div>
-                                    </div>
                                 </div>
                             </div>
                         </div>
@@ -186,6 +175,33 @@
         </div>
     </div>
 </div>
+
+
 <!-- WISHLIST AREA START -->
 <%- include('../partials/userPartials/footer.ejs') %>
+<script>
+    // Add an event listener to the "Logout" link
+    const logoutLink = document.querySelector('a[href="/logout"]');
+
+    if (logoutLink) {
+        logoutLink.addEventListener('click', function (event) {
+            event.preventDefault(); // Prevent the default link behavior
+
+            // Show the SweetAlert2 confirmation dialogue box
+            Swal.fire({
+                title: 'Logout Confirmation',
+                text: 'Are you sure you want to logout?',
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonText: 'Yes, logout',
+                cancelButtonText: 'Cancel'
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    // If the user confirms, proceed with the logout action
+                    window.location.href = logoutLink.getAttribute('href');
+                }
+            });
+        });
+    }
+</script>
 
